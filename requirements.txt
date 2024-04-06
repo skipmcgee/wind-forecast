@@ -1,0 +1,11 @@
+netCDF4
+matplotlib
+pvlib
+pandas
+datetime
+pytz
+siphon
+ruff
+aiohttp
+asyncio
+pprintjson
