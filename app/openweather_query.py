@@ -15,7 +15,8 @@ def query_meteo(query_lat: float, query_long: float) -> tuple:
   # The order of variables in hourly or daily is important to assign them correctly below
   url = "https://api.open-meteo.com/v1/gfs"
   params = {
-  	"latitude": 35.56361,
+  	"latitude": query_lat,
+    "longitude": query_long,
   	"hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "pressure_msl", "surface_pressure", "visibility", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "temperature_80m", "uv_index", "uv_index_clear_sky", "is_day", "cape", "lifted_index", "convective_inhibition", "freezing_level_height"],
   	"daily": ["weather_code", "temperature_2m_max", "temperature_2m_min", "apparent_temperature_max", "apparent_temperature_min", "sunrise", "sunset", "daylight_duration", "sunshine_duration", "uv_index_max", "uv_index_clear_sky_max", "precipitation_sum", "rain_sum", "showers_sum"],
   	"minutely_15": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "precipitation", "weather_code", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "visibility", "cape", "is_day"],
