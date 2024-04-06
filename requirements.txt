@@ -9,3 +9,9 @@ ruff
 aiohttp
 asyncio
 pprintjson
+flask-mysqldb
+openmeteo-requests
+requests-cache
+retry-requests
+numpy
+python-dotenv
