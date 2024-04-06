@@ -17,8 +17,8 @@ def query_meteo(query_lat: float, query_long: float) -> tuple:
   params = {
   	"latitude": query_lat,
     "longitude": query_long,
-  	"hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "pressure_msl", "surface_pressure", "visibility", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "temperature_80m", "uv_index", "uv_index_clear_sky", "is_day", "cape", "lifted_index", "convective_inhibition", "freezing_level_height"],
-  	"daily": ["weather_code", "temperature_2m_max", "temperature_2m_min", "apparent_temperature_max", "apparent_temperature_min", "sunrise", "sunset", "daylight_duration", "sunshine_duration", "uv_index_max", "uv_index_clear_sky_max", "precipitation_sum", "rain_sum", "showers_sum"],
+  "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "pressure_msl", "surface_pressure", "visibility", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "temperature_80m", "is_day", "cape", "lifted_index", "convective_inhibition"],
+  	"daily": ["weather_code", "temperature_2m_max", "temperature_2m_min", "apparent_temperature_max", "apparent_temperature_min", "sunrise", "sunset", "daylight_duration", "sunshine_duration", "uv_index_max", "uv_index_clear_sky_max", "precipitation_sum", "rain_sum", "showers_sum", "snowfall_sum"],
   	"minutely_15": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "precipitation", "weather_code", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "visibility", "cape", "is_day"],
   	"temperature_unit": "fahrenheit",
   	"wind_speed_unit": "mph",
@@ -89,13 +89,10 @@ def query_meteo(query_lat: float, query_long: float) -> tuple:
   hourly_wind_direction_80m = hourly.Variables(10).ValuesAsNumpy()
   hourly_wind_gusts_10m = hourly.Variables(11).ValuesAsNumpy()
   hourly_temperature_80m = hourly.Variables(12).ValuesAsNumpy()
-  hourly_uv_index = hourly.Variables(13).ValuesAsNumpy()
-  hourly_uv_index_clear_sky = hourly.Variables(14).ValuesAsNumpy()
-  hourly_is_day = hourly.Variables(15).ValuesAsNumpy()
-  hourly_cape = hourly.Variables(16).ValuesAsNumpy()
-  hourly_lifted_index = hourly.Variables(17).ValuesAsNumpy()
-  hourly_convective_inhibition = hourly.Variables(18).ValuesAsNumpy()
-  hourly_freezing_level_height = hourly.Variables(19).ValuesAsNumpy()
+  hourly_is_day = hourly.Variables(13).ValuesAsNumpy()
+  hourly_cape = hourly.Variables(14).ValuesAsNumpy()
+  hourly_lifted_index = hourly.Variables(15).ValuesAsNumpy()
+  hourly_convective_inhibition = hourly.Variables(16).ValuesAsNumpy()
   
   hourly_data = {"date": pd.date_range(
   	start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
@@ -116,13 +113,10 @@ def query_meteo(query_lat: float, query_long: float) -> tuple:
   hourly_data["wind_direction_80m"] = hourly_wind_direction_80m
   hourly_data["wind_gusts_10m"] = hourly_wind_gusts_10m
   hourly_data["temperature_80m"] = hourly_temperature_80m
-  hourly_data["uv_index"] = hourly_uv_index
-  hourly_data["uv_index_clear_sky"] = hourly_uv_index_clear_sky
   hourly_data["is_day"] = hourly_is_day
   hourly_data["cape"] = hourly_cape
   hourly_data["lifted_index"] = hourly_lifted_index
   hourly_data["convective_inhibition"] = hourly_convective_inhibition
-  hourly_data["freezing_level_height"] = hourly_freezing_level_height
   
   hourly_dataframe = pd.DataFrame(data = hourly_data)
   print(hourly_dataframe)
@@ -143,6 +137,7 @@ def query_meteo(query_lat: float, query_long: float) -> tuple:
   daily_precipitation_sum = daily.Variables(11).ValuesAsNumpy()
   daily_rain_sum = daily.Variables(12).ValuesAsNumpy()
   daily_showers_sum = daily.Variables(13).ValuesAsNumpy()
+  daily_snowfall_sum = daily.Variables(14).ValuesAsNumpy()
   
   daily_data = {"date": pd.date_range(
   	start = pd.to_datetime(daily.Time(), unit = "s", utc = True),
@@ -164,7 +159,9 @@ def query_meteo(query_lat: float, query_long: float) -> tuple:
   daily_data["precipitation_sum"] = daily_precipitation_sum
   daily_data["rain_sum"] = daily_rain_sum
   daily_data["showers_sum"] = daily_showers_sum
+  daily_data["snowfall_sum"] = daily_snowfall_sum
   
   daily_dataframe = pd.DataFrame(data = daily_data)
   print(daily_dataframe)
+
   # figure out return of values to process
