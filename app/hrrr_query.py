@@ -5,7 +5,7 @@ import pandas as pd
 from retry_requests import retry
 
 
-def query_meteo(query_lat: float, query_long: float) -> tuple:
+def query_hrrr(query_lat: float, query_long: float) -> tuple:
   # Setup the Open-Meteo API client with cache and retry on error
   cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
   retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
