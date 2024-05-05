@@ -33,6 +33,17 @@ def edit(model_string):
     edit_results = db.execute_query(db_connection=db_connection, query=edit_query).fetchall()
     return render_template("edit.j2", model_string=edit_results)
 
+@app.route('/update')
+def update():
+#    edit_query = f"SELECT * FROM {model_string};"
+#    edit_results = db.execute_query(db_connection=db_connection, query=edit_query).fetchall()
+    return render_template("update.j2")
+
+@app.route('/add')
+def add():
+#    edit_query = f"SELECT * FROM {model_string};"
+#    edit_results = db.execute_query(db_connection=db_connection, query=edit_query).fetchall()
+    return render_template("add.j2")
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 3000))
