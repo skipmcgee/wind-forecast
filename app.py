@@ -1,11 +1,12 @@
-from flask import Flask, render_template, json
+from flask import Flask, render_template, json, request
+from flask_mysqldb import MySQL
 import os
-#import database.db_connector as db
+import database.db_connector as db
 
 # Configuration
 
 app = Flask(__name__)
-#db_connection = db.connect_to_database()
+db_connection = db.connect_to_database()
 
 # Routes 
 

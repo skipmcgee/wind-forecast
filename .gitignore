@@ -1,4 +1,5 @@
 .env
 app/.env
+database/.env
 /venv
 __pycache__
