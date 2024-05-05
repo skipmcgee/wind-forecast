@@ -20,6 +20,6 @@ gunicorn
 itsdangerous
 Jinja2
 MarkupSafe
-#flask-mysqldb
-#mysqlclient
-#Werkzeug
+mysqlclient
+flask-mysqldb
+Werkzeug
