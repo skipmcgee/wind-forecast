@@ -16,6 +16,10 @@ wind forecast data
     340DBPW='mypw'
     340DB='mydb'```
 
-### if not first run::
+### make sure your network or local db is set up:
+1) confirm database name, user, pass
+2) `source DDL.sql` to create tables and data
+
+### To actually run the app:
 1) `source venv/bin/activate`
 2) `python3 app.py`

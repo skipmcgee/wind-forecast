@@ -8,20 +8,31 @@ import database.db_connector as db
 app = Flask(__name__)
 db_connection = db.connect_to_database()
 
-# Routes 
+entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ]
 
+# Routes 
 @app.route('/')
 def root():
-    return render_template("main.j2")
+    models_query = "SELECT * FROM Models;"
+    locations_query = "SELECT * FROM Locations;"
+    sensors_query = "SELECT * FROM Sensors;"
+    forecasts_query = "SELECT * FROM Forecasts;"
+    readings_query = "SELECT * FROM Readings;"
 
-#@app.route('/bsg-people')
-#def bsg_people():
-#    query = "SELECT * FROM bsg_people;"
-#    cursor = db.execute_query(db_connection=db_connection, query=query)
-#    results = cursor.fetchall()
-#    return render_template("bsg.j2", bsg_people=results)
+    models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
+    locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
+    sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
+    forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
+    readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
-# Listener
+    return render_template("main.j2", models=models_results, locations=locations_results, sensors=sensors_results, forecasts=forecasts_results, readings=readings_results)
+
+@app.route('/edit')
+def edit(model_string):
+    edit_query = f"SELECT * FROM {model_string};"
+    edit_results = db.execute_query(db_connection=db_connection, query=edit_query).fetchall()
+    return render_template("edit.j2", model_string=edit_results)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 3000))
