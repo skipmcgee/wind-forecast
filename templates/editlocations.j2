@@ -1,0 +1,81 @@
+<html>
+
+<head>
+	<title>Edit Locations</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div>
+        <table border="1" cellpadding="5"> 
+            <caption> Editing Location: </caption>
+            <!-- Access locations list passed from app.py -->
+            {% if locations %}
+                <thead>
+                    <tr>
+                        <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in locations[0].keys() %}
+
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+                <tbody>
+                    <!-- Now, iterate through every item in locations -->
+                    {% for item in locations %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+                        
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td>{{item[key]}}</td> {% endfor %} 
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+        </table>
+
+        <div id="edit">
+            <!-- form to edit locations-->
+            <form id="editLocation" action="/editlocations/{{locations[0].id}}" method="post">
+                <legend><strong>Edit Location</strong></legend>
+                <fieldset>
+                    <!-- We can preset form inputs to match attributes currently stored for 'id' of the location to be updated via value= and accessing our passed Locations list -->
+                    <!-- Create hidden form input to store the passed 'id' of the location we are editing so we can access it easily in our 'POST' method in our app.py -->
+                    <input type="hidden" value="{{locations[0].id}}" class="form-control" id="locationID" name="locationID" required>
+                    <label for="make">first name:</label>
+
+                    <input type="text" value="{{locations[0].fname}}" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" required>
+                    <label for="model">last name:</label>
+
+                    <input type="text" value="{{locations[0].lname}}" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" required>
+                    <label for="year">location:</label>
+
+
+                    <select class="form-control" id="location" name="location" pattern="[0-4]{1}" placeholder="" required> 
+                        <!-- Access our location list passed from app.py-->
+                        <option value="0">&nbsp;</option>
+                        {% for location in locations %}
+                                <!-- If the value iterated location matches the value of the location of the location currently Editing, pre-select that option -->
+                                {% if location['id'] == locations[0].location %}
+                                    <option value="{{ location['id'] }}" selected> {{location['name']}}</option>
+                                {% else %}
+                                    <option value="{{ location['id'] }}"> {{location['name']}}</option> 
+                                {% endif %}
+
+
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </select>	
+                        
+                    <label for="color">age:</label>
+                    <input type="text" value="{{locations[0].age}}" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}"> 
+                
+                </fieldset>
+                <input type="submit" value="Edit Location" name="Edit_Location" class="btn btn-primary" style="margin:.5rem;">
+                <a href='/people'><input class="btn" type="button" value="cancel"></a>
+            </form>
+
+</html>
