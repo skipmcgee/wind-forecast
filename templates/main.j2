@@ -4,7 +4,8 @@
     <nav>
           <ul class="menu">
             <li><a href="/">Home</a></li>
-            <li><a href="/add">Add</a></li>
+            <li><a href="/editlocations">Edit Locations</a></li>
+            <li><a href="/editsensors">Edit Sensors</a></li>
           </ul>
         </nav>
 </head>
@@ -12,7 +13,21 @@
     <h1>Group 10's Project</h1>
     <p>This is Skip McGee's and Kurt Griessman's project for the Model-Manager's company.</p>
 
-
+    <label for="sensorlist">Select a sensor:</label>
+    <select id="sensorlist" name="sensorlist" size="3">
+        {% if sensors %}
+            print(sensors)
+            {% for sensor in sensors %}
+        <option value="{{ sensor.sensorID }}">{{ sensor.sensorName }}</option>
+            {% endfor %}
+        {% else %}
+        <a>You need to add a sensor before continuing</a>
+        {% endif %}
+    </select> 
+    <p></p>
+    <input type="date" id="dateselector" name="dateselector">
+    <p></p>
+    <input type="submit" value="Submit" name="Submit" class="btn btn-primary">
 
 </body>
 </html>

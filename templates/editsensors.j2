@@ -44,25 +44,25 @@
                 <fieldset>
                     <!-- We can preset form inputs to match attributes currently stored for 'id' of the sensor to be updated via value= and accessing our passed Sensors list -->
                     <!-- Create hidden form input to store the passed 'id' of the sensor we are editing so we can access it easily in our 'POST' method in our app.py -->
-                    <input type="hidden" value="{{sensors[0].id}}" class="form-control" id="sensorID" name="sensorID" required>
-                    <label for="make">first name:</label>
+                    <input type="hidden" value="{{sensors[0].sensorID}}" class="form-control" id="sensorID" name="sensorID" required>
+                    <label for="make">Sensor Name:</label>
+                    <input type="text" value="{{sensors[0].sensorName}}" class="form-control" id="sensorName" name="sensorName" pattern="[A-Za-z]{1,}" required>
 
-                    <input type="text" value="{{sensors[0].fname}}" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" required>
-                    <label for="model">last name:</label>
+                    <label for="model">Sensor API Key:</label>
+					<input type="text" value="{{sensors[0].sensorAPIKey}}" class="form-control" id="APIKey" name="APIKey" pattern="[A-Za-z]{1,}" required>
 
-                    <input type="text" value="{{sensors[0].lname}}" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" required>
-                    <label for="year">sensor:</label>
-
-
+                    <label for="year">Sensor Number:</label>
+                    <input type="text" value="{{sensors[0].sensorNumber}}" class="form-control" id="sensorNumber" name="sensorNumber" pattern="[A-Za-z0-9]{1,}" required>
+					
                     <select class="form-control" id="sensor" name="sensor" pattern="[0-4]{1}" placeholder="" required> 
                         <!-- Access our sensor list passed from app.py-->
                         <option value="0">&nbsp;</option>
                         {% for sensor in sensors %}
                                 <!-- If the value iterated sensor matches the value of the sensor of the sensor currently Editing, pre-select that option -->
-                                {% if sensor['id'] == sensors[0].sensor %}
+                                {% if sensor['id'] == sensors[0].sensorID %}
                                     <option value="{{ sensor['id'] }}" selected> {{sensor['name']}}</option>
                                 {% else %}
-                                    <option value="{{ sensor['id'] }}"> {{sensor['name']}}</option> 
+                                    <option value="{{ sensor['id'] }}"> {{sensor['sensorName']}}</option> 
                                 {% endif %}
 
 
@@ -70,8 +70,8 @@
                         {% endfor %} 
                     </select>	
                         
-                    <label for="color">age:</label>
-                    <input type="text" value="{{sensors[0].age}}" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}"> 
+                    <label for="color">Location:</label>
+                    <input type="text" value="{{sensors[0].sensorLocationID}}" class="form-control" id="locationID" name="locationID" pattern="[A-Za-z0-9]{1,}"> 
                 
                 </fieldset>
                 <input type="submit" value="Edit Sensor" name="Edit_Sensor" class="btn btn-primary" style="margin:.5rem;">

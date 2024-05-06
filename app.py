@@ -44,7 +44,9 @@ def result_info(from_date, to_date, sensor):
 def edit_sensors():
     if request.method == "GET":
         edit_sensor_query = f"SELECT * FROM Sensors;"
-        edit_sensor_results = db.execute_query(db_connection=db_connection, query=edit_sensor_query).fetchall()
+        edit_sensor_obj = db.execute_query(db_connection=db_connection, query=edit_sensor_query)
+        edit_sensor_results = edit_sensor_obj.fetchall()
+        #print(edit_sensor_results)
         return render_template("editsensors.j2", sensors=edit_sensor_results)
     elif request.method == "POST":
         # sql commands to update or add
