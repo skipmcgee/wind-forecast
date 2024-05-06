@@ -16,7 +16,6 @@
     <label for="sensorlist">Select a sensor:</label>
     <select id="sensorlist" name="sensorlist" size="3">
         {% if sensors %}
-            print(sensors)
             {% for sensor in sensors %}
         <option value="{{ sensor.sensorID }}">{{ sensor.sensorName }}</option>
             {% endfor %}
