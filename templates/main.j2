@@ -11,8 +11,10 @@
 <body>
     <h1>Group 10's Project</h1>
     <p>This is Skip McGee's and Kurt Griessman's project for the Model-Manager's company.</p>
-
-    <label for="sensorlist">Select a sensor:</label>
+    <p></p>
+    <p>Select a Sensor</p>
+    <p></p>
+    <label for="sensorlist">Your Current Sensors:</label>
     <select id="sensorlist" name="sensorlist" size="3">
         {% if sensors %}
             {% for sensor in sensors %}
@@ -21,10 +23,12 @@
         {% else %}
         <a>You need to add a sensor before continuing</a>
         {% endif %}
-    </select> 
+    </select>
     <p></p>
+    <p>Select a Start Date:</p>
     <input type="date" id="fromdate" name="fromdate" required>
     <p></p>
+    <p>Select an End Date:</p>
     <input type="date" id="todate" name="todate" required>
     <p></p>
     <input type="submit" value="Submit" name="Submit" class="btn btn-primary">
