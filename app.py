@@ -51,16 +51,6 @@ def edit_sensors():
     elif request.method == "POST":
         # sql commands to update or add
         return redirect("/")
-
-@app.route('/editlocations', methods=["POST", "GET"])
-def edit_locations():
-    if request.method == "GET":
-        edit_loc_query = f"SELECT * FROM Locations;"
-        edit_loc_results = db.execute_query(db_connection=db_connection, query=edit_loc_query).fetchall()
-        return render_template("editlocations.j2", locations=edit_loc_results)
-    elif request.method == "POST":
-        # sql commands to update or add
-        return redirect("/")
     
 
 if __name__ == "__main__":
