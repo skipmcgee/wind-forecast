@@ -23,8 +23,12 @@ SELECT * FROM Forecasts;
 
 SELECT * 
 FROM Forecasts
-WHERE forecastForDateTime BETWEEN _toDate AND _fromDate;
-
+JOIN Models ON Forecasts.forecastModelID = Models.modelID
+JOIN Locations ON Forecasts.forecastLocationID = Locations.locationID
+WHERE 
+    forecastForDateTime BETWEEN _toDate AND _fromDate
+    AND
+    location.locationID = _locationID;
 -- -----------------------------------------------------
 -- Insert Forecast Information
 -- '_' is used to denote backend language variables
@@ -54,11 +58,13 @@ SELECT * FROM Readings;
 
 -- OR get Readings from a date range
 
-SELECT * 
-FROM Readings
+SELECT * FROM Readings
+JOIN Sensors ON Readings.readingSensorID = Sensors.sensorID
 JOIN Dates ON Readings.readingDateID = Dates.dateID
-WHERE dateDateTime BETWEEN _toDate AND _fromDate;
-
+WHERE 
+    dateDateTime BETWEEN _toDate AND _fromDate
+    AND
+    sensorLocationID =_locationID;
 -- -----------------------------------------------------
 -- Insert Readings Information
 -- '_' is used to denote backend language variables

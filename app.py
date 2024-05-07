@@ -31,13 +31,13 @@ def root():
         return redirect("/results", from_date=from_date, to_date=to_date, sensor=sensor)
 
 @app.route('/results', methods=["GET"])
-def result_info(from_date, to_date, sensor):
-    forecasts_query = "SELECT * FROM Forecasts;"
-    readings_query = "SELECT * FROM Readings;"
-    forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
-    readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
+def result_info(from_date, to_date, locationID):
+    forecasts_query = f"SELECT * FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE\nforecastForDateTime BETWEEN {to_date} AND {from_date}\nAND\nlocation.locationID = {locationID};"
+    readings_query = f"SELECT * FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE \ndateDateTime BETWEEN {to_date} AND {from_date}\nAND\nsensorLocationID = {locationID};"
+    forecasts_results = db.execute_query(db_connection=db_connection, forecasts=forecasts_query).fetchall()
+    readings_results = db.execute_query(db_connection=db_connection, readings=readings_query).fetchall()
 
-    return render_template("results.j2", forecasts=forecasts_results, readings=readings_results)
+    return render_template("results.j2", locationID=locationID, from_date=from_date, to_date=to_date, forecasts=forecasts_results, readings=readings_results)
 
 @app.route('/editsensors', methods=["POST", "GET"])
 def edit_sensors():
