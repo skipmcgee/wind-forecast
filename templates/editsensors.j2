@@ -45,15 +45,15 @@
                     <!-- We can preset form inputs to match attributes currently stored for 'id' of the sensor to be updated via value= and accessing our passed Sensors list -->
                     <!-- Create hidden form input to store the passed 'id' of the sensor we are editing so we can access it easily in our 'POST' method in our app.py -->
                     <input type="hidden" value="{{sensors[0].sensorID}}" class="form-control" id="sensorID" name="sensorID" required>
-                    <label for="make">Sensor Name:</label>
+                    <label for="name">Sensor Name:</label>
                     <input type="text" value="{{sensors[0].sensorName}}" class="form-control" id="sensorName" name="sensorName" pattern="[A-Za-z]{1,}" required>
 
-                    <label for="model">Sensor API Key:</label>
-					<input type="text" value="{{sensors[0].sensorAPIKey}}" class="form-control" id="APIKey" name="APIKey" pattern="[A-Za-z]{1,}" required>
+                    <label for="key">Sensor API Key:</label>
+					<input type="text" value="{{sensors[0].sensorAPIKEY}}" class="form-control" id="sensorAPIKey" name="sensorAPIKey" pattern="[A-Za-z]{1,}" required>
 
-                    <label for="year">Sensor Number:</label>
+                    <label for="number">Sensor Number:</label>
                     <input type="text" value="{{sensors[0].sensorNumber}}" class="form-control" id="sensorNumber" name="sensorNumber" pattern="[A-Za-z0-9]{1,}" required>
-					
+
                     <select class="form-control" id="sensor" name="sensor" pattern="[0-4]{1}" placeholder="" required> 
                         <!-- Access our sensor list passed from app.py-->
                         <option value="0">&nbsp;</option>
@@ -65,14 +65,19 @@
                                     <option value="{{ sensor['id'] }}"> {{sensor['sensorName']}}</option> 
                                 {% endif %}
 
-
                         <!-- End of this for loop -->
                         {% endfor %} 
                     </select>	
                         
-                    <label for="color">Location:</label>
-                    <input type="text" value="{{sensors[0].sensorLocationID}}" class="form-control" id="locationID" name="locationID" pattern="[A-Za-z0-9]{1,}"> 
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" value="{{sensors[0].locationLatitude}}" class="form-control" id="locationLatitude" name="locationLatitude" pattern="[A-Za-z0-9]{1,}"> 
                 
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" value="{{sensors[0].locationLongitude}}" class="form-control" id="locationLongitude" name="locationLongitude" pattern="[A-Za-z0-9]{1,}"> 
+
+                    <label for="altitude">Altitude:</label>
+                    <input type="text" value="{{sensors[0].locationAltitude}}" class="form-control" id="locationAltitude" name="locationAltitude" pattern="[A-Za-z0-9]{1,}"> 
+
                 </fieldset>
                 <input type="submit" value="Edit Sensor" name="Edit_Sensor" class="btn btn-primary" style="margin:.5rem;">
                 <a href='/people'><input class="btn" type="button" value="cancel"></a>
