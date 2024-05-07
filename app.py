@@ -22,8 +22,8 @@ def root():
         # set vars:
         from_date = ''
         to_date = ''
-        sensor = ''
-        return redirect("/results", from_date=from_date, to_date=to_date, sensor=sensor)
+        locationID = ''
+        return redirect("/results", from_date=from_date, to_date=to_date, locationID=locationID)
 
 @app.route('/results', methods=["GET"])
 def result_info(from_date, to_date, locationID):
