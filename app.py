@@ -43,7 +43,7 @@ def result_info(from_date, to_date, sensor):
 @app.route('/editsensors', methods=["POST", "GET"])
 def edit_sensors():
     if request.method == "GET":
-        edit_sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors; JOIN Locations ON Sensors.sensorLocationID = Locations.locationID; ORDER BY sensorName DESC;"
+        edit_sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
         edit_sensor_obj = db.execute_query(db_connection=db_connection, query=edit_sensor_query)
         edit_sensor_results = edit_sensor_obj.fetchall()
         print(edit_sensor_results)
