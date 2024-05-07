@@ -15,14 +15,9 @@ entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ]
 @app.route('/', methods=["POST", "GET"])
 def root():
     if request.method == "GET":
-        models_query = "SELECT * FROM Models;"
-        locations_query = "SELECT * FROM Locations;"
         sensors_query = "SELECT * FROM Sensors;"
-        models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
-        locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        
-        return render_template("main.j2", models=models_results, locations=locations_results, sensors=sensors_results,)
+        return render_template("main.j2", sensors=sensors_results,)
     elif request.method == "POST":
         # set vars:
         from_date = ''
