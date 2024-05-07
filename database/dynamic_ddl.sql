@@ -4,7 +4,7 @@
 -- -----------------------------------------------------
 SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors
 JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
-ORDER BY sensorName DESC;"
+ORDER BY sensorName DESC;
 
 - -----------------------------------------------------
 -- Delete a Forecast
