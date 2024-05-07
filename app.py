@@ -18,7 +18,6 @@ def root():
         models_query = "SELECT * FROM Models;"
         locations_query = "SELECT * FROM Locations;"
         sensors_query = "SELECT * FROM Sensors;"
-
         models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
         locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
