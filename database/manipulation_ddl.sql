@@ -19,6 +19,12 @@ DELETE FROM Forecasts WHERE forecastID=_forecastID;
 -- -----------------------------------------------------
 SELECT * FROM Forecasts;
 
+-- OR get Forecasts from a date range
+
+SELECT * 
+FROM Forecasts
+WHERE forecastForDateTime BETWEEN _toDate AND _fromDate;
+
 -- -----------------------------------------------------
 -- Insert Forecast Information
 -- '_' is used to denote backend language variables
@@ -45,6 +51,13 @@ DELETE FROM Readings WHERE readingID=_readingID;
 -- '_' is used to denote backend language variables
 -- -----------------------------------------------------
 SELECT * FROM Readings;
+
+-- OR get Readings from a date range
+
+SELECT * 
+FROM Readings
+JOIN Dates ON Readings.readingDateID = Dates.dateID
+WHERE dateDateTime BETWEEN _toDate AND _fromDate;
 
 -- -----------------------------------------------------
 -- Insert Readings Information
@@ -99,6 +112,12 @@ DELETE FROM Dates WHERE dateID=_dateID;
 -- '_' is used to denote backend language variables
 -- -----------------------------------------------------
 SELECT * FROM Dates;
+
+-- OR get Dates from a date range
+
+SELECT * 
+FROM Dates
+WHERE dateDateTime BETWEEN _toDate AND _fromDate;
 
 -- -----------------------------------------------------
 -- Insert Dates Information
