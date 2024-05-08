@@ -1,0 +1,48 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+	<h1>{% block title %} Add a Sensor and Location {% endblock %}</h1>
+    <div>
+        <form id="addSensor" action="/editsensors/{{sensors[0].sensorID}}" method="post">
+            <legend><strong>Add Sensor:</strong></legend>
+            <fieldset>
+                <!-- We can preset form inputs to match attributes currently stored for 'id' of the sensor to be updated via value= and accessing our passed Sensors list -->
+                <!-- Create hidden form input to store the passed 'id' of the sensor we are editing so we can access it easily in our 'POST' method in our app.py -->
+                <input type="hidden" value="{{sensors[0].sensorID}}" class="form-control" id="sensorID" name="sensorID" required>
+                <label for="name">Sensor Name:</label>
+                <input type="text" value="{{sensors[0].sensorName}}" class="form-control" id="sensorName" name="sensorName" required>
+
+                <label for="key">Sensor API Key:</label>
+                <input type="text" value="{{sensors[0].sensorAPIKEY}}" class="form-control" id="sensorAPIKey" name="sensorAPIKey" required>
+
+                <label for="number">Sensor Number:</label>
+                <input type="text" value="{{sensors[0].sensorNumber}}" class="form-control" id="sensorNumber" name="sensorNumber" required>
+                    
+                <label for="latitude">Latitude:</label>
+                <input type="text" value="{{sensors[0].locationLatitude}}" class="form-control" id="locationLatitude" name="locationLatitude" required> 
+            
+                <label for="longitude">Longitude:</label>
+                <input type="text" value="{{sensors[0].locationLongitude}}" class="form-control" id="locationLongitude" name="locationLongitude" required> 
+
+                <label for="altitude">Altitude:</label>
+                <input type="text" value="{{sensors[0].locationAltitude}}" class="form-control" id="locationAltitude" name="locationAltitude" required> 
+
+                <select class="form-control" id="sensor" name="sensor" placeholder="" required> 
+                    <!-- Access our sensor list passed from app.py-->
+                    
+                    {% for sensor in sensors %}
+                            <!-- If the value iterated sensor matches the value of the sensor currently Editing, pre-select that option -->
+                            {% if sensor['id'] == sensors[0].sensorID %}
+                                <option value="{{ sensor['id'] }}" selected> {{sensor['name']}}</option>
+                            {% else %}
+                                <option value="{{ sensor['id'] }}"> {{sensor['sensorName']}}</option> 
+                            {% endif %}
+
+                    <!-- End of this for loop -->
+                    {% endfor %} 
+                </select>	
+            </fieldset>
+
+        </form>
+
+{% endblock %}
