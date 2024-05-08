@@ -1,19 +1,7 @@
-<html>
+{% extends 'base.j2' %}
 
-<head>
-    <title>Model Managers Website</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-
-    <nav>
-		<ul class="menu">
-		<li><a href="/">Home</a></li>
-		<li><a href="/editsensors">Edit Sensors</a></li>
-		</ul>
-    </nav>
-</head>
-
-<body>
-	<h1>Edit Sensors Page</h1>
+{% block content %}
+	<h1>{% block title %} Edit Sensor Library {% endblock %}</h1>
     <div>
         <table border="1" cellpadding="5"> 
             <caption>Your Current Sensors: </caption>
@@ -90,4 +78,4 @@
                 <a href='/editsensors'><input class="btn" type="button" value="Cancel"></a>
             </form>
 
-</html>
+{% endblock %}

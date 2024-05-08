@@ -1,21 +1,15 @@
-<html>
-<head>
-    <title>Model Managers Website</title>
-    <nav>
-          <ul class="menu">
-            <li><a href="/">Home</a></li>
-            <li><a href="/editsensors">Edit Sensors</a></li>
-          </ul>
-        </nav>
-</head>
-<body>
-    <h1>Group 10's Project</h1>
-    <p>This is Skip McGee's and Kurt Griessman's project for the Model-Manager's company.</p>
+{% extends 'base.j2' %}
+
+{% block content %}
+    <h1>{% block title %} Project Group 10 {% endblock %}</h1>
+    <p></p>
+    <p>This is Skip McGee's project for the Model-Manager's company.</p>
     <p></p>
     <p>Select a Sensor</p>
     <p></p>
+    <form method="post">
     <label for="sensorlist">Your Current Sensors:</label>
-    <select id="sensorlist" name="sensorlist" size="3">
+    <select id="sensorlist" name="sensorlist" required>
         {% if sensors %}
             {% for sensor in sensors %}
         <option value="{{ sensor.sensorID }}">{{ sensor.sensorName }}</option>
@@ -31,7 +25,6 @@
     <p>Select an End Date:</p>
     <input type="date" id="todate" name="todate" required>
     <p></p>
-    <input type="submit" value="Submit" name="Submit" class="btn btn-primary">
-
-</body>
-</html>
+    <button type="submit">Submit</button>
+    </form>
+{% endblock %}

@@ -28,7 +28,7 @@ JOIN Locations ON Forecasts.forecastLocationID = Locations.locationID
 WHERE 
     forecastForDateTime BETWEEN _toDate AND _fromDate
     AND
-    location.locationID = _locationID;
+    Locations.locationID = _locationID;
 -- -----------------------------------------------------
 -- Insert Forecast Information
 -- '_' is used to denote backend language variables
