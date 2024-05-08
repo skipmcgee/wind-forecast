@@ -29,14 +29,14 @@
                         <!-- Create a <td> element with the value of that key in it -->
                         <td>{{item[key]}}</td>
                         {% endfor %}
-                        <td><a href="edit/{{item.sensorID}}" class="btn btn-default">Edit</a></td>
-						<td><a href="delete/{{item.sensorID}}" class="btn btn-default">Delete</a></td>
+                        <td><a href="/edit/{{item.sensorID}}" class="btn btn-default">Edit</a></td>
+						<td><a href="/delete/{{item.sensorID}}" class="btn btn-default">Delete</a></td>
                     </tr> 
                     {% endfor %} 
             {% endif %} 
         </table>
 
-        <input type="submit" value="Add Sensor" name="addsensor" class="btn btn-primary" style="margin:.5rem;">
+        <a href='/add'><input class="btn" type="button" value="Add a Sensor" method="get"></a>
         <a href='/library'><input class="btn" type="button" value="Cancel"></a>
 <div id="edit">
 

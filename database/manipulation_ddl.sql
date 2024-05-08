@@ -152,6 +152,12 @@ DELETE FROM Sensors WHERE sensorID=_sensorID;
 -- -----------------------------------------------------
 SELECT * FROM Sensors;
 
+-- OR
+
+SELECT * FROM Sensors
+JOIN Locations ON Sensors.sensorID = Locations.locationID
+WHERE Sensors.sensorID = _sensorID;
+
 -- -----------------------------------------------------
 -- Insert Sensors Information
 -- '_' is used to denote backend language variables
