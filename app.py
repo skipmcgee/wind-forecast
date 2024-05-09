@@ -13,6 +13,7 @@ logger = logging.getLogger('werkzeug')
 entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ] 
 info_dict = dict()
 editsensor = dict()
+addSensor = dict()
 
 # Routes 
 @app.route("/index")
@@ -57,9 +58,9 @@ def library():
         # sql commands to update or add
         return redirect("/")
 
-@app.route("/delete/<int:sensorID>", methods=["POST",])
+@app.route("/delete/<int:sensorID>", methods=["POST", "GET"])
 def delete(sensorID):
-    sensor_query = "DELETE FROM Sensors WHERE sensorID={sensorID};"
+    sensor_query = f"DELETE FROM Sensors\nWHERE sensorID={sensorID};"
     query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
 
     return redirect("/library")
@@ -67,7 +68,7 @@ def delete(sensorID):
 @app.route("/edit/<int:sensorID>", methods=["POST", "GET"])
 def sensoredit(sensorID):
     if request.method == "GET":
-        sensor_query = f"SELECT * FROM Sensors\nJOIN Locations ON Sensors.sensorID = Locations.locationID\nWHERE Sensors.sensorID = {sensorID};"
+        sensor_query = f"SELECT * FROM Sensors\nJOIN Locations ON Sensors.sensorLocationID = Locations.locationID\nWHERE Sensors.sensorID = {sensorID};"
         query_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
         logger.info(query_results)
         return render_template("edit.html", specific_sensor=query_results)
@@ -75,9 +76,9 @@ def sensoredit(sensorID):
     elif request.method == "Post":
         logger.info(sensorID)
         logger.info(str(editsensor))
-        sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({editsensor['sensorName']}, {editsensor['sensorAPIKey']}, {editsensor['sensorNumber']}, {editsensor['sensorLocationID']},);"
+        sensor_query = f"UPDATE Sensors\nSET `sensorName` = {editsensor['sensorName']}, `sensorAPIKey` = {editsensor['sensorAPIKey']}, `sensorNumber` = {editsensor['sensorNumber']}, `sensorLocationID` = {editsensor['sensorLocationID']},\nWHERE `sensorID` = {sensorID};"
         query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({editsensor['locationName']}, {editsensor['locationLatitude']}, {editsensor['locationLongitude']}, {editsensor['locationAltitude']},);"
+        location_query = f"UPDATE Locations\nSET `locationName`={editsensor['locationName']}, `locationLatitude`={editsensor['locationLatitude']}, `locationLongitude`={editsensor['locationLongitude']}, `locationAltitude`={editsensor['locationAltitude']},\nWHERE `locationID`=_locationID;"
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)
 
         return redirect("/library")
@@ -88,9 +89,10 @@ def addsensor():
         return render_template("add.html")
 
     elif request.method == "POST":
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({addsensor['locationName']}, {addsensor['locationLatitude']}, {addsensor['locationLongitude']}, {addsensor['locationAltitude']},);"
+        logger.info(str(addSensor))
+        location_query = f"INSERT INTO Locations\n VALUES (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({addSensor['locationName']}, {addSensor['locationLatitude']}, {addSensor['locationLongitude']}, {addSensor['locationAltitude']},);"
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-        sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({addsensor['sensorName']}, {addsensor['sensorAPIKey']}, {addsensor['sensorNumber']}, {addsensor['sensorLocationID']},);"
+        sensor_query = f"INSERT INTO Sensors \n VALUES (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({addSensor['sensorName']}, {addSensor['sensorAPIKey']}, {addSensor['sensorNumber']}, {addSensor['sensorLocationID']},);"
         query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
         return redirect("/library")
 

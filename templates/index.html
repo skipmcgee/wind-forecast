@@ -5,6 +5,36 @@
     <p></p>
     <p>This is Skip McGee's project for the Model-Manager's company.</p>
     <p></p>
+    <p>The Model-Managers company enables customers to determine which wind forecast models are
+    most accurate for given locations over specified time intervals. There are a variety of wind
+    forecast models (HRRR, ECMWF, GFS, MBLUE, etc. ) which often have different wind forecasts
+    for a given location. Users of these forecast models usually cannot determine what model is the
+    most accurate for their specific location. In other words, they would need to compare the model
+    forecasts to actual data from weather/wind collection devices at specific locations to determine
+    which model is typically more accurate for those locations.</p>
+
+    <p>The Model-Managers company solves this problem by storing hourly wind forecasts for a
+    standardized forecast period of 7 days in a database, and then allowing users to interact with a
+    web interface to compare the forecast data against the actual measured data at a location for
+    different time intervals. The 3 criteria used to compare forecast predictions to measured wind
+    are average wind speed, wind direction, and wind gust speed. The Model-Managers company
+    uses the free OpenMeteo API (https://open-meteo.com) to obtain wind forecast data, and a
+    Holfuy (https://api.holfuy.com/) device API to obtain the measured wind forecast data.
+    The minimal viable product of the Model-Managers company uses 2 weather forecast models
+    (HRRR and ECMWF) and 1 Holfuy device, located at La Bajada Ridge, New Mexico. The
+    1Model-Managers interface is expected to be accessible by a minimum of 50 different users over
+    100 times per day. Model-Managers uses a GitHub repository at
+    https://github.com/skipmcgee/wind-forecast to manage their codebase.</p>
+
+    <p>The entities that the Model-Manager’s Database uses are Models, Locations, Sensors,
+    Forecasts, Dates, and Readings. There will be more instances of Dates, Readings and
+    Forecasts than any other entity, as we are limiting the MVP to one Sensor and 2 Models. Since
+    there is one Sensor, that Sensor will be at 1 location for the MVP phase of the project. The
+    Dates of the Readings and Forecasts will be taken hourly, so 24 times a day for approximately
+    the next four months (each). This is anticipated to be around 2100 instances of each of the
+    Dates, Forecasts and Readings entities.</p>
+
+    <p></p>
     <p>Select a Sensor</p>
     <p></p>
     <form method="post">

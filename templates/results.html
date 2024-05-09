@@ -19,6 +19,8 @@
                         <td>{{item[key]}}</td> {% endfor %} 
                     </tr> 
                     {% endfor %} 
+            {% else %}
+                    <p>No results from the selected dates and location.</p>
             {% endif %} 
         </table>
     </div>
@@ -40,7 +42,9 @@
                         {% for key in item.keys() %}
                         <td>{{item[key]}}</td> {% endfor %} 
                     </tr> 
-                    {% endfor %} 
+                    {% endfor %}
+            {% else %}
+                <p>No results from the selected dates and sensor.</p>
             {% endif %} 
         </table>
     </div>

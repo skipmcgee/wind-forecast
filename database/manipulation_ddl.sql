@@ -155,7 +155,7 @@ SELECT * FROM Sensors;
 -- OR
 
 SELECT * FROM Sensors
-JOIN Locations ON Sensors.sensorID = Locations.locationID
+JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
 WHERE Sensors.sensorID = _sensorID;
 
 -- -----------------------------------------------------
@@ -170,8 +170,8 @@ VALUES (_sensorName, _sensorAPIKey, _sensorNumber, _sensorLocationID,);
 -- '_' is used to denote backend language variables
 -- -----------------------------------------------------
 UPDATE Sensors
-SET column1 = value1, column2 = value2,
-WHERE sensorID=_sensorID; 
+SET `sensorName` = _sensorName, `sensorAPIKey` = _sensorAPIKey, `sensorNumber` = _sensorNumber, `sensorLocationID` = _sensorLocationID,
+WHERE `sensorID` = _sensorID; 
 
 - -----------------------------------------------------
 -- Delete a Location
@@ -197,5 +197,5 @@ VALUES (_locationName, _locationLatitude, _locationLongitude, _locationAltitude,
 -- '_' is used to denote backend language variables
 -- -----------------------------------------------------
 UPDATE Locations
-SET column1 = value1, column2 = value2,
-WHERE locationID=_locationID;
+SET `locationName`={editsensor['locationName']}, `locationLatitude`={editsensor['locationLatitude']}, `locationLongitude`={editsensor['locationLongitude']}, `locationAltitude`={editsensor['locationAltitude']},
+WHERE `locationID`=_locationID;

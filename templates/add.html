@@ -3,12 +3,10 @@
 {% block content %}
 	<h1>{% block title %} Add a Sensor and Location {% endblock %}</h1>
     <div>
-        <form name="addsensor" id="addsensor" action="/add" method="post">
+        <form name="addSensor" id="addSensor" action="/add" method="post">
             <legend><strong>Add Sensor:</strong></legend>
             <fieldset>
-                <!-- We can preset form inputs to match attributes currently stored for 'id' of the sensor to be updated via value= and accessing our passed Sensors list -->
-                <!-- Create hidden form input to store the passed 'id' of the sensor we are editing so we can access it easily in our 'POST' method in our app.py -->
-                <input type="hidden" class="form-control" id="sensorID" name="sensorID">
+                
                 <label for="name">Sensor Name:</label>
                 <input type="text" value="Your Sensor Name Here" class="form-control" id="sensorName" name="sensorName" required>
 
@@ -17,7 +15,10 @@
 
                 <label for="number">Sensor Number:</label>
                 <input type="text" value="Your Sensor Number Here" class="form-control" id="sensorNumber" name="sensorNumber" required>
-                    
+
+                <label for="latitude">Location Name:</label>
+                <input type="text" value="Your Location Name Here" class="form-control" id="locationName" name="locationName" required> 
+        
                 <label for="latitude">Latitude:</label>
                 <input type="text" value="Your Sensor Latitude Here" class="form-control" id="locationLatitude" name="locationLatitude" required> 
             
@@ -28,7 +29,7 @@
                 <input type="text" value="Your Sensor Altitude Here" class="form-control" id="locationAltitude" name="locationAltitude" required> 
 
             </fieldset>
-        <button type="submit">Add New Sensor</button>
+        <button type="submit" method="post">Add New Sensor</button>
         </form>
 
 {% endblock %}
