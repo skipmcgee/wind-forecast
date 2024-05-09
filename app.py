@@ -13,7 +13,6 @@ logger = logging.getLogger('werkzeug')
 entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ] 
 info_dict = dict()
 editsensor = dict()
-addSensor = dict()
 
 # Routes 
 @app.route("/index")
@@ -58,7 +57,7 @@ def library():
         # sql commands to update or add
         return redirect("/")
 
-@app.route("/delete/<int:sensorID>", methods=["POST", "GET"])
+@app.route("/delete/<int:sensorID>", methods=["POST",])
 def delete(sensorID):
     sensor_query = f"DELETE FROM Sensors\nWHERE sensorID={sensorID};"
     query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
@@ -89,10 +88,10 @@ def addsensor():
         return render_template("add.html")
 
     elif request.method == "POST":
-        logger.info(str(addSensor))
-        location_query = f"INSERT INTO Locations\n VALUES (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({addSensor['locationName']}, {addSensor['locationLatitude']}, {addSensor['locationLongitude']}, {addSensor['locationAltitude']},);"
+        logger.info(str(request.form))
+        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-        sensor_query = f"INSERT INTO Sensors \n VALUES (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({addSensor['sensorName']}, {addSensor['sensorAPIKey']}, {addSensor['sensorNumber']}, {addSensor['sensorLocationID']},);"
+        sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({request.form['sensorName']}, {request.form['sensorAPIKey']}, {request.form['sensorNumber']}, {request.form['sensorLocationID']},);"
         query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
         return redirect("/library")
 
