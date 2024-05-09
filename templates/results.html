@@ -3,9 +3,10 @@
 {% block content %}
 	<h1>{% block title %} Compare Forecasts and Readings{% endblock %}</h1>
     <div>
+        {% if forecasts %}
         <table border="1" cellpadding="5"> 
             <caption> Display the Forecasts: </caption>
-            {% if forecasts %}
+
                 <thead>
                     <tr>
                         {% for key in forecasts[0].keys() %}
@@ -19,15 +20,16 @@
                         <td>{{item[key]}}</td> {% endfor %} 
                     </tr> 
                     {% endfor %} 
-            {% else %}
-                    <p>No results from the selected dates and location.</p>
-            {% endif %} 
         </table>
+        {% else %}
+            <p>No results from the selected dates and location.</p>
+        {% endif %} 
     </div>
     <div>
+        {% if readings %}
         <table border="1" cellpadding="5"> 
             <caption> Display the Readings: </caption>
-            {% if readings %}
+            
                 <thead>
                     <tr>
                         {% for key in readings[0].keys() %}
@@ -43,9 +45,9 @@
                         <td>{{item[key]}}</td> {% endfor %} 
                     </tr> 
                     {% endfor %}
-            {% else %}
-                <p>No results from the selected dates and sensor.</p>
-            {% endif %} 
         </table>
+        {% else %}
+            <p>No results from the selected dates and sensor.</p>
+        {% endif %} 
     </div>
 {% endblock %}
