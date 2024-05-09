@@ -35,10 +35,9 @@
     Dates, Forecasts and Readings entities.</p>
 
     <p></p>
-    <p>Select a Sensor</p>
-    <p></p>
+
     <form method="post">
-    <label for="sensorlist">Your Current Sensors:</label>
+    <label for="sensorlist">Select a Sensor:</label>
     <select id="sensorlist" name="sensorlist" required>
         {% if sensors %}
             {% for sensor in sensors %}

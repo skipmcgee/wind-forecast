@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400,900&display=swap');
+
+:root {
+        --heading-size:200%;
+        --photoDarkGray: #2f4f4f90;
+        --cactusBrown: #594539;
+        --cactusBrownTransparent: #59453995;
+        --sandiaBlue: #777082;
+        --sandiaBlueTransparent: #77708299;
+        --outlines: darkslategray;
+
+      }
+body {
+    background-color: var(--sandiaBlueTransparent);
+    margin: 4% auto;
+    width: 80%;
+    padding: 2% auto;
+    max-width: 80%;
+    min-width: 600px;
+    font-size: 1.2em;
+    line-height: 1.5;
+}
+body p {
+    font-family: Oxygen, sans-serif;
+    color: black;
+}
+
+
+h1 {
+    text-align: center;
+}
+
+
+footer {
+    font-size: 17px;
+    color: white;
+    height: 85px;
+    background-color: #395470;
+    display: block;
+    text-align: right;
+    padding: 2%;
+    margin: 2% auto;
+    width: 100%;
+}
+footer a {
+    font-weight: bold;
+    font-size: 130%;
+    display: inline-block;
+    min-width: 100px;
+    color: white;
+    text-decoration: none;
+    text-size-adjust: 30px;
+    font-family: Lato, sans-serif;
+  }

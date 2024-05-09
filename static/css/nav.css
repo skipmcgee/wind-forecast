@@ -1,0 +1,35 @@
+nav {
+    font-size: 17px;
+    color: white;
+    height: 85px;
+    background-color: #395470;
+    display: block;
+    text-align: center;
+    border-radius: 4px;
+    padding: 2%;
+    margin: 2% auto;
+    width: 100%;
+}
+nav a {
+    background: 3px solid var(--photoDarkGray);
+    font-weight: bold;
+    font-size: 130%;
+    display: inline-block;
+    min-width: 100px;
+    color: white;
+    margin-right: 40px;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-size-adjust: 30px;
+    font-family: Lato, sans-serif;
+  }
+nav a:hover {
+    background-color: whitesmoke;
+    color: black;
+    transition: 0.8s;
+    transform: scale(0.9); 
+  }
+nav a:focus {
+    outline-color: transparent;
+    outline-style:solid;
+  }
