@@ -1,8 +1,8 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-	<h1>{% block title %} Browse Your Sensor Library {% endblock %}</h1>
-    <div>
+	<h1>{% block title %} Browse Your Library {% endblock %}</h1>
+    <div id="sensorlibrary">
         <table border="1" cellpadding="5"> 
             <caption>Current Sensors: </caption>
             <!-- Access sensors list passed from app.py -->
@@ -30,15 +30,51 @@
                         <td>{{item[key]}}</td>
                         {% endfor %}
                         <p></p>
-                        <td><a href="/edit/{{item.sensorID}}" class="btn btn-default" method="get">Edit</a></td>
-						<td><a href="/delete/{{item.sensorID}}" class="btn btn-default" method="post">Delete</a></td>
+                        <td><a href="/edit/sensor/{{item.sensorID}}" class="btn btn-default" method="get">Edit</a></td>
+						<td><a href="/delete/sensor/{{item.sensorID}}" class="btn btn-default" method="post">Delete</a></td>
                     </tr> 
                     {% endfor %} 
             {% endif %} 
         </table>
 
-        <a href='/add'><input class="btn" type="button" value="Add a Sensor" method="get"></a>
-        <a href='/'><input class="btn" type="button" value="Home"></a>
-<div id="edit">
+        <a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a>
+    </div>
+    <div id=""modellibrary>
+        <table border="1" cellpadding="5"> 
+            <caption>Current Models: </caption>
+            <!-- Access models list passed from app.py -->
+            {% if models %}
+                <thead>
+                    <tr>
+                        <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in models[0].keys() %}
 
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+                <tbody>
+                    <!-- Now, iterate through every item in models -->
+                    {% for item in models %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+                        
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td>{{item[key]}}</td>
+                        {% endfor %}
+                        <p></p>
+                        <td><a href="/edit/model/{{item.modelID}}" class="btn btn-default" method="get">Edit</a></td>
+						<td><a href="/delete/model/{{item.modelID}}" class="btn btn-default" method="post">Delete</a></td>
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+        </table>
+        <a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a>
+    </div>
+    <p></p>
+    <a href='/'><input class="btn" type="button" value="Home"></a>
 {% endblock %}

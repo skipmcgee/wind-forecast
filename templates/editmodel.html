@@ -1,0 +1,17 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+	<h1>{% block title %} Edit a Model{% endblock %}</h1>
+    <div>
+        <form name="editmodel" id="editmodel" action="/edit/model/{{specific_model[0].modelID}}" method="post">
+            <legend><strong>Edit Model:</strong></legend>
+            <fieldset>
+                <input type="hidden" value="{{specific_model[0].modelID}}" class="form-control" id="modelID" name="modelID" required>
+                <label for="name">Model Name:</label>
+                <input type="text" value="{{specific_model[0].modelName}}" class="form-control" id="modelName" name="modelName" required>
+
+            </fieldset>
+        <button type="submit">Submit</button>
+        </form>
+
+{% endblock %}

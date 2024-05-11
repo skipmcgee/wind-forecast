@@ -3,7 +3,7 @@
 {% block content %}
 	<h1>{% block title %} Edit a Sensor or Location {% endblock %}</h1>
     <div>
-        <form name="editsensor" id="editsensor" action="/edit/{{specific_sensor[0].sensorID}}" method="post">
+        <form name="editsensor" id="editsensor" action="/edit/sensor/{{specific_sensor[0].sensorID}}" method="post">
             <legend><strong>Edit Sensor:</strong></legend>
             <fieldset>
                 <!-- We can preset form inputs to match attributes currently stored for 'id' of the sensor to be updated via value= and accessing our passed Sensors list -->
