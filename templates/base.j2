@@ -16,11 +16,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static',filename='img/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static',filename='img/favicon-16x16.png') }}">
     <link rel="stylesheet" href="/static/css/pico.min.css" />
+    <link rel="stylesheet" href="/static/css/pico.colors.min.css" />
     <title>Model-Managers Website</title>
 
 </head>
 <body>
-    <main class="container">
+    <main class="container-fluid">
         <nav class="navbar">
             <ul>
                 <li><strong>Model-Managers Website</strong></li>
@@ -33,7 +34,7 @@
             </ul>
         </nav>
         <p></p>
-        <div class="content">
+        <div class="content container">
             {% block content %}
             {% endblock %}
         </div>
