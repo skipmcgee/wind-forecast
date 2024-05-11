@@ -1,7 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-	<h1>{% block title %} Your Sensor Library {% endblock %}</h1>
+	<h1>{% block title %} Browse Your Sensor Library {% endblock %}</h1>
     <div>
         <table border="1" cellpadding="5"> 
             <caption>Current Sensors: </caption>
@@ -29,6 +29,7 @@
                         <!-- Create a <td> element with the value of that key in it -->
                         <td>{{item[key]}}</td>
                         {% endfor %}
+                        <p></p>
                         <td><a href="/edit/{{item.sensorID}}" class="btn btn-default" method="get">Edit</a></td>
 						<td><a href="/delete/{{item.sensorID}}" class="btn btn-default" method="post">Delete</a></td>
                     </tr> 
