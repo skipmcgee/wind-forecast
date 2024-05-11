@@ -84,11 +84,11 @@ def sensoredit(sensorID):
     
     elif request.method == "POST":
         logger.info(sensorID)
-        logger.info(str(request.form))
         sensor_query = f"UPDATE Sensors\nSET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}', `sensorLocationID`='{request.form['sensorLocationID']}',\nWHERE Sensors.sensorID = {sensorID};"
         query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
         id_sensor_query = f"SELECT sensorLocationID FROM Sensors\n WHERE Sensors.sensorID = {sensorID};"
-        _sensorLocationID = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
+        _sensorLocationID = db.execute_query(db_connection=db_connection, query=id_sensor_query).fetchall()
+        logger.info("identified the sensorLocationID as: " + _sensorLocationID)
         location_query = f"UPDATE Locations\nSET `locationName`='{request.form['locationName']}', `locationLatitude`='{request.form['locationLatitude']}', `locationLongitude`='{request.form['locationLongitude']}', `locationAltitude`='{request.form['locationAltitude']}',\nWHERE Locations.locationID = {_sensorLocationID};"
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)
 
