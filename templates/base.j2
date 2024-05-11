@@ -5,15 +5,15 @@
     <meta name="robots" content="noindex">
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel="shortcut icon" href="static/img/favicon.ico"/>
-    <link href="static/css/nav.css" rel="stylesheet" type="text/css" />
-    <link href="static/css/form.css" rel="stylesheet" type="text/css" />
-    <link href="static/css/app.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/favicon.ico') }}"/>
+    <link href="{{ url_for('static',filename='css/nav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static',filename='css/form.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet" type="text/css" />
     <link rel="apple-touch-icon" sizes="180x180" href="static/img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="static/img/android-chrome-512x512.png"> 
-    <link rel="icon" type="image/png" sizes="192x192" href="static/img/android-chrome-192x192.png"> 
-    <link rel="icon" type="image/png" sizes="32x32" href="static/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="static/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static',filename='img/android-chrome-512x512.png') }}"> 
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static',filename='img/android-chrome-192x192.png') }}"> 
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static',filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static',filename='img/favicon-16x16.png') }}">
     <title>Model-Managers Website</title>
 
 </head>
