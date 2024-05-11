@@ -1,10 +1,11 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-<article>
+
 	<h1>{% block title %} Browse Your Library {% endblock %}</h1>
-    <div id="sensorlibrary">
-        <table border="1" cellpadding="5"> 
+    <article>
+    <div id="sensorlibrary" class="overflow-auto">
+        <table class="striped"> 
             <caption>Current Sensors: </caption>
             <!-- Access sensors list passed from app.py -->
             {% if sensors %}
@@ -38,12 +39,18 @@
             {% endif %} 
         </table>
 
-        <a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a>
+        <div class="grid">
+            <div></div>
+            <div><a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a></div>
+            <div></div>
+        </div>
+        
     </div>
 </article>
 
-    <div id=""modellibrary>
-        <table border="1" cellpadding="5"> 
+<article>
+    <div id="modellibrary" class="overflow-auto">
+        <table class="striped"> 
             <caption>Current Models: </caption>
             <!-- Access models list passed from app.py -->
             {% if models %}
@@ -76,8 +83,13 @@
                     {% endfor %} 
             {% endif %} 
         </table>
-        <a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a>
+
+        <div class="grid">
+            <div></div>
+            <div><a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a></div>
+            <div><a href='/'><input class="btn" type="button" value="Home"></a></div>
+            <div></div>
+        </div>  
     </div>
-    <p></p>
-    <a href='/'><input class="btn" type="button" value="Home"></a>
+</article>
 {% endblock %}
