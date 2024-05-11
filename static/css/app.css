@@ -14,16 +14,14 @@
 body {
     background-color: var(--sandiaBlueTransparent);
     margin: 4% auto;
-    width: 80%;
     padding: 2% auto;
-    max-width: 80%;
     min-width: 600px;
     font-size: 1.2em;
     line-height: 1.5;
-}
-body p {
     font-family: Oxygen, sans-serif;
     color: black;
+    width: 80%;
+    max-width: 80%;
 }
 
 
@@ -42,6 +40,7 @@ footer {
     padding: 2%;
     margin: 2% auto;
     width: 100%;
+    border-radius: 4px;
 }
 footer a {
     font-weight: bold;
