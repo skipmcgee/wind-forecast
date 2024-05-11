@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf8">
     <meta name="robots" content="noindex">
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name="color-scheme" content="light dark" />
     <link rel="shortcut icon" href="{{ url_for('static',filename='img/favicon.ico') }}"/>
     <link href="{{ url_for('static',filename='css/nav.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static',filename='css/form.css') }}" rel="stylesheet" type="text/css" />
@@ -14,17 +15,23 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static',filename='img/android-chrome-192x192.png') }}"> 
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static',filename='img/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static',filename='img/favicon-16x16.png') }}">
+    <link rel="stylesheet" href="/static/css/pico.min.css" />
     <title>Model-Managers Website</title>
 
 </head>
 <body>
-    <nav class="navbar">
-        <a href="/">Home</a>
-        <a href="/library">Your Library</a>
-        <a href="/add/sensor">Add a Sensor</a>
-        <a href="/add/model">Add a Model</a>
-    </nav>
-    <main>
+    <main class="container">
+        <nav class="navbar">
+            <ul>
+                <li><strong>Model-Managers Website</strong></li>
+            </ul>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/library">Sensor Library</a></li>
+                <li><a href="/add/sensor">Add A Sensor</a></li>
+                <li><a href="/add/model">Add a Model</a></li>
+            </ul>
+        </nav>
         <p></p>
         <div class="content">
             {% block content %}

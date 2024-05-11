@@ -1,6 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
+<article>
 	<h1>{% block title %} Browse Your Library {% endblock %}</h1>
     <div id="sensorlibrary">
         <table border="1" cellpadding="5"> 
@@ -39,6 +40,8 @@
 
         <a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a>
     </div>
+</article>
+
     <div id=""modellibrary>
         <table border="1" cellpadding="5"> 
             <caption>Current Models: </caption>
