@@ -1,26 +1,24 @@
-#!/bin/env python3
 import asyncio
 import aiohttp
 import json
 from pprintjson import pprintjson as ppjson
 
-from credentials import Credentials
-from surreal import add_weather_entry,add_query_error_entry
-
-creds = Credentials()
-info_type = "JSON"
-wind_speed_units = "mph"
-wind_average_options_tuple = (0, 1, 2)
+# local imports
+from app.sensor_credentials import Credentials
 
 async def fetch(session, url):
     async with session.get(url) as response:
         return await response.json(),response.status
 
 async def gather_data():
+    creds = Credentials()
+    info_type = "JSON"
+    wind_speed_units = "mph"
+    wind_average_options_tuple = (0,)# (0, 1, 2)
     urls = []
     for wind_avg in wind_average_options_tuple:
         url = f"{creds.holfuy_base_address}s={creds.holfuy_station_list}&pw={creds.holfuy_password}&avg={wind_avg}&m={info_type}&su={wind_speed_units}&utc&loc&tu=F&daily"
-        #print(url)
+        #print("Holfuy URL: " + url)
         urls.append(url)
     valid_obj_list = []
     error_obj_list = []
@@ -31,6 +29,7 @@ async def gather_data():
                 #ppjson(json_object)
                 valid_obj_list.append(json_object)
             else:
+                print("Status Code: " + status_code)
                 error_obj_list.append(json_object)
     return valid_obj_list,error_obj_list
 

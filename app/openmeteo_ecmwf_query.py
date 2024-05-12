@@ -2,6 +2,7 @@ import openmeteo_requests
 import requests_cache
 import pandas as pd
 from retry_requests import retry
+import pprint
 
 
 def query_ecmwf(query_lat: float, query_long: float) -> tuple:
@@ -30,10 +31,10 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
 	
 	# Process first location. Add a for-loop for multiple locations or weather models
 	response = responses[0]
-	print(f"Coordinates {response.Latitude()}°N {response.Longitude()}°E")
-	print(f"Elevation {response.Elevation()} m asl")
-	print(f"Timezone {response.Timezone()} {response.TimezoneAbbreviation()}")
-	print(f"Timezone difference to GMT+0 {response.UtcOffsetSeconds()} s")
+	print(f"Coordinates: {response.Latitude()}°N {response.Longitude()}°E")
+	print(f"Elevation: {response.Elevation()} m asl")
+	print(f"Timezone: {response.Timezone()} {response.TimezoneAbbreviation()}")
+	print(f"Timezone difference to GMT+0: {response.UtcOffsetSeconds()} s")
 	
 	# Process hourly data. The order of variables needs to be the same as requested.
 	hourly = response.Hourly()
@@ -71,8 +72,11 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
 	hourly_data["surface_temperature"] = hourly_surface_temperature
 	hourly_data["cape"] = hourly_cape
 	
-	hourly_dataframe = pd.DataFrame(data = hourly_data)
-	print(hourly_dataframe)
+	#hourly_dataframe = pd.DataFrame(data = hourly_data)
+	#print(hourly_dataframe)
+    
+	pprint.pprint(hourly_data)
+	return hourly_data
 
 if __name__ == "__main__":
   query_ecmwf('35.562', '-106.226')
