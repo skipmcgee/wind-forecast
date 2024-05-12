@@ -2,4 +2,5 @@
 app/.env
 database/.env
 /venv
+venv
 __pycache__

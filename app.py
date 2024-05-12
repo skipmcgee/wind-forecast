@@ -6,6 +6,10 @@ import os
 import database.db_connector as db
 from datetime import date, datetime
 
+# local imports
+from app.openmeteo_ecmwf_query import query_ecmwf
+from app.openmeteo_gfs_query import query_gfs
+
 # Configuration
 app = Flask(__name__)
 app.secret_key = 'mc)kNIk4cbIZQ,@jUve-Q}2^T3em$p'
@@ -13,6 +17,7 @@ db_connection = db.connect_to_database()
 logger = logging.getLogger('werkzeug')
 entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ] 
 valid_models_list = ['HRRR', 'ECMWF', 'MBLUE', 'GFS', 'NAM', 'ICON', ]
+current_supported_model_list = ['ECMWF', 'GFS']
 info_dict = dict()
 DEBUG = True
 
@@ -221,6 +226,44 @@ def addmodel():
         model_obj = db.execute_query(db_connection=db_connection, query=model_update)
         return redirect("/library")
 
+@app.route('/add/reading', methods=["POST", "GET"])
+def addreading():
+    if request.method == "GET":
+        sensors_query = "SELECT * FROM Sensors;"
+        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
+        return render_template("addreading.html", sensors=sensors_results)
+    elif request.method == "POST":
+        use_sensorID = request.form['sensorlist']
+        if DEBUG:
+            logger.info("add reading post for sensor: " + use_sensorID)
+        #### need to add api query logic here
+        print("POST")
+        return redirect("/")
+
+@app.route('/add/forecast', methods=["POST", "GET"])
+def addforecast():
+    if request.method == "GET":
+        sensors_query = "SELECT * FROM Sensors;"
+        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
+        models_query = "SELECT * FROM Models;"
+        models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
+        return render_template("addforecast.html", sensors=sensors_results, models=models_results)
+    elif request.method == "POST":
+        if DEBUG:
+            logger.info(str(request.form))
+        use_sensorID = request.form['sensorlist']
+        use_modelID = request.form['modellist']
+        if DEBUG:
+            logger.info("add forecast post for sensor: " + use_sensorID + " and model: " + use_modelID)
+        model_query = f"SELECT * from Models\n WHERE modelID='{use_modelID}'"
+        model_results = db.execute_query(db_connection=db_connection, query=model_query).fetchall()
+        if DEBUG:
+            logger.info("model post results: " + str(model_results))
+        if model_results[0]['modelName'] not in current_supported_model_list:
+            flash(f"This model is not currently supported!")
+            return redirect("/add/forecast")
+        ### need to add api logic here
+        return redirect("/")
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 3000))

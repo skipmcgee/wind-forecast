@@ -1,11 +1,13 @@
 import openmeteo_requests
-
 import requests_cache
 import pandas as pd
 from retry_requests import retry
 
 
 def query_ecmwf(query_lat: float, query_long: float) -> tuple:
+     
+	print(f"query_ecmwf started for lat: {str(query_lat)}, long: {str(query_long)}")
+
 	# Setup the Open-Meteo API client with cache and retry on error
 	cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 	retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
@@ -71,3 +73,6 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
 	
 	hourly_dataframe = pd.DataFrame(data = hourly_data)
 	print(hourly_dataframe)
+
+if __name__ == "__main__":
+  query_ecmwf('35.562', '-106.226')
