@@ -39,7 +39,8 @@
                         <label for="altitude">Altitude:</label>
                         <input type="text" value="{{specific_sensor[0].locationAltitude}}" class="form-control"
                             id="locationAltitude" name="locationAltitude" required>
-    
+                        <input type="hidden" value="{{specific_sensor[0].locationName}}" class="form-control" id="locationName"
+                            name="locationName" required>
                     </fieldset>
                     <button type="submit">Submit</button>
                 </form>
