@@ -154,7 +154,11 @@ def modeledit(modelID):
         return render_template("editmodel.html", specific_model=query_results)
     
     elif request.method == "POST":
-        logger.info(f"updating name for {request.form['modelID']} to: {request.form['modelName']}")
+        if request.form['modelName'].upper() not in valid_models_list:
+            flash("Not a recognized Weather Model!")
+            return redirect(f"/edit/model/{request.form['modelID']}")
+        if DEBUG:
+            logger.info(f"updating name for {request.form['modelID']} to: {request.form['modelName']}")
         model_query = f"UPDATE Models\nSET `modelName`='{request.form['modelName']}'\nWHERE Models.modelID = {modelID};"
         if DEBUG:
             logger.info("edit model post: " + model_query)
