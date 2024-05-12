@@ -249,10 +249,11 @@ def addreading():
         if DEBUG:
             for sensor_obj in valid_obj_list:
                 pp.pprint(sensor_obj)
-        if len(error_obj_list) > 0:
-            for obj in error_obj_list:
+        # check for errors
+        for sensor_obj in valid_obj_list:
+            if "error" in sensor_obj.keys():
                 flash("Error accessing Holfuy API")
-            return redirect("/")
+                return redirect("/")
         now = datetime.now()
         date_format = "%Y-%m-%d %H:%M:%S"
         datetime_str = now.strftime(date_format)
