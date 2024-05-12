@@ -1,6 +1,6 @@
 import logging
 from markupsafe import Markup, escape
-from flask import Flask, render_template, json, request, redirect, flash
+from flask import Flask, render_template, json, request, redirect, flash, url_for
 from flask_mysqldb import MySQL
 import os
 import database.db_connector as db
@@ -35,13 +35,20 @@ def root():
         info_dict['todate'] = request.form['todate']
         info_dict['sensorlist'] = request.form['sensorlist']
         logger.info(str(info_dict))
-        return redirect("/results", info_dict=info_dict)
+        return url_for("results", info_dict=info_dict)
 
 @app.route('/results', methods=["GET"])
-def results():
+def results(info_dict):
+    if DEBUG:
+        logger.info("results info_dict: " + str(info_dict))
     forecasts_query = f"SELECT * FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE\nforecastForDateTime BETWEEN {info_dict['todate']} AND {info_dict['fromdate']}\nAND\nLocations.locationID = {info_dict['sensorlist']};"
-    readings_query = f"SELECT * FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE \ndateDateTime BETWEEN {info_dict['todate']} AND {info_dict['fromdate']}\nAND\nsensorLocationID = {info_dict['sensorlist']};"
+    if DEBUG:
+        logger.info("results forecasts query: " + forecasts_query)
     forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
+    
+    readings_query = f"SELECT * FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE \ndateDateTime BETWEEN {info_dict['todate']} AND {info_dict['fromdate']}\nAND\nsensorLocationID = {info_dict['sensorlist']};"
+    if DEBUG:
+        logger.info("results readings query: " + readings_query)
     readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
     return render_template("results.html", forecasts=forecasts_results, readings=readings_results)
