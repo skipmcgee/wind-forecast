@@ -4,7 +4,7 @@
 	<h4>{% block title %}Compare Forecasts to Readings{% endblock %}</h4>
     <div></div>
     <div></div>
-    <h6>Showing results for {{info_dict['sensorName']}} Sensor from {{info_dict['fromdate']}} to {{info_dict['todate']}}:</h6>
+    <h6>Showing results for {{info_dict['sensorName']}} sensor from {{info_dict['fromdate']}} to {{info_dict['todate']}}:</h6>
     <div></div>
     <div>
         {% if forecasts %}
@@ -43,7 +43,7 @@
                 <thead>
                     <tr>
                         {% for key in readings[0].keys() %}
-                        {% if key != 'readingDateID' %}
+                        {% if key != 'readingDateID' and key != 'readingSensorID' %}
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                         {% endif %}
                         {% endfor %}
@@ -53,7 +53,7 @@
                     {% for item in readings %}
                     <tr>
                         {% for key in item.keys() %}
-                        {% if key != 'readingDateID' %}
+                        {% if key != 'readingDateID' and key != 'readingSensorID' %}
                         <td>{{item[key]}}</td>
                         {% endif %}
                         {% endfor %} 
