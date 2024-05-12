@@ -4,6 +4,7 @@ from flask import Flask, render_template, json, request, redirect, flash, url_fo
 from flask_mysqldb import MySQL
 import os
 import database.db_connector as db
+from datetime import date, datetime
 
 # Configuration
 app = Flask(__name__)
@@ -31,6 +32,23 @@ def root():
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
         return render_template("index.html", sensors=sensors_results,)
     elif request.method == "POST":
+        # add validation 
+        #1) fromdate needs to be before todate
+        #2) todate can't be later than today
+        today = date.today()
+        if DEBUG:
+            logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
+        to_date_obj = datetime.strptime(request.form['todate'], '%Y-%m-%d').date()
+        from_date_obj = datetime.strptime(request.form['fromdate'], '%Y-%m-%d').date()
+        if to_date_obj > today:
+            flash("The To Date cannot be in the future!")
+            return redirect("/")
+        elif from_date_obj > to_date_obj:
+            flash("The From Date cannot be greater than the To Date!")
+            return redirect("/")
+        elif from_date_obj == to_date_obj:
+            flash("The From Date cannot be equal to the To Date!")
+            return redirect("/")
         info_dict['fromdate'] = request.form['fromdate']
         info_dict['todate'] = request.form['todate']
         info_dict['sensorlist'] = request.form['sensorlist']

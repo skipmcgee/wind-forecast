@@ -7,6 +7,12 @@ h4 {
     text-align: center;
 }
 
+footer p {
+    text-align: right;
+    font-size: 0.7em;
+    color: var(--pico-primary-hover-background);
+}
+
 /*
 :root {
         --heading-size:200%;
