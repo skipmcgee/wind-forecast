@@ -1,9 +1,11 @@
 {% extends 'base.j2' %}
 
 {% block content %}
+
 	<h1>{% block title %} Browse Your Library {% endblock %}</h1>
-    <div id="sensorlibrary">
-        <table border="1" cellpadding="5"> 
+    <article>
+    <div id="sensorlibrary" class="overflow-auto">
+        <table class="striped"> 
             <caption>Current Sensors: </caption>
             <!-- Access sensors list passed from app.py -->
             {% if sensors %}
@@ -16,9 +18,12 @@
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                         
                         <!-- End of this for loop -->
-                        {% endfor %} 
+                        {% endfor %}
+                        <!-- So decorator bar appears above edit and delete in table -->
+                        <th></th>
+                        <th></th>
                     </tr>
-
+                </thead>
                 <tbody>
                     <!-- Now, iterate through every item in sensors -->
                     {% for item in sensors %}
@@ -33,14 +38,23 @@
                         <td><a href="/edit/sensor/{{item.sensorID}}" class="btn btn-default" method="get">Edit</a></td>
 						<td><a href="/delete/sensor/{{item.sensorID}}" class="btn btn-default" method="post">Delete</a></td>
                     </tr> 
-                    {% endfor %} 
+                    {% endfor %}
+                </tbody>
             {% endif %} 
         </table>
 
-        <a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a>
+        <div class="grid">
+            <div></div>
+            <div><a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a></div>
+            <div></div>
+        </div>
+        
     </div>
-    <div id=""modellibrary>
-        <table border="1" cellpadding="5"> 
+</article>
+
+<article>
+    <div id="modellibrary" class="overflow-auto">
+        <table class="striped"> 
             <caption>Current Models: </caption>
             <!-- Access models list passed from app.py -->
             {% if models %}
@@ -53,8 +67,12 @@
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                         
                         <!-- End of this for loop -->
-                        {% endfor %} 
+                        {% endfor %}
+                        <!-- So decorator bar appears above edit and delete in table -->
+                        <th></th>
+                        <th></th>
                     </tr>
+                </thead>
 
                 <tbody>
                     <!-- Now, iterate through every item in models -->
@@ -69,12 +87,19 @@
                         <p></p>
                         <td><a href="/edit/model/{{item.modelID}}" class="btn btn-default" method="get">Edit</a></td>
 						<td><a href="/delete/model/{{item.modelID}}" class="btn btn-default" method="post">Delete</a></td>
-                    </tr> 
+                    </tr>
                     {% endfor %} 
+                </tbody>
+                    
             {% endif %} 
         </table>
-        <a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a>
+
+        <div class="grid">
+            <div></div>
+            <div><a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a></div>
+            <div><a href='/'><input class="btn" type="button" value="Home"></a></div>
+            <div></div>
+        </div>  
     </div>
-    <p></p>
-    <a href='/'><input class="btn" type="button" value="Home"></a>
+</article>
 {% endblock %}

@@ -1,17 +1,26 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-	<h1>{% block title %} Add a Model {% endblock %}</h1>
-    <div>
-        <form name="addModel" id="addModel" action="/addmodel" method="post">
-            <legend><strong>Add Model:</strong></legend>
-            <fieldset>
-
-                <label for="name">Model Name:</label>
-                <input type="text" value="Your Model Name Here" class="form-control" id="modelName" name="modelName" required>
-
-            </fieldset>
-        <button type="submit">Add New Model</button>
-        </form>
-
+    <h1>{% block title %} Add a Model {% endblock %}</h1>
+    
+    <div class="grid">
+        <div></div>
+        <div>
+            <article>
+                <form name="addModel" id="addModel" action="/addmodel" method="post">
+                    <legend><strong>Add Model:</strong></legend>
+                    <fieldset>
+    
+                        <label for="name">Model Name:</label>
+                        <input type="text" value="Your Model Name Here" class="form-control" id="modelName" name="modelName"
+                            required>
+    
+                    </fieldset>
+                    <button type="submit">Add New Model</button>
+                </form>
+            </article>
+        </div>
+        <div></div>
+    </div>
+    
 {% endblock %}
