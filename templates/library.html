@@ -4,6 +4,11 @@
 
 	<h1>{% block title %} Browse Your Library {% endblock %}</h1>
     <article>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
     <div id="sensorlibrary" class="overflow-auto">
         <table class="striped"> 
             <caption>Current Sensors: </caption>
