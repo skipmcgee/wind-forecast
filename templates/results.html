@@ -3,6 +3,9 @@
 {% block content %}
 	<h4>{% block title %}Compare Forecasts to Readings{% endblock %}</h4>
     <div></div>
+    <div></div>
+    <h6>Showing results for {{info_dict['sensorName']}} Sensor from {{info_dict['fromdate']}} to {{info_dict['todate']}}:</h6>
+    <div></div>
     <div>
         {% if forecasts %}
         <table border="1" cellpadding="5"> 
@@ -10,7 +13,9 @@
                 <thead>
                     <tr>
                         {% for key in forecasts[0].keys() %}
+                        {% if key != 'forecastDateID' %}
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        {% endif %}
                         {% endfor %}
                         <th>Delete</th> 
                     </tr>
@@ -18,7 +23,9 @@
                     {% for item in forecasts %}
                     <tr>
                         {% for key in item.keys() %}
+                        {% if key != 'forecastDateID' %}
                         <td>{{item[key]}}</td>
+                        {% endif %}
                         {% endfor %}
                         <td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"><span class="material-icons">delete</span></a></td>
                     </tr> 
@@ -36,7 +43,9 @@
                 <thead>
                     <tr>
                         {% for key in readings[0].keys() %}
+                        {% if key != 'readingDateID' %}
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        {% endif %}
                         {% endfor %}
                         <th>Delete</th>
                     </tr>
@@ -44,7 +53,9 @@
                     {% for item in readings %}
                     <tr>
                         {% for key in item.keys() %}
+                        {% if key != 'readingDateID' %}
                         <td>{{item[key]}}</td>
+                        {% endif %}
                         {% endfor %} 
                         <td><a href="/delete/reading/{{item.readingID}}" class="btn btn-default" method="post"><span class="material-icons">delete</span></a></td>
                     </tr> 

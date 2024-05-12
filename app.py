@@ -27,32 +27,35 @@ def dot_index():
 
 @app.route('/', methods=["POST", "GET"])
 def root():
+    today = date.today()
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        return render_template("index.html", sensors=sensors_results,)
+        return render_template("index.html", sensors=sensors_results, today=str(today))
     elif request.method == "POST":
-        # add validation 
-        #1) fromdate needs to be before todate
-        #2) todate can't be later than today
-        today = date.today()
         if DEBUG:
             logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
         to_date_obj = datetime.strptime(request.form['todate'], '%Y-%m-%d').date()
         from_date_obj = datetime.strptime(request.form['fromdate'], '%Y-%m-%d').date()
+        # validation 1) fromdate needs to be before todate
         if to_date_obj > today:
             flash("The To Date cannot be in the future!")
             return redirect("/")
+        # validation 2) todate can't be later than today
         elif from_date_obj > to_date_obj:
             flash("The From Date cannot be greater than the To Date!")
             return redirect("/")
+        # validation 3) from and to dates cannot be equal
         elif from_date_obj == to_date_obj:
             flash("The From Date cannot be equal to the To Date!")
             return redirect("/")
+        sensors_query = f"SELECT sensorName FROM Sensors\n WHERE sensorID='{request.form['sensorlist']}';"
+        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
         info_dict['fromdate'] = request.form['fromdate']
         info_dict['todate'] = request.form['todate']
         info_dict['sensorlist'] = request.form['sensorlist']
-        logger.info(str(info_dict))
+        info_dict['sensorName'] = sensors_results[0]['sensorName']
+        logger.info("found info dict: " + str(info_dict))
         return redirect("/results")
 
 @app.route('/results', methods=["GET"])
@@ -62,7 +65,7 @@ def results():
     if len(info_dict) == 0:
         logger.error("results info_dict was not created when resource was requested")
         return redirect("/")
-    forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape, forecastLocationID, forecastModelID FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
+    forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
     if DEBUG:
         logger.info("results forecasts query: " + forecasts_query)
     forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
@@ -71,7 +74,7 @@ def results():
         logger.info("results readings query: " + readings_query)
     readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
-    return render_template("results.html", forecasts=forecasts_results, readings=readings_results)
+    return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
 @app.route('/library', methods=["POST", "GET"])
 def library():
