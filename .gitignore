@@ -3,4 +3,5 @@ app/.env
 database/.env
 /venv
 venv
+.cache.sqlite
 __pycache__

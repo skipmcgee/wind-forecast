@@ -255,14 +255,25 @@ def addforecast():
         use_modelID = request.form['modellist']
         if DEBUG:
             logger.info("add forecast post for sensor: " + use_sensorID + " and model: " + use_modelID)
-        model_query = f"SELECT * from Models\n WHERE modelID='{use_modelID}'"
+        model_query = f"SELECT * from Models\n WHERE modelID='{use_modelID}';"
         model_results = db.execute_query(db_connection=db_connection, query=model_query).fetchall()
         if DEBUG:
-            logger.info("model post results: " + str(model_results))
+            logger.info("add forecast post model results: " + str(model_results))
+        sensor_query = f"SELECT * from Sensors\nJOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n WHERE sensorID='{use_sensorID}';"
+        sensor_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
+        if DEBUG:
+            logger.info("add forecast post sensor results: " + str(sensor_results))
         if model_results[0]['modelName'] not in current_supported_model_list:
             flash(f"This model is not currently supported!")
             return redirect("/add/forecast")
-        ### need to add api logic here
+        elif model_results[0]['modelName'] == "ECMWF":
+            query_ecmwf(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
+            ### sql insert here
+        
+        elif model_results[0]['modelName'] == "GFS":
+            query_gfs(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
+            ### sql insert here
+            
         return redirect("/")
 
 if __name__ == "__main__":
