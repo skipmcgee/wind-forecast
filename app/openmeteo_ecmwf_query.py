@@ -20,6 +20,7 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
 	params = {
 		"latitude": query_lat,
 		"longitude": query_long,
+        "timezone": 'MST',
 		"hourly": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "precipitation", "weather_code", "pressure_msl", "surface_pressure", "wind_speed_10m", "wind_speed_100m", "wind_direction_10m", "wind_direction_100m", "surface_temperature", "cape"],
 		"temperature_unit": "fahrenheit",
 		"wind_speed_unit": "mph",
@@ -53,8 +54,8 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
 	hourly_cape = hourly.Variables(12).ValuesAsNumpy()
 	
 	hourly_data = {"date": pd.date_range(
-		start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
-		end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = True),
+		start = pd.to_datetime(hourly.Time(), unit = "s", utc = False),
+		end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = False),
 		freq = pd.Timedelta(seconds = hourly.Interval()),
 		inclusive = "left"
 	)}
@@ -72,11 +73,12 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
 	hourly_data["surface_temperature"] = hourly_surface_temperature
 	hourly_data["cape"] = hourly_cape
 	
-	#hourly_dataframe = pd.DataFrame(data = hourly_data)
+	hourly_dataframe = pd.DataFrame(data = hourly_data)
 	#print(hourly_dataframe)
     
-	pprint.pprint(hourly_data)
-	return hourly_data
+	#pprint.pprint(hourly_dataframe.to_dict())
+    
+	return hourly_dataframe
 
 if __name__ == "__main__":
   query_ecmwf('35.562', '-106.226')

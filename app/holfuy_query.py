@@ -14,7 +14,7 @@ async def gather_data():
     creds = Credentials()
     info_type = "JSON"
     wind_speed_units = "mph"
-    wind_average_options_tuple = (0,)# (0, 1, 2)
+    wind_average_options_tuple = (2,)# (0, 1, 2)
     urls = []
     for wind_avg in wind_average_options_tuple:
         url = f"{creds.holfuy_base_address}s={creds.holfuy_station_list}&pw={creds.holfuy_password}&avg={wind_avg}&m={info_type}&su={wind_speed_units}&utc&loc&tu=F&daily"

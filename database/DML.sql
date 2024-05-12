@@ -33,8 +33,8 @@ WHERE
 -- Insert Forecast Information
 -- '_' is used to denote backend language variables
 -- -----------------------------------------------------
-INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastWindGust`, `forecastForDateTime`,)
-VALUES (_forecastDateID, _forecastTemperature2m, _forecastPrecipitation, _forecastWeatherCode, _forecastPressureMSL, _forecastWindSpeed10m, _forecastWindDirection10m, _forecastCape, _forecastModelID, _forecastLocationID, _forecastWindGust, _forecastForDateTime,);
+INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`,)
+VALUES (_forecastDateID, _forecastTemperature2m, _forecastPrecipitation, _forecastWeatherCode, _forecastPressureMSL, _forecastWindSpeed10m, _forecastWindDirection10m, _forecastCape, _forecastModelID, _forecastLocationID, _forecastForDateTime,);
 
 -- -----------------------------------------------------
 -- Update Forecast Information

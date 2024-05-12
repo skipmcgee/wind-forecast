@@ -20,7 +20,8 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     params = {
       "latitude": query_lat,
       "longitude": query_long,
-    "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "pressure_msl", "surface_pressure", "visibility", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "temperature_80m", "is_day", "cape", "lifted_index", "convective_inhibition"],
+      "timezone": 'MST',
+      "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "pressure_msl", "surface_pressure", "visibility", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "temperature_80m", "is_day", "cape", "lifted_index", "convective_inhibition"],
       "daily": ["weather_code", "temperature_2m_max", "temperature_2m_min", "apparent_temperature_max", "apparent_temperature_min", "sunrise", "sunset", "daylight_duration", "sunshine_duration", "uv_index_max", "uv_index_clear_sky_max", "precipitation_sum", "rain_sum", "showers_sum", "snowfall_sum"],
       "minutely_15": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "precipitation", "weather_code", "wind_speed_10m", "wind_speed_80m", "wind_direction_10m", "wind_direction_80m", "wind_gusts_10m", "visibility", "cape", "is_day"],
       "temperature_unit": "fahrenheit",
@@ -55,8 +56,8 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     minutely_15_is_day = minutely_15.Variables(12).ValuesAsNumpy()
     
     minutely_15_data = {"date": pd.date_range(
-      start = pd.to_datetime(minutely_15.Time(), unit = "s", utc = True),
-      end = pd.to_datetime(minutely_15.TimeEnd(), unit = "s", utc = True),
+      start = pd.to_datetime(minutely_15.Time(), unit = "s", utc = False),
+      end = pd.to_datetime(minutely_15.TimeEnd(), unit = "s", utc = False),
       freq = pd.Timedelta(seconds = minutely_15.Interval()),
       inclusive = "left"
     )}
@@ -75,7 +76,7 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     minutely_15_data["is_day"] = minutely_15_is_day
     
     minutely_15_dataframe = pd.DataFrame(data = minutely_15_data)
-    print(minutely_15_dataframe)
+    #print(minutely_15_dataframe)
     
     # Process hourly data. The order of variables needs to be the same as requested.
     hourly = response.Hourly()
@@ -98,8 +99,8 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     hourly_convective_inhibition = hourly.Variables(16).ValuesAsNumpy()
     
     hourly_data = {"date": pd.date_range(
-      start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
-      end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = True),
+      start = pd.to_datetime(hourly.Time(), unit = "s", utc = False),
+      end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = False),
       freq = pd.Timedelta(seconds = hourly.Interval()),
       inclusive = "left"
     )}
@@ -122,7 +123,7 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     hourly_data["convective_inhibition"] = hourly_convective_inhibition
     
     hourly_dataframe = pd.DataFrame(data = hourly_data)
-    print(hourly_dataframe)
+    #print(hourly_dataframe)
     
     # Process daily data. The order of variables needs to be the same as requested.
     daily = response.Daily()
@@ -143,8 +144,8 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     daily_snowfall_sum = daily.Variables(14).ValuesAsNumpy()
     
     daily_data = {"date": pd.date_range(
-      start = pd.to_datetime(daily.Time(), unit = "s", utc = True),
-      end = pd.to_datetime(daily.TimeEnd(), unit = "s", utc = True),
+      start = pd.to_datetime(daily.Time(), unit = "s", utc = False),
+      end = pd.to_datetime(daily.TimeEnd(), unit = "s", utc = False),
       freq = pd.Timedelta(seconds = daily.Interval()),
       inclusive = "left"
     )}
@@ -165,11 +166,10 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     daily_data["snowfall_sum"] = daily_snowfall_sum
     
     daily_dataframe = pd.DataFrame(data = daily_data)
-    print(daily_dataframe)
+    #print(daily_dataframe)
 
-    pprint.pprint(hourly_data)
-    return hourly_data
-    # figure out return of values to process
+    #pprint.pprint(hourly_data)
+    return hourly_dataframe
 
 
 if __name__ == "__main__":

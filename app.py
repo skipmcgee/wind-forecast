@@ -249,6 +249,8 @@ def addreading():
         if DEBUG:
             for sensor_obj in valid_obj_list:
                 pp.pprint(sensor_obj)
+            for error_obj in error_obj_list:
+                pp.pprint(error_obj)
         # check for errors
         for sensor_obj in valid_obj_list:
             if "error" in sensor_obj.keys():
@@ -279,7 +281,7 @@ def addreading():
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
         info_dict['sensorName'] = sensors_results[0]['sensorName']
         
-        forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
+        forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
         if DEBUG:
             logger.info("results forecasts query: " + forecasts_query)
         forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
@@ -317,14 +319,61 @@ def addforecast():
             flash(f"This model is not currently supported!")
             return redirect("/add/forecast")
         elif model_results[0]['modelName'] == "ECMWF":
-            query_ecmwf(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
-            ### sql insert here
-        
-        elif model_results[0]['modelName'] == "GFS":
-            query_gfs(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
-            ### sql insert here
+            ecmwf = query_ecmwf(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
+            forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
+            row_count = len(ecmwf.index)
+            for index,row in ecmwf.iterrows():
+                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
+                date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
+                date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
+                if len(date_results) == 0:
+                    date_create_id = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{row['date']}');"
+                    date_id = db.execute_query(db_connection=db_connection, query=date_create_id)
+                    date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
+                forecast_query += f"\n('{date_results[0]['dateID']}', '{row['temperature_2m']}', '{row['precipitation']}', '{row['weather_code']}', '{row['pressure_msl']}', '{row['wind_speed_10m']}', '{row['wind_direction_10m']}', '{row['cape']}', '{model_results[0]['modelID']}', '{sensor_results[0]['locationID']}', '{row['date']}')"
+                if index != row_count-1:
+                    forecast_query += ","
+            forecast_query += ";"
+            forecast_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
 
-        return redirect("/")
+        elif model_results[0]['modelName'] == "GFS":
+            gfs = query_gfs(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
+            forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
+            row_count = len(gfs.index)
+            for index,row in gfs.iterrows():
+                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
+                date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
+                date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
+                if len(date_results) == 0:
+                    date_create_id = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{row['date']}');"
+                    date_id = db.execute_query(db_connection=db_connection, query=date_create_id)
+                    date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
+                forecast_query += f"\n('{date_results[0]['dateID']}', '{row['temperature_2m']}', '{row['precipitation']}', '{row['weather_code']}', '{row['pressure_msl']}', '{row['wind_speed_10m']}', '{row['wind_direction_10m']}', '{row['cape']}', '{model_results[0]['modelID']}', '{sensor_results[0]['locationID']}', '{row['date']}')"
+                if index != row_count-1:
+                    forecast_query += ","
+            forecast_query += ";"
+            forecast_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
+        now = datetime.now()
+        date_format = "%Y-%m-%d %H:%M:%S"
+        datetime_str = now.strftime(date_format)
+        old_date = now - timedelta(hours=1)
+        new_date = now + timedelta(days=7)
+        new_date_str = new_date.strftime(date_format)
+        old_date_str = old_date.strftime(date_format)
+        info_dict['fromdate'] = old_date_str
+        info_dict['todate'] = new_date_str
+        info_dict['sensorlist'] = request.form['sensorlist']
+        info_dict['sensorName'] = sensor_results[0]['sensorName']
+        forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
+        if DEBUG:
+            logger.info("results forecasts query: " + forecasts_query)
+        forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
+        readings_query = f"SELECT readingID, readingSensorID, readingDateID, readingWindSpeed, readingWindGust, readingWindMin, readingWindDirection, readingTemperature FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE ( dateDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Sensors.sensorLocationID='{info_dict['sensorlist']}' );"
+        if DEBUG:
+            logger.info("results readings query: " + readings_query)
+        readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
+
+        return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 3000))
