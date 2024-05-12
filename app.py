@@ -79,7 +79,7 @@ def deletesensor(sensorID):
         logger.info("delete sensor: " + str(sensorID))
     sensor_query = f"DELETE FROM Sensors\nWHERE sensorID={sensorID};"
     query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-    flash(f"Deleted sensor ID: {sensorID}")
+    flash(f"Successfully deleted sensor!")
     return redirect("/library")
 
 @app.route("/delete/model/<int:modelID>", methods=["POST", "GET"])
@@ -89,7 +89,7 @@ def deletemodel(modelID):
         logger.info("delete model: " + str(modelID))
     model_query = f"DELETE FROM Models\nWHERE modelID={modelID};"
     query_obj = db.execute_query(db_connection=db_connection, query=model_query)
-    flash(f"Deleted model ID: {modelID}")
+    flash(f"Successfully deleted model!")
     return redirect("/library")
 
 @app.route("/delete/forecast/<int:forecastID>", methods=["POST", "GET"])
