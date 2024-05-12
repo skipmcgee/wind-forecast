@@ -10,15 +10,14 @@
     <link href="{{ url_for('static',filename='css/nav.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static',filename='css/form.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static',filename='css/app.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="apple-touch-icon" sizes="180x180" href="static/img/apple-touch-icon.png">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/pico.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/pico.colors.min.css') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static',filename='img/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static',filename='img/android-chrome-512x512.png') }}"> 
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static',filename='img/android-chrome-192x192.png') }}"> 
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static',filename='img/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static',filename='img/favicon-16x16.png') }}">
-    <link rel="stylesheet" href="/static/css/pico.min.css" />
-    <link rel="stylesheet" href="/static/css/pico.colors.min.css" />
     <title>Model-Managers Website</title>
-
 </head>
 <body>
     <main class="container-fluid">

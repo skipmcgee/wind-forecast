@@ -2,6 +2,11 @@
 
 {% block content %}
     <h1>{% block title %} Edit a Sensor or Location {% endblock %}</h1>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
     <div class="grid">
         <div></div>
         <div>
@@ -9,8 +14,6 @@
                 <form name="editsensor" id="editsensor" action="/edit/sensor/{{specific_sensor[0].sensorID}}" method="post">
                     <legend><strong>Edit Sensor:</strong></legend>
                     <fieldset>
-                        <!-- We can preset form inputs to match attributes currently stored for 'id' of the sensor to be updated via value= and accessing our passed Sensors list -->
-                        <!-- Create hidden form input to store the passed 'id' of the sensor we are editing so we can access it easily in our 'POST' method in our app.py -->
                         <input type="hidden" value="{{specific_sensor[0].sensorID}}" class="form-control" id="sensorID"
                             name="sensorID" required>
                         <label for="name">Sensor Name:</label>

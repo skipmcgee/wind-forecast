@@ -2,40 +2,45 @@
 
 {% block content %}
     <h1>{% block title %} Add a Sensor and Location {% endblock %}</h1>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
     <div class="grid">
         <div></div>
         <div>
             <article>
-                <form name="addSensor" id="addSensor" action="/addsensor" method="post">
+                <form name="addSensor" id="addSensor" action="/add/sensor" method="post">
                     <legend><strong>Add Sensor:</strong></legend>
                     <fieldset>
     
                         <label for="name">Sensor Name:</label>
-                        <input type="text" value="Your Sensor Name Here" class="form-control" id="sensorName"
+                        <input type="text" value="max 100 characters" class="form-control" id="sensorName"
                             name="sensorName" required>
     
                         <label for="key">Sensor API Key:</label>
-                        <input type="text" value="Your Sensor API Key Here" class="form-control" id="sensorAPIKey"
+                        <input type="text" value="max 100 characters" class="form-control" id="sensorAPIKey"
                             name="sensorAPIKey" required>
     
                         <label for="number">Sensor Number:</label>
-                        <input type="text" value="Your Sensor Number Here" class="form-control" id="sensorNumber"
+                        <input type="text" value="integer used to reference API" class="form-control" id="sensorNumber"
                             name="sensorNumber" required>
     
                         <label for="latitude">Location Name:</label>
-                        <input type="text" value="Your Location Name Here" class="form-control" id="locationName"
+                        <input type="text" value="max 100 characters" class="form-control" id="locationName"
                             name="locationName" required>
     
                         <label for="latitude">Latitude:</label>
-                        <input type="text" value="Your Sensor Latitude Here" class="form-control" id="locationLatitude"
+                        <input type="text" value="decimal" class="form-control" id="locationLatitude"
                             name="locationLatitude" required>
     
                         <label for="longitude">Longitude:</label>
-                        <input type="text" value="Your Sensor Longitude Here" class="form-control" id="locationLongitude"
+                        <input type="text" value="decimal" class="form-control" id="locationLongitude"
                             name="locationLongitude" required>
     
                         <label for="altitude">Altitude:</label>
-                        <input type="text" value="Your Sensor Altitude Here" class="form-control" id="locationAltitude"
+                        <input type="text" value="decimal" class="form-control" id="locationAltitude"
                             name="locationAltitude" required>
     
                     </fieldset>
