@@ -13,7 +13,7 @@ logger = logging.getLogger('werkzeug')
 entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ] 
 valid_models_list = ['HRRR', 'ECMWF', 'MBLUE', 'GFS', 'NAM', 'ICON', ]
 info_dict = dict()
-DEBUG = True
+DEBUG = False
 
 # Routes 
 @app.route("/index")
