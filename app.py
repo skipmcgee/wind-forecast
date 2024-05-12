@@ -13,7 +13,7 @@ logger = logging.getLogger('werkzeug')
 entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ] 
 valid_models_list = ['HRRR', 'ECMWF', 'MBLUE', 'GFS', 'NAM', 'ICON', ]
 info_dict = dict()
-DEBUG = False
+DEBUG = True
 
 # Routes 
 @app.route("/index")
@@ -44,12 +44,11 @@ def results():
     if len(info_dict) == 0:
         logger.error("results info_dict was not created when resource was requested")
         return redirect("/")
-    forecasts_query = f"SELECT * FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE\nforecastForDateTime BETWEEN {info_dict['fromdate']} AND {info_dict['todate']}\nAND\nLocations.locationID = {info_dict['sensorlist']};"
+    forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape, forecastLocationID, forecastModelID FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
     if DEBUG:
         logger.info("results forecasts query: " + forecasts_query)
     forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
-    
-    readings_query = f"SELECT * FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE \ndateDateTime BETWEEN {info_dict['todate']} AND {info_dict['fromdate']}\nAND\nsensorLocationID = {info_dict['sensorlist']};"
+    readings_query = f"SELECT readingID, readingSensorID, readingDateID, readingWindSpeed, readingWindGust, readingWindMin, readingWindDirection, readingTemperature FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE ( dateDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Sensors.sensorLocationID='{info_dict['sensorlist']}' );"
     if DEBUG:
         logger.info("results readings query: " + readings_query)
     readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
@@ -98,20 +97,20 @@ def deleteforecast(forecastID):
     forecastID = escape(forecastID)
     if DEBUG:
         logger.info("delete forecast: " + str(forecastID))
-    forecast_query = f"DELETE FROM Forecasts\nWHERE forecastID={forecastID};"
+    forecast_query = f"DELETE FROM Forecasts\nWHERE Forecasts.forecastID={forecastID};"
     query_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
 
-    return url_for("results", info_dict=info_dict)
+    return redirect("/results")
 
 @app.route("/delete/reading/<int:readingID>", methods=["POST", "GET"])
 def deletereading(readingID):
     readingID = escape(readingID)
     if DEBUG:
         logger.info("delete reading: " + str(readingID))
-    reading_query = f"DELETE FROM Readings\nWHERE readingID={readingID};"
+    reading_query = f"DELETE FROM Readings\nWHERE Readings.readingID={readingID};"
     query_obj = db.execute_query(db_connection=db_connection, query=reading_query)
 
-    return url_for("results", info_dict=info_dict)
+    return redirect("/results")
 
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
 def sensoredit(sensorID):
