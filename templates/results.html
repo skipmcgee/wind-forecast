@@ -2,22 +2,25 @@
 
 {% block content %}
 	<h1>{% block title %}Compare Forecasts to Readings{% endblock %}</h1>
+    <div></div>
     <div>
         {% if forecasts %}
         <table border="1" cellpadding="5"> 
             <caption> Display the Forecasts: </caption>
-
                 <thead>
                     <tr>
                         {% for key in forecasts[0].keys() %}
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
-                        {% endfor %} 
+                        {% endfor %}
+                        <th>Delete</th> 
                     </tr>
                 <tbody>
                     {% for item in forecasts %}
                     <tr>
                         {% for key in item.keys() %}
-                        <td>{{item[key]}}</td> {% endfor %} 
+                        <td>{{item[key]}}</td>
+                        {% endfor %}
+                        <td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"><span class="material-icons">delete</span></a></td>
                     </tr> 
                     {% endfor %} 
         </table>
@@ -25,24 +28,25 @@
             <p>No results from the selected dates and location.</p>
         {% endif %} 
     </div>
+    <div></div>
     <div>
         {% if readings %}
         <table border="1" cellpadding="5"> 
             <caption> Display the Readings: </caption>
-            
                 <thead>
                     <tr>
                         {% for key in readings[0].keys() %}
-                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
-                        {% endfor %} 
+                        {% endfor %}
+                        <th>Delete</th>
                     </tr>
-
                 <tbody>
                     {% for item in readings %}
                     <tr>
                         {% for key in item.keys() %}
-                        <td>{{item[key]}}</td> {% endfor %} 
+                        <td>{{item[key]}}</td>
+                        {% endfor %} 
+                        <td><a href="/delete/reading/{{item.readingID}}" class="btn btn-default" method="post"><span class="material-icons">delete</span></a></td>
                     </tr> 
                     {% endfor %}
         </table>
@@ -50,4 +54,5 @@
             <p>No results from the selected dates and sensor.</p>
         {% endif %} 
     </div>
+    <div></div>
 {% endblock %}

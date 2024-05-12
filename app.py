@@ -35,13 +35,16 @@ def root():
         info_dict['todate'] = request.form['todate']
         info_dict['sensorlist'] = request.form['sensorlist']
         logger.info(str(info_dict))
-        return url_for("results", info_dict=info_dict)
+        return redirect("/results")
 
 @app.route('/results', methods=["GET"])
-def results(info_dict):
+def results():
     if DEBUG:
         logger.info("results info_dict: " + str(info_dict))
-    forecasts_query = f"SELECT * FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE\nforecastForDateTime BETWEEN {info_dict['todate']} AND {info_dict['fromdate']}\nAND\nLocations.locationID = {info_dict['sensorlist']};"
+    if len(info_dict) == 0:
+        logger.error("results info_dict was not created when resource was requested")
+        return redirect("/")
+    forecasts_query = f"SELECT * FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE\nforecastForDateTime BETWEEN {info_dict['fromdate']} AND {info_dict['todate']}\nAND\nLocations.locationID = {info_dict['sensorlist']};"
     if DEBUG:
         logger.info("results forecasts query: " + forecasts_query)
     forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
@@ -89,6 +92,26 @@ def deletemodel(modelID):
     query_obj = db.execute_query(db_connection=db_connection, query=model_query)
 
     return redirect("/library")
+
+@app.route("/delete/forecast/<int:forecastID>", methods=["POST", "GET"])
+def deleteforecast(forecastID):
+    forecastID = escape(forecastID)
+    if DEBUG:
+        logger.info("delete forecast: " + str(forecastID))
+    forecast_query = f"DELETE FROM Forecasts\nWHERE forecastID={forecastID};"
+    query_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
+
+    return url_for("results", info_dict=info_dict)
+
+@app.route("/delete/reading/<int:readingID>", methods=["POST", "GET"])
+def deletereading(readingID):
+    readingID = escape(readingID)
+    if DEBUG:
+        logger.info("delete reading: " + str(readingID))
+    reading_query = f"DELETE FROM Readings\nWHERE readingID={readingID};"
+    query_obj = db.execute_query(db_connection=db_connection, query=reading_query)
+
+    return url_for("results", info_dict=info_dict)
 
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
 def sensoredit(sensorID):
