@@ -18,9 +18,12 @@
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                         
                         <!-- End of this for loop -->
-                        {% endfor %} 
+                        {% endfor %}
+                        <!-- So decorator bar appears above edit and delete in table -->
+                        <th></th>
+                        <th></th>
                     </tr>
-
+                </thead>
                 <tbody>
                     <!-- Now, iterate through every item in sensors -->
                     {% for item in sensors %}
@@ -35,7 +38,8 @@
                         <td><a href="/edit/sensor/{{item.sensorID}}" class="btn btn-default" method="get">Edit</a></td>
 						<td><a href="/delete/sensor/{{item.sensorID}}" class="btn btn-default" method="post">Delete</a></td>
                     </tr> 
-                    {% endfor %} 
+                    {% endfor %}
+                </tbody>
             {% endif %} 
         </table>
 
@@ -63,8 +67,12 @@
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                         
                         <!-- End of this for loop -->
-                        {% endfor %} 
+                        {% endfor %}
+                        <!-- So decorator bar appears above edit and delete in table -->
+                        <th></th>
+                        <th></th>
                     </tr>
+                </thead>
 
                 <tbody>
                     <!-- Now, iterate through every item in models -->
@@ -79,8 +87,10 @@
                         <p></p>
                         <td><a href="/edit/model/{{item.modelID}}" class="btn btn-default" method="get">Edit</a></td>
 						<td><a href="/delete/model/{{item.modelID}}" class="btn btn-default" method="post">Delete</a></td>
-                    </tr> 
+                    </tr>
                     {% endfor %} 
+                </tbody>
+                    
             {% endif %} 
         </table>
 

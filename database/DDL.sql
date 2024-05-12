@@ -150,82 +150,95 @@ COMMENT = 'The actual measured sensor reading values.';
 -- Insert `Models`
 -- -----------------------------------------------------
 
-INSERT INTO `Models` (modelName)
-VALUES ('ECMWF'),
-('HRRR'),
-('GFS'),
-('ICON'),
-('MBLUE'),
-('NAM');
+INSERT
+	INTO
+	`Models` (modelName)
+VALUES 
+	('ECMWF'),
+	('HRRR'),
+	('GFS'),
+	('ICON'),
+	('MBLUE'),
+	('NAM');
 
 -- -----------------------------------------------------
 -- Insert `Locations`
 -- -----------------------------------------------------
 
-INSERT INTO `Locations` (locationName, locationLatitude, locationLongitude, locationAltitude)
-VALUES ('La Bajada Ridge Launch', 35.56195, -106.22596, 6135),
-('Sandia Peak Launch', 35.196576, -106.434662, 10275),
-('Sandia Crest Launch', 35.21342, -106.45026, 10600),
-('Blue Springs Launch', 34.44002, -106.51913, 6200);
+INSERT INTO 
+	`Locations` (locationName, locationLatitude, locationLongitude, locationAltitude)
+VALUES 
+	('La Bajada Ridge Launch', 35.56195, -106.22596, 6135),
+	('Sandia Peak Launch', 35.196576, -106.434662, 10275),
+	('Sandia Crest Launch', 35.21342, -106.45026, 10600),
+	('Blue Springs Launch', 34.44002, -106.51913, 6200);
 
 -- -----------------------------------------------------
 -- Insert `Sensors`
 -- -----------------------------------------------------
 
-INSERT INTO `Sensors` (sensorName, sensorLocationID, sensorAPIKey, sensorNumber)
-VALUES ('La Bajada Holfuy', 1, 'mytestapikey1234', 1151),
-('Sandia Peak Holfuy', 2, 'mytestapikey23456', 1152),
-('Sandia Peak Tempest', 2, 'mytestapikey345670', 2),
-('Sandia Crest Holfuy', 3, 'mytestapikey456789', 1153),
-('Blue Springs Holfuy', 4, 'mytestapikey56789', 1154);
+INSERT INTO 
+	`Sensors` (sensorName, sensorLocationID, sensorAPIKey, sensorNumber)
+VALUES 
+	('La Bajada Holfuy', 1, 'mytestapikey1234', 1151),
+	('Sandia Peak Holfuy', 2, 'mytestapikey23456', 1152),
+	('Sandia Peak Tempest', 2, 'mytestapikey345670', 2),
+	('Sandia Crest Holfuy', 3, 'mytestapikey456789', 1153),
+	('Blue Springs Holfuy', 4, 'mytestapikey56789', 1154);
 
 -- -----------------------------------------------------
 -- Insert `Dates`
 -- -----------------------------------------------------
 
-INSERT INTO `Dates` (dateDateTime)
-VALUES ('2024-04-01 08:00:00'),
-('2024-04-01 09:00:00'),
-('2024-04-01 10:00:00'),
-('2024-04-01 11:00:00'),
-('2024-04-01 12:00:00'),
-('2024-04-01 13:00:00'),
-('2024-04-01 14:00:00'),
-('2024-04-01 15:00:00'),
-('2024-04-01 16:00:00'),
-('2024-04-01 17:00:00'),
-('2024-04-01 18:00:00'),
-('2024-04-01 19:00:00'),
-('2024-04-01 20:00:00'),
-('2024-04-01 21:00:00');
+INSERT INTO 
+	`Dates` (dateDateTime)
+VALUES 
+	('2024-04-01 08:00:00'),
+	('2024-04-01 09:00:00'),
+	('2024-04-01 10:00:00'),
+	('2024-04-01 11:00:00'),
+	('2024-04-01 12:00:00'),
+	('2024-04-01 13:00:00'),
+	('2024-04-01 14:00:00'),
+	('2024-04-01 15:00:00'),
+	('2024-04-01 16:00:00'),
+	('2024-04-01 17:00:00'),
+	('2024-04-01 18:00:00'),
+	('2024-04-01 19:00:00'),
+	('2024-04-01 20:00:00'),
+	('2024-04-01 21:00:00');
 
 -- -----------------------------------------------------
 -- Insert `Readings`
 -- -----------------------------------------------------
-INSERT INTO `Readings` (readingSensorID, readingDateID, readingWindSpeed, readingWindGust, readingWindMin, readingWindDirection, readingTemperature)
-VALUES (1, 1, 22.0, 28.0, 14.0, 250, 64),
-(1, 1, 22.0, 28.0, 14.0, 250, 64),
-(1, 2, 20.0, 22.0, 6.0, 231, 66),
-(1, 3, 21.0, 24.0, 11.0, 242, 67),
-(1, 4, 23.0, 25.0, 8.0, 250, 69),
-(1, 5, 18.0, 21.0, 4.0, 256, 71),
-(1, 6, 17.0, 22.0, 12.0, 264, 74),
-(1, 7, 16.0, 20.0, 15.0, 270, 72),
-(1, 8, 18.0, 21.0, 18.0, 265, 77),
-(1, 9, 20.0, 24.0, 16.0, 254, 75),
-(1, 10, 19.0, 22.0, 17.0, 246, 74);
+INSERT INTO 
+	`Readings` (readingSensorID, readingDateID, readingWindSpeed, readingWindGust, readingWindMin, readingWindDirection, readingTemperature)
+VALUES 
+	(1, 1, 22.0, 28.0, 14.0, 250, 64),
+	(1, 1, 22.0, 28.0, 14.0, 250, 64),
+	(1, 2, 20.0, 22.0, 6.0, 231, 66),
+	(1, 3, 21.0, 24.0, 11.0, 242, 67),
+	(1, 4, 23.0, 25.0, 8.0, 250, 69),
+	(1, 5, 18.0, 21.0, 4.0, 256, 71),
+	(1, 6, 17.0, 22.0, 12.0, 264, 74),
+	(1, 7, 16.0, 20.0, 15.0, 270, 72),
+	(1, 8, 18.0, 21.0, 18.0, 265, 77),
+	(1, 9, 20.0, 24.0, 16.0, 254, 75),
+	(1, 10, 19.0, 22.0, 17.0, 246, 74);
 
 -- -----------------------------------------------------
 -- Insert `Forecasts`
 -- -----------------------------------------------------
-INSERT INTO `Forecasts` (forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape, forecastLocationID, forecastModelID)
-VALUES ('2024-04-01 15:00:00', 1, 58, 0, 'CLEAR', 3, 10.0, 14.7, 220.0, 3.5, 1, 1),
-('2024-04-01 16:00:00', 2, 58, 0, 'CLEAR', 3, 10.0, 14.7, 220.0, 4.1, 1, 1),
-('2024-04-01 17:00:00', 3, 62, 0, 'CLEAR', 4, 14.0, 24.0, 230.0, 4.2, 1, 1),
-('2024-04-01 18:00:00', 4, 64, 0, 'CLEAR', 4, 16.0, 25.2, 232.0, 3.6, 1, 1),
-('2024-04-01 19:00:00', 5, 66, 0, 'CLEAR', 4, 13.0, 25.0, 228.0, 3.4, 1, 1),
-('2024-04-01 20:00:00', 6, 62, 0, 'CLEAR', 4, 11.0, 24.0, 220.0, 3.3, 1, 1),
-('2024-04-01 21:00:00', 7, 58, 0, 'CLEAR', 3, 9.0, 20.0, 218.0, 3.1, 1, 1);
+INSERT INTO 
+	`Forecasts` (forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape, forecastLocationID, forecastModelID)
+VALUES 
+	('2024-04-01 15:00:00', 1, 58, 0, 'CLEAR', 3, 10.0, 14.7, 220.0, 3.5, 1, 1),
+	('2024-04-01 16:00:00', 2, 58, 0, 'CLEAR', 3, 10.0, 14.7, 220.0, 4.1, 1, 1),
+	('2024-04-01 17:00:00', 3, 62, 0, 'CLEAR', 4, 14.0, 24.0, 230.0, 4.2, 1, 1),
+	('2024-04-01 18:00:00', 4, 64, 0, 'CLEAR', 4, 16.0, 25.2, 232.0, 3.6, 1, 1),
+	('2024-04-01 19:00:00', 5, 66, 0, 'CLEAR', 4, 13.0, 25.0, 228.0, 3.4, 1, 1),
+	('2024-04-01 20:00:00', 6, 62, 0, 'CLEAR', 4, 11.0, 24.0, 220.0, 3.3, 1, 1),
+	('2024-04-01 21:00:00', 7, 58, 0, 'CLEAR', 3, 9.0, 20.0, 218.0, 3.1, 1, 1);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
