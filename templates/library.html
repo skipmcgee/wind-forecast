@@ -16,7 +16,9 @@
                 <thead>
                     <tr>
                         {% for key in sensors[0].keys() %}
+                        {% if key != 'sensorID' %}
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        {% endif %}
                         {% endfor %}
                         <th>Edit</th>
                         <th>Delete</th>
@@ -26,7 +28,9 @@
                     {% for item in sensors %}
                     <tr>
                         {% for key in item.keys() %}
+                        {% if key != 'sensorID' %}
                         <td>{{item[key]}}</td>
+                        {% endif %}
                         {% endfor %}
                         <p></p>
                         <td><a href="/edit/sensor/{{item.sensorID}}" class="btn btn-default" method="get"><span class="material-icons">mode_edit</span></a></td>
@@ -54,17 +58,21 @@
                 <thead>
                     <tr>
                         {% for key in models[0].keys() %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        {% if key != 'modelID' %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">Weather Model Name</th>
+                        {% endif %}
                         {% endfor %}
-                        <th></th>
-                        <th></th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in models %}
                     <tr>
                         {% for key in item.keys() %}
+                        {% if key != 'modelID' %}
                         <td>{{item[key]}}</td>
+                        {% endif %}
                         {% endfor %}
                         <p></p>
                         <td><a href="/edit/model/{{item.modelID}}" class="btn btn-default" method="get"><span class="material-icons">mode_edit</span></a></td>
