@@ -86,6 +86,53 @@ def results():
 
     return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
+
+@app.route('/sensors', methods=["POST", "GET"])
+def sensors():
+    ''''''
+    if request.method == "GET":
+        sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
+        sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
+        sensor_results = sensor_obj.fetchall()
+        if DEBUG:
+            logger.info(sensor_results)
+        return render_template("sensors.html", sensors=sensor_results)
+    elif request.method == "POST":
+        return redirect("/")
+    
+@app.route('/models', methods=["POST", "GET"])
+def models():
+    ''''''
+    if request.method == "GET":
+        model_query = f"SELECT * FROM Models\n ORDER BY modelName DESC;"
+        model_obj = db.execute_query(db_connection=db_connection, query=model_query)
+        model_results = model_obj.fetchall()
+        if DEBUG:
+            logger.info(model_results)
+        return render_template("models.html", models=model_results)
+    elif request.method == "POST":
+        return redirect("/")
+    
+@app.route('/forecasts', methods=["POST", "GET"])
+def forecasts():
+    ''''''
+    return render_template("forecasts.html")
+
+@app.route('/locations', methods=["POST", "GET"])
+def locations():
+    ''''''
+    return render_template("locations.html")
+
+@app.route('/dates', methods=["POST", "GET"])
+def dates():
+    ''''''
+    return render_template("dates.html")
+
+@app.route('/readings', methods=["POST", "GET"])
+def readings():
+    ''''''
+    return render_template("readings.html")
+
 @app.route('/library', methods=["POST", "GET"])
 def library():
     if request.method == "GET":

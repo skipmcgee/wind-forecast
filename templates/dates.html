@@ -1,0 +1,49 @@
+{% extends 'base.j2' %}
+{% block content %}
+<h4>{% block title %} Browse Your Library {% endblock %}</h4>
+<article>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div id="sensorlibrary" class="overflow-auto">
+        <table class="striped">
+            <caption>Current Sensors: </caption>
+            {% if sensors %}
+            <thead>
+                <tr>
+                    <th>Sensor ID</th>
+                    <th>Sensor Name</th>
+                    <th>API Key</th>
+                    <th>Number</th>
+                    <th>Location</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in sensors %}
+                <tr>
+                    {% for key in item.keys() %}
+                    {% if key != 'sensorID' %}
+                    <td>{{item[key]}}</td>
+                    {% endif %}
+                    {% endfor %}
+                    <p></p>
+                    <td><a href="/edit/sensor/{{item.sensorID}}" class="btn btn-default" method="get"><span
+                                class="material-icons">mode_edit</span></a></td>
+                    <td><a href="/delete/sensor/{{item.sensorID}}" class="btn btn-default" method="post"><span
+                                class="material-icons">delete</span></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endif %}
+        </table>
+
+        <div class="grid">
+            <div></div>
+            <div><a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a></div>
+            <div></div>
+        </div>
+    </div>
+</article>
+{% endblock %}
