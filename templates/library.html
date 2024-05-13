@@ -49,6 +49,51 @@
 </article>
 <div></div>
 <article>
+<div></div>
+    <div id="locationTable" class="overflow-auto">
+        <table class="striped">
+            <caption>Current Locations: </caption>
+            {% if locations %}
+            <thead>
+                <tr>
+                    {% for key in locations[0].keys() %}
+                    {% if key != 'locationID' %}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endif %}
+                    {% endfor %}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in locations %}
+                <tr>
+                    {% for key in item.keys() %}
+                    {% if key != 'locationID' %}
+                    <td>{{item[key]}}</td>
+                    {% endif %}
+                    {% endfor %}
+                    <p></p>
+                    <td><a href="/edit/location/{{item.locationID}}" class="btn btn-default" method="get"><span
+                                class="material-icons">mode_edit</span></a></td>
+                    <td><a href="/delete/location/{{item.locationID}}" class="btn btn-default" method="post"><span
+                                class="material-icons">delete</span></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endif %}
+        </table>
+
+        <div class="grid">
+            <div></div>
+            <div><a href='/add/location'><input class="btn" type="button" value="Add a location" method="get"></a></div>
+            <div></div>
+        </div>
+    </div>
+<div></div>
+</article>
+<div></div>
+<article>
     <div id="modellibrary" class="overflow-auto">
         <table class="striped"> 
             <caption>Current Models: </caption>

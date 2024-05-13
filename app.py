@@ -75,7 +75,7 @@ def results():
     if len(info_dict) == 0:
         logger.error("results info_dict was not created when resource was requested")
         return redirect("/")
-    forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindGust, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
+    forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
     if DEBUG:
         logger.info("results forecasts query: " + forecasts_query)
     forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
@@ -117,7 +117,7 @@ def models():
 def forecasts():
     ''''''
     if request.method == "GET":
-        query = f"SELECT * FROM forecasts;"
+        query = f"SELECT * FROM Forecasts;"
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -130,7 +130,7 @@ def forecasts():
 def locations():
     ''''''
     if request.method == "GET":
-        query = f"SELECT * FROM locations;"
+        query = f"SELECT * FROM Locations;"
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -143,7 +143,7 @@ def locations():
 def dates():
     ''''''
     if request.method == "GET":
-        query = f"SELECT * FROM dates;"
+        query = f"SELECT * FROM Dates;"
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -156,7 +156,7 @@ def dates():
 def readings():
     ''''''
     if request.method == "GET":
-        query = f"SELECT * FROM readings;"
+        query = f"SELECT * FROM Readings;"
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -168,7 +168,7 @@ def readings():
 @app.route('/library', methods=["POST", "GET"])
 def library():
     if request.method == "GET":
-        sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
+        sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationName FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
         sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
         sensor_results = sensor_obj.fetchall()
         if DEBUG:
@@ -178,7 +178,12 @@ def library():
         model_results = model_obj.fetchall()
         if DEBUG:
             logger.info(model_results)
-        return render_template("library.html", sensors=sensor_results, models=model_results)
+        locations_query = f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
+        locations_obj = db.execute_query(db_connection=db_connection, query=locations_query)
+        locations_results = locations_obj.fetchall()
+        if DEBUG:
+            logger.info(locations_results)
+        return render_template("library.html", sensors=sensor_results, models=model_results, locations=locations_results)
     elif request.method == "POST":
         return redirect("/")
 
