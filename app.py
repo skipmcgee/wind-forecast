@@ -116,22 +116,54 @@ def models():
 @app.route('/forecasts', methods=["POST", "GET"])
 def forecasts():
     ''''''
-    return render_template("forecasts.html")
+    if request.method == "GET":
+        query = f"SELECT * FROM forecasts;"
+        obj = db.execute_query(db_connection=db_connection, query=query)
+        results = obj.fetchall()
+        if DEBUG:
+            logger.info(results)
+        return render_template("forecasts.html", forecasts=results)
+    elif request.method == "POST":
+        return redirect("/")
 
 @app.route('/locations', methods=["POST", "GET"])
 def locations():
     ''''''
-    return render_template("locations.html")
+    if request.method == "GET":
+        query = f"SELECT * FROM locations;"
+        obj = db.execute_query(db_connection=db_connection, query=query)
+        results = obj.fetchall()
+        if DEBUG:
+            logger.info(results)
+        return render_template("locations.html", locations=results)
+    elif request.method == "POST":
+        return redirect("/")
 
 @app.route('/dates', methods=["POST", "GET"])
 def dates():
     ''''''
-    return render_template("dates.html")
+    if request.method == "GET":
+        query = f"SELECT * FROM dates;"
+        obj = db.execute_query(db_connection=db_connection, query=query)
+        results = obj.fetchall()
+        if DEBUG:
+            logger.info(results)
+        return render_template("dates.html", dates=results)
+    elif request.method == "POST":
+        return redirect("/")
 
 @app.route('/readings', methods=["POST", "GET"])
 def readings():
     ''''''
-    return render_template("readings.html")
+    if request.method == "GET":
+        query = f"SELECT * FROM readings;"
+        obj = db.execute_query(db_connection=db_connection, query=query)
+        results = obj.fetchall()
+        if DEBUG:
+            logger.info(results)
+        return render_template("readings.html", readings=results)
+    elif request.method == "POST":
+        return redirect("/")
 
 @app.route('/library', methods=["POST", "GET"])
 def library():
