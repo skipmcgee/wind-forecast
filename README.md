@@ -18,7 +18,7 @@ wind forecast data
     340DB='mydb'
     ```
 
-### (optional) add your sensor api keys
+### (optional) add your sensor api keys:
 - open app/.env
 - add the following customized variables:
     ```
