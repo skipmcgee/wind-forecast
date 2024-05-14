@@ -1,3 +1,5 @@
+# used the code generator at: https://open-meteo.com/en/docs/ecmwf-api
+# as well as their docs to create this
 import openmeteo_requests
 import requests_cache
 import pandas as pd
