@@ -1,0 +1,30 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+    <h4>{% block title %} Edit a Forecast {% endblock %}</h4>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
+    <div class="grid">
+        <div></div>
+        <div>
+            <article>
+                <form name="editforecast" id="editforecast" action="/edit/forecast/{{specific_forecast[0].forecastID}}" method="post">
+                    <!-- <legend><strong>Edit Weather Forecast:</strong></legend> -->
+                    <fieldset>
+                        <input type="hidden" value="{{specific_forecast[0].forecastID}}" class="form-control" id="forecastID"
+                            name="forecastID" required>
+                        <label for="name">Weather Forecast Name:</label>
+                        <input type="text" value="{{specific_forecast[0].forecastName}}" class="form-control" id="forecastName"
+                            name="forecastName" pattern="[A-Za-z0-9\s]+" required>
+                    </fieldset>
+                    <button type="submit">Submit</button>
+                </form>
+            </article>
+        </div>
+        <div></div>
+    </div>
+
+{% endblock %}

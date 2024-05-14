@@ -1,0 +1,30 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+    <h4>{% block title %} Edit a Location {% endblock %}</h4>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
+    <div class="grid">
+        <div></div>
+        <div>
+            <article>
+                <form name="editlocation" id="editlocation" action="/edit/location/{{specific_location[0].locationID}}" method="post">
+                    <!-- <legend><strong>Edit Weather Location:</strong></legend> -->
+                    <fieldset>
+                        <input type="hidden" value="{{specific_location[0].locationID}}" class="form-control" id="locationID"
+                            name="locationID" required>
+                        <label for="name">Weather Location Name:</label>
+                        <input type="text" value="{{specific_location[0].locationName}}" class="form-control" id="locationName"
+                            name="locationName" pattern="[A-Za-z0-9\s]+" required>
+                    </fieldset>
+                    <button type="submit">Submit</button>
+                </form>
+            </article>
+        </div>
+        <div></div>
+    </div>
+
+{% endblock %}

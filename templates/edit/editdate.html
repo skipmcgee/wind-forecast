@@ -1,0 +1,30 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+    <h4>{% block title %} Edit a Date {% endblock %}</h4>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
+    <div class="grid">
+        <div></div>
+        <div>
+            <article>
+                <form name="editdate" id="editdate" action="/edit/date/{{specific_date[0].dateID}}" method="post">
+                    <!-- <legend><strong>Edit Date:</strong></legend> -->
+                    <fieldset>
+                        <input type="hidden" value="{{specific_date[0].dateID}}" class="form-control" id="dateID"
+                            name="dateID" required>
+                        <label for="name">Weather Date Name:</label>
+                        <input type="text" value="{{specific_date[0].dateName}}" class="form-control" id="dateName"
+                            name="dateName" pattern="[A-Za-z0-9\s]+" required>
+                    </fieldset>
+                    <button type="submit">Submit</button>
+                </form>
+            </article>
+        </div>
+        <div></div>
+    </div>
+
+{% endblock %}

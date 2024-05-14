@@ -41,7 +41,7 @@ def root():
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        return render_template("index.html", sensors=sensors_results, today=str(today))
+        return render_template("pages/index.html", sensors=sensors_results, today=str(today))
     elif request.method == "POST":
         if DEBUG:
             logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
@@ -96,7 +96,7 @@ def sensors():
         sensor_results = sensor_obj.fetchall()
         if DEBUG:
             logger.info(sensor_results)
-        return render_template("sensors.html", sensors=sensor_results)
+        return render_template("pages/sensors.html", sensors=sensor_results)
     elif request.method == "POST":
         return redirect("/")
     
@@ -109,7 +109,7 @@ def models():
         model_results = model_obj.fetchall()
         if DEBUG:
             logger.info(model_results)
-        return render_template("models.html", models=model_results)
+        return render_template("pages/models.html", models=model_results)
     elif request.method == "POST":
         return redirect("/")
     
@@ -122,7 +122,7 @@ def forecasts():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("forecasts.html", forecasts=results)
+        return render_template("pages/forecasts.html", forecasts=results)
     elif request.method == "POST":
         return redirect("/")
 
@@ -135,7 +135,7 @@ def locations():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("locations.html", locations=results)
+        return render_template("pages/locations.html", locations=results)
     elif request.method == "POST":
         return redirect("/")
 
@@ -148,7 +148,7 @@ def dates():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("dates.html", dates=results)
+        return render_template("pages/dates.html", dates=results)
     elif request.method == "POST":
         return redirect("/")
 
@@ -161,7 +161,7 @@ def readings():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("readings.html", readings=results)
+        return render_template("pages/readings.html", readings=results)
     elif request.method == "POST":
         return redirect("/")
 
@@ -257,7 +257,7 @@ def sensoredit(sensorID):
         query_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
         if DEBUG:
             logger.info("edit sensor get: " + str(query_results))
-        return render_template("editsensor.html", specific_sensor=query_results)
+        return render_template("edit/editsensor.html", specific_sensor=query_results)
     
     elif request.method == "POST":
         sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}' \n WHERE sensorID='{sensorID}';"
@@ -286,7 +286,7 @@ def modeledit(modelID):
         query_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
         if DEBUG:
             logger.info("edit model get: " + str(query_results))
-        return render_template("editmodel.html", specific_model=query_results)
+        return render_template("edit/editmodel.html", specific_model=query_results)
     
     elif request.method == "POST":
         if request.form['modelName'].upper() not in valid_models_list:
@@ -304,7 +304,7 @@ def modeledit(modelID):
 @app.route("/add/sensor", methods=["POST", "GET",])
 def addsensor():
     if request.method == "GET":
-        return render_template("addsensor.html")
+        return render_template("add/addsensor.html")
 
     elif request.method == "POST":
         if DEBUG:
@@ -322,14 +322,14 @@ def addsensor():
 @app.route("/add/model", methods=["POST", "GET",])
 def addmodel():
     if request.method == "GET":
-        return render_template("addmodel.html")
+        return render_template("add/addmodel.html")
     
     elif request.method == "POST":
         if DEBUG:
             logger.info("add model post: " + request.form['modelName'].upper())
         if request.form['modelName'].upper() not in valid_models_list:
             flash("Not a recognized Weather Model!")
-            return render_template("addmodel.html")
+            return render_template("add/addmodel.html")
         model_update = f"INSERT INTO `Models` (modelName)\n VALUES ('{request.form['modelName'].upper()}');"
         if DEBUG:
             logger.info("add model post query: " + model_update)
@@ -341,7 +341,7 @@ def addreading():
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        return render_template("addreading.html", sensors=sensors_results)
+        return render_template("add/addreading.html", sensors=sensors_results)
     
     elif request.method == "POST":
         use_sensorID = request.form['sensorlist']
@@ -404,7 +404,7 @@ def addforecast():
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
         models_query = "SELECT * FROM Models;"
         models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
-        return render_template("addforecast.html", sensors=sensors_results, models=models_results)
+        return render_template("add/addforecast.html", sensors=sensors_results, models=models_results)
     elif request.method == "POST":
         if DEBUG:
             logger.info(str(request.form))
@@ -483,7 +483,7 @@ def addforecast():
 @app.route("/add/location", methods=["POST", "GET",])
 def addlocation():
     if request.method == "GET":
-        return render_template("addlocation.html")
+        return render_template("add/addlocation.html")
 
     elif request.method == "POST":
         if DEBUG:
@@ -497,7 +497,7 @@ def addlocation():
 @app.route("/add/date", methods=["POST", "GET",])
 def adddate():
     if request.method == "GET":
-        return render_template("adddate.html")
+        return render_template("add/adddate.html")
 
     elif request.method == "POST":
         if DEBUG:

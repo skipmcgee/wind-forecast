@@ -1,0 +1,30 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+    <h4>{% block title %} Edit a Reading {% endblock %}</h4>
+    <div></div>
+    {% for mesg in get_flashed_messages() %}
+    <h3>{{ mesg }}</h3>
+    {% endfor %}
+    <div></div>
+    <div class="grid">
+        <div></div>
+        <div>
+            <article>
+                <form name="editreading" id="editreading" action="/edit/reading/{{specific_reading[0].readingID}}" method="post">
+                    <!-- <legend><strong>Edit Weather Reading:</strong></legend> -->
+                    <fieldset>
+                        <input type="hidden" value="{{specific_reading[0].readingID}}" class="form-control" id="readingID"
+                            name="readingID" required>
+                        <label for="name">Weather Reading Name:</label>
+                        <input type="text" value="{{specific_reading[0].readingName}}" class="form-control" id="readingName"
+                            name="readingName" pattern="[A-Za-z0-9\s]+" required>
+                    </fieldset>
+                    <button type="submit">Submit</button>
+                </form>
+            </article>
+        </div>
+        <div></div>
+    </div>
+
+{% endblock %}
