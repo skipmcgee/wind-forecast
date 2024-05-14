@@ -227,6 +227,26 @@ def deletereading(readingID):
 
     return redirect("/results")
 
+@app.route("/delete/location/<int:locationID>", methods=["POST", "GET"])
+def deletelocation(locationID):
+    locationID = escape(locationID)
+    if DEBUG:
+        logger.info("delete location: " + str(locationID))
+    location_query = f"DELETE FROM Locations\nWHERE Locations.locationID={locationID};"
+    query_obj = db.execute_query(db_connection=db_connection, query=location_query)
+
+    return redirect("/results")
+
+@app.route("/delete/date/<int:dateID>", methods=["POST", "GET"])
+def deletedate(dateID):
+    dateID = escape(dateID)
+    if DEBUG:
+        logger.info("delete date: " + str(dateID))
+    date_query = f"DELETE FROM Dates\nWHERE Dates.dateID={dateID};"
+    query_obj = db.execute_query(db_connection=db_connection, query=date_query)
+
+    return redirect("/results")
+
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
 def sensoredit(sensorID):
     sensorID = escape(sensorID)
@@ -287,7 +307,8 @@ def addsensor():
         return render_template("addsensor.html")
 
     elif request.method == "POST":
-        logger.info(str(request.form))
+        if DEBUG:
+            logger.info(str(request.form))
         location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
         if DEBUG: 
             logger.info("add sensor post first query: " + location_query)
@@ -458,6 +479,34 @@ def addforecast():
         readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
         return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
+
+@app.route("/add/location", methods=["POST", "GET",])
+def addlocation():
+    if request.method == "GET":
+        return render_template("addlocation.html")
+
+    elif request.method == "POST":
+        if DEBUG:
+            logger.info(str(request.form))
+        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
+        if DEBUG: 
+            logger.info("add sensor post first query: " + location_query)
+        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
+        return redirect("/library")
+    
+@app.route("/add/date", methods=["POST", "GET",])
+def adddate():
+    if request.method == "GET":
+        return render_template("adddate.html")
+
+    elif request.method == "POST":
+        if DEBUG:
+            logger.info(str(request.form))
+        date_query = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{request.form['dateDateTime']}');"
+        if DEBUG: 
+            logger.info("add date post first query: " + date_query)
+        date_obj = db.execute_query(db_connection=db_connection, query=date_query)
+        return redirect("/library")
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 3000))
