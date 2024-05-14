@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
   `forecastWindSpeed10m` FLOAT NOT NULL,
   `forecastWindDirection10m` FLOAT NOT NULL,
   `forecastCape` FLOAT NOT NULL,
-  `forecastModelID` INT NOT NULL,
+  `forecastModelID` INT,
   `forecastLocationID` INT NOT NULL,
   `forecastForDateTime` DATETIME NOT NULL,
   PRIMARY KEY (`forecastID`),
