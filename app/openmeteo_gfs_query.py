@@ -170,7 +170,7 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     daily_dataframe = pd.DataFrame(data = daily_data)
     #print(daily_dataframe)
 
-    #pprint.pprint(hourly_data)
+    #pprint.pprint(hourly_dataframe)
     return hourly_dataframe
 
 
