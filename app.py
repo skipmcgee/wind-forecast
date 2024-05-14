@@ -89,9 +89,23 @@ def results():
 
 @app.route('/sensors', methods=["POST", "GET"])
 def sensors():
-    ''''''
+    '''View for the Sensors Admin Page'''
     if request.method == "GET":
-        sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
+        sensor_query = '''
+        SELECT
+            sensorID AS 'ID', 
+            sensorName AS 'Name', 
+            sensorAPIKEY AS 'API Key', 
+            sensorNumber AS 'Number', 
+            locationLatitude AS 'Latitude', 
+            locationLongitude AS 'Longitude', 
+            locationAltitude AS 'Altitude' 
+        FROM 
+            Sensors
+        JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
+        ORDER BY
+            sensorName DESC;
+        '''
         sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
         sensor_results = sensor_obj.fetchall()
         if DEBUG:
@@ -102,9 +116,17 @@ def sensors():
     
 @app.route('/models', methods=["POST", "GET"])
 def models():
-    ''''''
+    '''View for the Models Admin Page'''
     if request.method == "GET":
-        model_query = f"SELECT * FROM Models\n ORDER BY modelName DESC;"
+        model_query = '''
+        SELECT 
+            modelID AS 'ID', 
+            modelName AS 'Name' 
+        FROM 
+            Models
+        ORDER BY 
+            modelName DESC;
+        '''
         model_obj = db.execute_query(db_connection=db_connection, query=model_query)
         model_results = model_obj.fetchall()
         if DEBUG:
@@ -115,9 +137,28 @@ def models():
     
 @app.route('/forecasts', methods=["POST", "GET"])
 def forecasts():
-    ''''''
+    '''View for the Forecasts Admin Page'''
+
+    #TODO
+    # Add join(s) to view relevant data from other tables
     if request.method == "GET":
-        query = f"SELECT * FROM Forecasts;"
+        query = '''
+        SELECT
+            forecastID AS 'ID',
+            forecastDateID AS 'Date',
+            forecastTemperature2m AS 'Temperature',
+            forecastPrecipitation AS 'Precipitation',
+            forecastWeatherCode AS 'Weather Code',
+            forecastPressureMSL AS 'Pressure MSL',
+            forecastWindSpeed10m AS 'Wind Speed',
+            forecastWindDirection10m AS 'Wind Direction',
+            forecastCape AS 'Cape',
+            forecastModelID AS 'Model',
+            forecastLocationID AS 'Location',
+            forecastForDateTime AS 'Date/Time'
+        FROM 
+            Forecasts;
+        '''
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -128,9 +169,18 @@ def forecasts():
 
 @app.route('/locations', methods=["POST", "GET"])
 def locations():
-    ''''''
+    '''View for the Locations Admin Page'''
     if request.method == "GET":
-        query = f"SELECT * FROM Locations;"
+        query = '''
+        SELECT
+            locationID AS 'ID',
+            locationName AS 'Name',
+            locationLatitude AS 'Latitude',
+            locationLongitude AS 'Longitude',
+            locationAltitude AS 'Altitude'
+        FROM
+            Locations;
+        '''
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -141,9 +191,15 @@ def locations():
 
 @app.route('/dates', methods=["POST", "GET"])
 def dates():
-    ''''''
+    '''View for the Dates Admin Page'''
     if request.method == "GET":
-        query = f"SELECT * FROM Dates;"
+        query = '''
+        SELECT
+            dateID AS 'ID',
+            dateDateTime AS 'Date/Time'
+        FROM
+            Dates;
+        '''
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
@@ -154,9 +210,21 @@ def dates():
 
 @app.route('/readings', methods=["POST", "GET"])
 def readings():
-    ''''''
+    '''View for the Readings Admin Page'''
     if request.method == "GET":
-        query = f"SELECT * FROM Readings;"
+        query = '''
+        SELECT
+            readingID AS 'ID',
+            readingSensorID AS 'Sensor',
+            readingWindSpeed AS 'Wind Speed',
+            readingWindGust AS 'Wind Gust',
+            readingWindMin AS 'Wind Min',
+            readingWindDirection AS 'Wind Direction',
+            readingTemperature AS 'Temperature',
+            readingDateID AS 'Date'
+        FROM
+            Readings;
+        '''
         obj = db.execute_query(db_connection=db_connection, query=query)
         results = obj.fetchall()
         if DEBUG:
