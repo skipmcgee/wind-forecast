@@ -18,6 +18,14 @@ wind forecast data
     340DB='mydb'
     ```
 
+### (optional) add your sensor api keys
+- open app/.env
+- add the following customized variables:
+    ```
+    HOLFUY_STATION='1151'
+    HOLFUY_TOKEN='mytoken'
+    ```
+
 ### make sure your network or local db is set up:
 1) confirm database name, user, pass
 2) `source DDL.sql` to create tables and data
