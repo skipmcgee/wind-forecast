@@ -76,18 +76,18 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
   CONSTRAINT `fk_Forecasts_Models`
     FOREIGN KEY (`forecastModelID`)
     REFERENCES `Models` (`modelID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Forecasts_Locations1`
     FOREIGN KEY (`forecastLocationID`)
     REFERENCES `Locations` (`locationID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Forecasts_Dates1`
     FOREIGN KEY (`forecastDateID`)
     REFERENCES `Dates` (`dateID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'Forecast information that uses attributes that are common across all weather models.\n';
 
@@ -102,15 +102,15 @@ CREATE TABLE IF NOT EXISTS `Sensors` (
   `sensorName` VARCHAR(100) NOT NULL,
   `sensorAPIKey` VARCHAR(100) NOT NULL,
   `sensorNumber` INT NOT NULL DEFAULT 1151,
-  `sensorLocationID` INT NOT NULL,
+  `sensorLocationID` INT,
   PRIMARY KEY (`sensorID`),
   UNIQUE INDEX `sensorNumber_UNIQUE` (`sensorNumber` ASC) VISIBLE,
   INDEX `fk_Sensors_Locations1_idx` (`sensorLocationID` ASC) VISIBLE,
   CONSTRAINT `fk_Sensors_Locations1`
     FOREIGN KEY (`sensorLocationID`)
     REFERENCES `Locations` (`locationID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'The sensors that can measure the weather data at a specific location.';
 
@@ -122,26 +122,26 @@ DROP TABLE IF EXISTS `Readings` ;
 
 CREATE TABLE IF NOT EXISTS `Readings` (
   `readingID` INT NOT NULL AUTO_INCREMENT,
-  `readingSensorID` INT NOT NULL,
+  `readingSensorID` INT,
   `readingWindSpeed` FLOAT NOT NULL,
   `readingWindGust` FLOAT NOT NULL,
   `readingWindMin` INT NOT NULL,
   `readingWindDirection` INT NOT NULL,
   `readingTemperature` FLOAT NOT NULL,
-  `readingDateID` INT NOT NULL,
+  `readingDateID` INT,
   PRIMARY KEY (`readingID`),
   INDEX `fk_Readings_Sensors1_idx` (`readingSensorID` ASC) VISIBLE,
   INDEX `fk_Readings_Dates1_idx` (`readingDateID` ASC) VISIBLE,
   CONSTRAINT `fk_Readings_Sensors1`
     FOREIGN KEY (`readingSensorID`)
     REFERENCES `Sensors` (`sensorID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Readings_Dates1`
     FOREIGN KEY (`readingDateID`)
     REFERENCES `Dates` (`dateID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'The actual measured sensor reading values.';
 
