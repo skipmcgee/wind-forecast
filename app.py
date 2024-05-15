@@ -87,9 +87,10 @@ def results():
     return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
 
-@app.route('/sensors', methods=["POST", "GET"])
+@app.route('/sensors', methods=["GET"])
 def sensors():
     '''View for the Sensors Admin Page'''
+    
     sensor_dict = dict()
     sensor_dict['sensorID'] = 'ID'
     sensor_dict['sensorName'] = 'Name'
@@ -98,55 +99,56 @@ def sensors():
     sensor_dict['locationLatitude'] = 'Latitude'
     sensor_dict['locationLongitude'] = 'Longitude'
     sensor_dict['locationAltitude'] = 'Altitude'
-    if request.method == "GET":
-        sensor_query = '''
-        SELECT
-            sensorID, 
-            sensorName, 
-            sensorAPIKEY, 
-            sensorNumber, 
-            locationLatitude, 
-            locationLongitude, 
-            locationAltitude
-        FROM 
-            Sensors
-        JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
-        ORDER BY
-            sensorName DESC;
-        '''
-        sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-        sensor_results = sensor_obj.fetchall()
-        if DEBUG:
-            logger.info(sensor_results)
-        return render_template("pages/sensors.html", sensors=sensor_results, sensor_dict=sensor_dict)
-    elif request.method == "POST":
-        return redirect("/")
+
+    query = '''
+    SELECT
+        sensorID, 
+        sensorName, 
+        sensorAPIKEY, 
+        sensorNumber, 
+        locationLatitude, 
+        locationLongitude, 
+        locationAltitude
+    FROM 
+        Sensors
+    JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
+    ORDER BY
+        sensorName DESC;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/sensors.html", sensors=results, sensor_dict=sensor_dict)
     
-@app.route('/models', methods=["POST", "GET"])
+@app.route('/models', methods=["GET"])
 def models():
     '''View for the Models Admin Page'''
+
     model_dict = dict()
     model_dict['modelID'] = 'ID' 
     model_dict['modelName'] = 'Model Name'
-    if request.method == "GET":
-        model_query = '''
-        SELECT 
-            modelID, 
-            modelName
-        FROM 
-            Models
-        ORDER BY 
-            modelName DESC;
-        '''
-        model_obj = db.execute_query(db_connection=db_connection, query=model_query)
-        model_results = model_obj.fetchall()
-        if DEBUG:
-            logger.info(model_results)
-        return render_template("pages/models.html", models=model_results, model_dict=model_dict)
-    elif request.method == "POST":
-        return redirect("/")
+
+    query = '''
+    SELECT 
+        modelID, 
+        modelName
+    FROM 
+        Models
+    ORDER BY 
+        modelName DESC;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/models.html", models=results, model_dict=model_dict)
     
-@app.route('/forecasts', methods=["POST", "GET"])
+@app.route('/forecasts', methods=["GET"])
 def forecasts():
     '''View for the Forecasts Admin Page'''
 
@@ -165,85 +167,86 @@ def forecasts():
     forecast_dict['forecastModelID'] = 'Model'
     forecast_dict['forecastLocationID'] = 'Location'
     forecast_dict['forecastForDateTime'] = 'Date/Time'
-    if request.method == "GET":
-        query = '''
-        SELECT
-            forecastID,
-            forecastDateID,
-            forecastTemperature2m,
-            forecastPrecipitation,
-            forecastWeatherCode,
-            forecastPressureMSL,
-            forecastWindSpeed10m,
-            forecastWindDirection10m,
-            forecastCape,
-            forecastModelID,
-            forecastLocationID,
-            forecastForDateTime
-        FROM 
-            Forecasts;
-        '''
-        obj = db.execute_query(db_connection=db_connection, query=query)
-        results = obj.fetchall()
-        if DEBUG:
-            logger.info(results)
-        return render_template("pages/forecasts.html", forecasts=results, forecast_dict=forecast_dict)
-    elif request.method == "POST":
-        return redirect("/")
 
-@app.route('/locations', methods=["POST", "GET"])
+    query = '''
+    SELECT
+        forecastID,
+        forecastDateID,
+        forecastTemperature2m,
+        forecastPrecipitation,
+        forecastWeatherCode,
+        forecastPressureMSL,
+        forecastWindSpeed10m,
+        forecastWindDirection10m,
+        forecastCape,
+        forecastModelID,
+        forecastLocationID,
+        forecastForDateTime
+    FROM 
+        Forecasts;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/forecasts.html", forecasts=results, forecast_dict=forecast_dict)
+
+@app.route('/locations', methods=["GET"])
 def locations():
     '''View for the Locations Admin Page'''
+
     location_dict = dict()
     location_dict['locationID'] = 'ID'
     location_dict['locationName'] = 'Location Name'
     location_dict['locationLatitude'] = 'Latitude'
     location_dict['locationLongitude'] = 'Longitude'
     location_dict['locationAltitude'] = 'Altitude'
-    if request.method == "GET":
-        query = '''
-        SELECT
-            locationID,
-            locationName,
-            locationLatitude,
-            locationLongitude,
-            locationAltitude
-        FROM
-            Locations;
-        '''
-        obj = db.execute_query(db_connection=db_connection, query=query)
-        results = obj.fetchall()
-        if DEBUG:
-            logger.info(results)
-        return render_template("pages/locations.html", locations=results, location_dict=location_dict)
-    elif request.method == "POST":
-        return redirect("/")
 
-@app.route('/dates', methods=["POST", "GET"])
+    query = '''
+    SELECT
+        locationID,
+        locationName,
+        locationLatitude,
+        locationLongitude,
+        locationAltitude
+    FROM
+        Locations;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/locations.html", locations=results, location_dict=location_dict)
+
+@app.route('/dates', methods=["GET"])
 def dates():
     '''View for the Dates Admin Page'''
     date_dict = dict()
     date_dict['dateID'] = 'ID'
     date_dict['dateDateTime'] = 'Date/Time'
-    if request.method == "GET":
-        query = '''
-        SELECT
-            dateID,
-            dateDateTime
-        FROM
-            Dates;
-        '''
-        obj = db.execute_query(db_connection=db_connection, query=query)
-        results = obj.fetchall()
-        if DEBUG:
-            logger.info(results)
-        return render_template("pages/dates.html", dates=results, date_dict=date_dict)
-    elif request.method == "POST":
-        return redirect("/")
 
-@app.route('/readings', methods=["POST", "GET"])
+    query = '''
+    SELECT
+        dateID,
+        dateDateTime
+    FROM
+        Dates;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+    return render_template("pages/dates.html", dates=results, date_dict=date_dict)
+
+@app.route('/readings', methods=["GET"])
 def readings():
     '''View for the Readings Admin Page'''
+
     reading_dict = dict()
     reading_dict['readingID'] = 'ID'
     reading_dict['readingSensorID'] = 'Sensor'
@@ -253,26 +256,26 @@ def readings():
     reading_dict['readingWindDirection'] = 'Wind Direction'
     reading_dict['readingTemperature'] = 'Temperature'
     reading_dict['readingDateID'] = 'Date ID'
-    if request.method == "GET":
-        query = '''
-        SELECT readingID, 
-            readingSensorID,
-            readingWindSpeed,
-            readingWindGust,
-            readingWindMin,
-            readingWindDirection,
-            readingTemperature,
-            readingDateID
-        FROM
-            Readings;
-        '''
-        obj = db.execute_query(db_connection=db_connection, query=query)
-        results = obj.fetchall()
-        if DEBUG:
-            logger.info(results)
-        return render_template("pages/readings.html", readings=results, reading_dict=reading_dict)
-    elif request.method == "POST":
-        return redirect("/")
+
+    query = '''
+    SELECT readingID, 
+        readingSensorID,
+        readingWindSpeed,
+        readingWindGust,
+        readingWindMin,
+        readingWindDirection,
+        readingTemperature,
+        readingDateID
+    FROM
+        Readings;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/readings.html", readings=results, reading_dict=reading_dict)
 
 @app.route('/library', methods=["POST", "GET"])
 def library():
@@ -425,16 +428,31 @@ def delete_date(dateID):
 ############
 
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
-def sensoredit(sensorID):
+def update_sensor(sensorID):
+    '''API Route to update a sensor'''
+
     sensorID = escape(sensorID)
+
     if DEBUG:
-        logger.info("edit sensor post: " + str(sensorID))
+        logger.info(f"Edit sensor post: {sensorID}")
+
     if request.method == "GET":
-        sensor_query = f"SELECT * FROM Sensors\nINNER JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\nWHERE Sensors.sensorID = {sensorID};"
-        query_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
+        query = '''
+        SELECT 
+            * 
+        FROM 
+            Sensors
+        INNER JOIN 
+            Locations ON Sensors.sensorLocationID = Locations.locationID
+        WHERE 
+            Sensors.sensorID = %(sensorID)s;
+        '''
+        results = db.execute_query(db_connection=db_connection, query=query, query_params={'sensorID': sensorID}).fetchall()
+
         if DEBUG:
-            logger.info("edit sensor get: " + str(query_results))
-        return render_template("edit/editsensor.html", specific_sensor=query_results)
+            logger.info(f"edit sensor get: {results}")
+
+        return render_template("edit/sensor.html", specific_sensor=results)
     
     elif request.method == "POST":
         sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}' \n WHERE sensorID='{sensorID}';"
