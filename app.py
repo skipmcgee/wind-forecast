@@ -86,6 +86,31 @@ def results():
 
     return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
+@app.route('/library', methods=["POST", "GET"])
+def library():
+    if request.method == "GET":
+        sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationName FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
+        sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
+        sensor_results = sensor_obj.fetchall()
+        if DEBUG:
+            logger.info(sensor_results)
+        model_query = f"SELECT * FROM Models\n ORDER BY modelName DESC;"
+        model_obj = db.execute_query(db_connection=db_connection, query=model_query)
+        model_results = model_obj.fetchall()
+        if DEBUG:
+            logger.info(model_results)
+        locations_query = f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
+        locations_obj = db.execute_query(db_connection=db_connection, query=locations_query)
+        locations_results = locations_obj.fetchall()
+        if DEBUG:
+            logger.info(locations_results)
+        return render_template("library.html", sensors=sensor_results, models=model_results, locations=locations_results)
+    elif request.method == "POST":
+        return redirect("/")
+    
+############
+# Read
+############
 
 @app.route('/sensors', methods=["GET"])
 def sensors():
@@ -277,28 +302,6 @@ def readings():
 
     return render_template("pages/readings.html", readings=results, reading_dict=reading_dict)
 
-@app.route('/library', methods=["POST", "GET"])
-def library():
-    if request.method == "GET":
-        sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationName FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
-        sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-        sensor_results = sensor_obj.fetchall()
-        if DEBUG:
-            logger.info(sensor_results)
-        model_query = f"SELECT * FROM Models\n ORDER BY modelName DESC;"
-        model_obj = db.execute_query(db_connection=db_connection, query=model_query)
-        model_results = model_obj.fetchall()
-        if DEBUG:
-            logger.info(model_results)
-        locations_query = f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
-        locations_obj = db.execute_query(db_connection=db_connection, query=locations_query)
-        locations_results = locations_obj.fetchall()
-        if DEBUG:
-            logger.info(locations_results)
-        return render_template("library.html", sensors=sensor_results, models=model_results, locations=locations_results)
-    elif request.method == "POST":
-        return redirect("/")
-
 ############
 # DELETE
 ############
@@ -475,6 +478,8 @@ def update_sensor(sensorID):
 
 @app.route("/edit/model/<int:modelID>", methods=["POST", "GET"])
 def modeledit(modelID):
+    '''API Route to update a model'''
+
     modelID = escape(modelID)
     if request.method == "GET":
         models_query = f"SELECT * FROM Models\nWHERE Models.modelID = {modelID};"
@@ -496,26 +501,42 @@ def modeledit(modelID):
 
         return redirect("/library")
 
+############
+# Create
+############
+
 @app.route("/add/sensor", methods=["POST", "GET",])
-def addsensor():
+def add_sensor():
+    '''API Route to add a sensor'''
+
     if request.method == "GET":
-        return render_template("add/addsensor.html")
+        ''''''
+        return render_template("add/sensor.html")
 
     elif request.method == "POST":
+
         if DEBUG:
             logger.info(str(request.form))
+
         location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
+        
         if DEBUG: 
             logger.info("add sensor post first query: " + location_query)
-        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
+
+        db.execute_query(db_connection=db_connection, query=location_query)
         sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({request.form['sensorName']}, {request.form['sensorAPIKey']}, {request.form['sensorNumber']}, {request.form['sensorLocationID']},);"
+        
         if DEBUG:
             logger.info("add sensor post second query: " + sensor_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-        return redirect("/library")
+
+        db.execute_query(db_connection=db_connection, query=sensor_query)
+
+        return redirect("/sensors")
 
 @app.route("/add/model", methods=["POST", "GET",])
-def addmodel():
+def add_model():
+    '''API Route to add a model'''
+
     if request.method == "GET":
         return render_template("add/addmodel.html")
     
@@ -532,7 +553,9 @@ def addmodel():
         return redirect("/library")
 
 @app.route('/add/reading', methods=["POST", "GET"])
-def addreading():
+def add_reading():
+    '''API Route to add a reading'''
+
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
@@ -593,7 +616,9 @@ def addreading():
         return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
 @app.route('/add/forecast', methods=["POST", "GET"])
-def addforecast():
+def add_forecast():
+    '''API Route to add a forecast'''
+
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
@@ -676,7 +701,9 @@ def addforecast():
         return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
 
 @app.route("/add/location", methods=["POST", "GET",])
-def addlocation():
+def add_location():
+    '''API Route to add a location'''
+
     if request.method == "GET":
         return render_template("add/addlocation.html")
 
@@ -690,7 +717,9 @@ def addlocation():
         return redirect("/library")
     
 @app.route("/add/date", methods=["POST", "GET",])
-def adddate():
+def add_date():
+    '''API Route to add a date'''
+
     if request.method == "GET":
         return render_template("add/adddate.html")
 
