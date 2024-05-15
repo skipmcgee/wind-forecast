@@ -15,7 +15,7 @@
                     <tr>
                         {% for key in sensors[0].keys() %}
                         {% if key != 'sensorID' %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ sensor_dict[key] }}</th>
                         {% endif %}
                         {% endfor %}
                         <th>Edit</th>
