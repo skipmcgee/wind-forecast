@@ -296,65 +296,133 @@ def library():
     elif request.method == "POST":
         return redirect("/")
 
-@app.route("/delete/sensor/<int:sensorID>", methods=["POST", "GET"])
-def deletesensor(sensorID):
-    sensorID = escape(sensorID)
+############
+# DELETE
+############
+
+@app.route("/delete/sensor/<int:sensorID>", methods=["GET"])
+def delete_sensor(sensorID):
+    '''API Route to delete a sensor'''
+
     if DEBUG:
-        logger.info("delete sensor: " + str(sensorID))
-    sensor_query = f"DELETE FROM Sensors\nWHERE sensorID={sensorID};"
-    query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
+        logger.info(f'Delete sensor: {sensorID}')
+
+    query = '''
+    DELETE FROM
+        Sensors
+    WHERE
+        sensorID = %(sensorID)s;
+    '''
+
+    db.execute_query(db_connection=db_connection, query=query, query_params={'sensorID': sensorID})
+
     flash(f"Successfully deleted sensor!")
-    return redirect("/library")
 
-@app.route("/delete/model/<int:modelID>", methods=["POST", "GET"])
-def deletemodel(modelID):
-    modelID = escape(modelID)
+    return redirect("/sensors")
+
+@app.route("/delete/model/<int:modelID>", methods=["GET"])
+def delete_model(modelID):
+    '''API Route to delete a model'''
+
     if DEBUG:
-        logger.info("delete model: " + str(modelID))
-    model_query = f"DELETE FROM Models\nWHERE modelID={modelID};"
-    query_obj = db.execute_query(db_connection=db_connection, query=model_query)
+        logger.info(f'Delete model: {modelID}')
+
+    query = '''
+    DELETE FROM 
+        Models
+    WHERE 
+        modelID = %(modelID)s;
+    '''
+
+    db.execute_query(db_connection=db_connection, query=query, query_params={'modelID': modelID})
+
     flash(f"Successfully deleted model!")
-    return redirect("/library")
 
-@app.route("/delete/forecast/<int:forecastID>", methods=["POST", "GET"])
-def deleteforecast(forecastID):
-    forecastID = escape(forecastID)
+    return redirect("/models")
+
+@app.route("/delete/forecast/<int:forecastID>", methods=["GET"])
+def delete_forecast(forecastID):
+    '''API Route to delete a forecast'''
+
     if DEBUG:
-        logger.info("delete forecast: " + str(forecastID))
-    forecast_query = f"DELETE FROM Forecasts\nWHERE Forecasts.forecastID={forecastID};"
-    query_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
+        logger.info(f'Delete forecast: {forecastID}')
 
-    return redirect("/results")
+    query = '''
+    DELETE FROM 
+        Forecasts
+    WHERE
+        forecastID = %(forecastID)s;
+    '''
 
-@app.route("/delete/reading/<int:readingID>", methods=["POST", "GET"])
-def deletereading(readingID):
-    readingID = escape(readingID)
+    db.execute_query(db_connection=db_connection, query=query, query_params={'forecastID': forecastID})
+    
+    flash(f"Successfully deleted forecast!")
+
+    return redirect("/forecasts")
+
+@app.route("/delete/reading/<int:readingID>", methods=["GET"])
+def delete_reading(readingID):
+    '''API Route to delete a reading'''
+
     if DEBUG:
-        logger.info("delete reading: " + str(readingID))
-    reading_query = f"DELETE FROM Readings\nWHERE Readings.readingID={readingID};"
-    query_obj = db.execute_query(db_connection=db_connection, query=reading_query)
+        logger.info(f'Delete reading: {readingID}')
 
-    return redirect("/results")
+    query = '''
+    DELETE FROM
+        Readings
+    WHERE
+        readingID = %(readingID)s;
+    '''
 
-@app.route("/delete/location/<int:locationID>", methods=["POST", "GET"])
-def deletelocation(locationID):
-    locationID = escape(locationID)
+    db.execute_query(db_connection=db_connection, query=query, query_params={'readingID': readingID})
+
+    flash(f"Successfully deleted reading!")
+
+    return redirect("/readings")
+
+@app.route("/delete/location/<int:locationID>", methods=["GET"])
+def delete_location(locationID):
+    '''API Route to delete a location'''
+
     if DEBUG:
-        logger.info("delete location: " + str(locationID))
-    location_query = f"DELETE FROM Locations\nWHERE Locations.locationID={locationID};"
-    query_obj = db.execute_query(db_connection=db_connection, query=location_query)
+        logger.info(f'Delete location: {locationID}')
 
-    return redirect("/results")
+    query = '''
+    DELETE FROM 
+        Locations
+    WHERE 
+        locationID = %(locationID)s;
+    '''
 
-@app.route("/delete/date/<int:dateID>", methods=["POST", "GET"])
-def deletedate(dateID):
-    dateID = escape(dateID)
+    db.execute_query(db_connection=db_connection, query=query, query_params={'locationID': locationID})
+
+    flash(f"Successfully deleted location!")
+
+    return redirect("/locations")
+
+@app.route("/delete/date/<int:dateID>", methods=["GET"])
+def delete_date(dateID):
+    '''API Route to delete a date'''
+
     if DEBUG:
-        logger.info("delete date: " + str(dateID))
-    date_query = f"DELETE FROM Dates\nWHERE Dates.dateID={dateID};"
-    query_obj = db.execute_query(db_connection=db_connection, query=date_query)
+        logger.info(f'Delete date: {dateID}')
 
-    return redirect("/results")
+    query = '''
+    DELETE FROM 
+        Dates
+    WHERE 
+        dateID = %(dateID)s;
+    '''
+
+    db.execute_query(db_connection=db_connection, query=query, query_params={'dateID': dateID})
+
+    flash(f"Successfully deleted date!")
+
+    return redirect("/dates")
+
+############
+# Update
+############
 
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
 def sensoredit(sensorID):
@@ -385,7 +453,7 @@ def sensoredit(sensorID):
             logger.info("edit sensor post third query: " + location_query)
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)
 
-        return redirect("/library")
+        return redirect("/sensors")
 
 @app.route("/edit/model/<int:modelID>", methods=["POST", "GET"])
 def modeledit(modelID):
