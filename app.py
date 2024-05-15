@@ -90,16 +90,24 @@ def results():
 @app.route('/sensors', methods=["POST", "GET"])
 def sensors():
     '''View for the Sensors Admin Page'''
+    sensor_dict = dict()
+    sensor_dict['sensorID'] = 'ID'
+    sensor_dict['sensorName'] = 'Name'
+    sensor_dict['sensorAPIKEY'] = 'API Key' 
+    sensor_dict['sensorNumber'] = 'Number'
+    sensor_dict['locationLatitude'] = 'Latitude'
+    sensor_dict['locationLongitude'] = 'Longitude'
+    sensor_dict['locationAltitude'] = 'Altitude'
     if request.method == "GET":
         sensor_query = '''
         SELECT
-            sensorID AS 'ID', 
-            sensorName AS 'Name', 
-            sensorAPIKEY AS 'API Key', 
-            sensorNumber AS 'Number', 
-            locationLatitude AS 'Latitude', 
-            locationLongitude AS 'Longitude', 
-            locationAltitude AS 'Altitude' 
+            sensorID, 
+            sensorName, 
+            sensorAPIKEY, 
+            sensorNumber, 
+            locationLatitude, 
+            locationLongitude, 
+            locationAltitude
         FROM 
             Sensors
         JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
@@ -110,18 +118,21 @@ def sensors():
         sensor_results = sensor_obj.fetchall()
         if DEBUG:
             logger.info(sensor_results)
-        return render_template("pages/sensors.html", sensors=sensor_results)
+        return render_template("pages/sensors.html", sensors=sensor_results, sensor_dict=sensor_dict)
     elif request.method == "POST":
         return redirect("/")
     
 @app.route('/models', methods=["POST", "GET"])
 def models():
     '''View for the Models Admin Page'''
+    model_dict = dict()
+    model_dict['modelID'] = 'ID' 
+    model_dict['modelName'] = 'Model Name'
     if request.method == "GET":
         model_query = '''
         SELECT 
-            modelID AS 'ID', 
-            modelName AS 'Name' 
+            modelID, 
+            modelName
         FROM 
             Models
         ORDER BY 
@@ -131,7 +142,7 @@ def models():
         model_results = model_obj.fetchall()
         if DEBUG:
             logger.info(model_results)
-        return render_template("pages/models.html", models=model_results)
+        return render_template("pages/models.html", models=model_results, model_dict=model_dict)
     elif request.method == "POST":
         return redirect("/")
     
@@ -141,21 +152,34 @@ def forecasts():
 
     #TODO
     # Add join(s) to view relevant data from other tables
+    forecast_dict = dict()
+    forecast_dict['forecastID'] = 'ID'
+    forecast_dict['forecastDateID'] = 'Date'
+    forecast_dict['forecastTemperature2m'] = 'Temperature'
+    forecast_dict['forecastPrecipitation'] = 'Precipitation'
+    forecast_dict['forecastWeatherCode'] = 'Weather Code'
+    forecast_dict['forecastPressureMSL'] = 'Pressure MSL'
+    forecast_dict['forecastWindSpeed10m'] = 'Wind Speed'
+    forecast_dict['forecastWindDirection10m'] = 'Wind Direction'
+    forecast_dict['forecastCape'] = 'Cape'
+    forecast_dict['forecastModelID'] = 'Model'
+    forecast_dict['forecastLocationID'] = 'Location'
+    forecast_dict['forecastForDateTime'] = 'Date/Time'
     if request.method == "GET":
         query = '''
         SELECT
-            forecastID AS 'ID',
-            forecastDateID AS 'Date',
-            forecastTemperature2m AS 'Temperature',
-            forecastPrecipitation AS 'Precipitation',
-            forecastWeatherCode AS 'Weather Code',
-            forecastPressureMSL AS 'Pressure MSL',
-            forecastWindSpeed10m AS 'Wind Speed',
-            forecastWindDirection10m AS 'Wind Direction',
-            forecastCape AS 'Cape',
-            forecastModelID AS 'Model',
-            forecastLocationID AS 'Location',
-            forecastForDateTime AS 'Date/Time'
+            forecastID,
+            forecastDateID,
+            forecastTemperature2m,
+            forecastPrecipitation,
+            forecastWeatherCode,
+            forecastPressureMSL,
+            forecastWindSpeed10m,
+            forecastWindDirection10m,
+            forecastCape,
+            forecastModelID,
+            forecastLocationID,
+            forecastForDateTime
         FROM 
             Forecasts;
         '''
@@ -163,21 +187,27 @@ def forecasts():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("pages/forecasts.html", forecasts=results)
+        return render_template("pages/forecasts.html", forecasts=results, forecast_dict=forecast_dict)
     elif request.method == "POST":
         return redirect("/")
 
 @app.route('/locations', methods=["POST", "GET"])
 def locations():
     '''View for the Locations Admin Page'''
+    location_dict = dict()
+    location_dict['locationID'] = 'ID'
+    location_dict['locationName'] = 'Location Name'
+    location_dict['locationLatitude'] = 'Latitude'
+    location_dict['locationLongitude'] = 'Longitude'
+    location_dict['locationAltitude'] = 'Altitude'
     if request.method == "GET":
         query = '''
         SELECT
-            locationID AS 'ID',
-            locationName AS 'Name',
-            locationLatitude AS 'Latitude',
-            locationLongitude AS 'Longitude',
-            locationAltitude AS 'Altitude'
+            locationID,
+            locationName,
+            locationLatitude,
+            locationLongitude,
+            locationAltitude
         FROM
             Locations;
         '''
@@ -185,18 +215,21 @@ def locations():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("pages/locations.html", locations=results)
+        return render_template("pages/locations.html", locations=results, location_dict=location_dict)
     elif request.method == "POST":
         return redirect("/")
 
 @app.route('/dates', methods=["POST", "GET"])
 def dates():
     '''View for the Dates Admin Page'''
+    date_dict = dict()
+    date_dict['dateID'] = 'ID'
+    date_dict['dateDateTime'] = 'Date/Time'
     if request.method == "GET":
         query = '''
         SELECT
-            dateID AS 'ID',
-            dateDateTime AS 'Date/Time'
+            dateID,
+            dateDateTime
         FROM
             Dates;
         '''
@@ -204,24 +237,32 @@ def dates():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("pages/dates.html", dates=results)
+        return render_template("pages/dates.html", dates=results, date_dict=date_dict)
     elif request.method == "POST":
         return redirect("/")
 
 @app.route('/readings', methods=["POST", "GET"])
 def readings():
     '''View for the Readings Admin Page'''
+    reading_dict = dict()
+    reading_dict['readingID'] = 'ID'
+    reading_dict['readingSensorID'] = 'Sensor'
+    reading_dict['readingWindSpeed'] = 'Average Wind Speed'
+    reading_dict['readingWindGust'] = 'Wind Gust'
+    reading_dict['readingWindMin'] = 'Wind Minimum Speed'
+    reading_dict['readingWindDirection'] = 'Wind Direction'
+    reading_dict['readingTemperature'] = 'Temperature'
+    reading_dict['readingDateID'] = 'Date ID'
     if request.method == "GET":
         query = '''
-        SELECT
-            readingID AS 'ID',
-            readingSensorID AS 'Sensor',
-            readingWindSpeed AS 'Wind Speed',
-            readingWindGust AS 'Wind Gust',
-            readingWindMin AS 'Wind Min',
-            readingWindDirection AS 'Wind Direction',
-            readingTemperature AS 'Temperature',
-            readingDateID AS 'Date'
+        SELECT readingID, 
+            readingSensorID,
+            readingWindSpeed,
+            readingWindGust,
+            readingWindMin,
+            readingWindDirection,
+            readingTemperature,
+            readingDateID
         FROM
             Readings;
         '''
@@ -229,7 +270,7 @@ def readings():
         results = obj.fetchall()
         if DEBUG:
             logger.info(results)
-        return render_template("pages/readings.html", readings=results)
+        return render_template("pages/readings.html", readings=results, reading_dict=reading_dict)
     elif request.method == "POST":
         return redirect("/")
 

@@ -13,7 +13,7 @@
                 <tr>
                     {% for key in dates[0].keys() %}
                     {% if key != 'dateID' %}
-                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ date_dict[key] }}</th>
                     {% endif %}
                     {% endfor %}
                     <th>Edit</th>

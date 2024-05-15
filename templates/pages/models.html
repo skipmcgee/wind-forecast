@@ -14,7 +14,9 @@
                 <thead>
                     <tr>
                         {% for key in models[0].keys() %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{key}}</th>
+                        {% if key != 'modelID' %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ model_dict[key] }}</th>
+                        {% endif %}
                         {% endfor %}
                         <th>Edit</th>
                         <th>Delete</th>
