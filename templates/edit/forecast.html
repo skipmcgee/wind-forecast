@@ -50,7 +50,7 @@
                     <input type="number" step="0.01" id="forecastCape" name="forecastCape"
                         value="{{specific_forecast.forecastCape}}" required>
 
-                    <select name="model" aria-label="date" required>
+                    <select name="model" aria-label="model" required>
                         <option selected disabled value="">{{specific_forecast.forecastModel}}"</option>
                         {% for model in models %}
                         <option>{{model.modelName}}</option>
@@ -58,7 +58,7 @@
                     </select>
 
                     <label for="forecastForDateTime">Forecast Date/Time:</label>
-                    <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime" required>
+                    <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime" value="{{specific_forecast.forecastDateTime}}" required>
                 </fieldset>
                 <button type="submit">Submit</button>
             </form>
