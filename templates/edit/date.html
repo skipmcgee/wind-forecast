@@ -11,13 +11,13 @@
         <div></div>
         <div>
             <article>
-                <form name="editdate" id="editdate" action="/edit/date/{{specific_date[0].dateID}}" method="post">
+                <form name="editdate" id="editdate" action="/edit/date/{{specific_date.dateID}}" method="post">
                     <!-- <legend><strong>Edit Date:</strong></legend> -->
                     <fieldset>
-                        <input type="hidden" value="{{specific_date[0].dateID}}" class="form-control" id="dateID"
+                        <input type="hidden" value="{{specific_date.dateID}}" class="form-control" id="dateID"
                             name="dateID" required>
                         <label for="name">Weather Date Name:</label>
-                        <input type="text" value="{{specific_date[0].dateName}}" class="form-control" id="dateName"
+                        <input type="text" value="{{specific_date.dateDateTime}}" class="form-control" id="dateName"
                             name="dateName" pattern="[A-Za-z0-9\s]+" required>
                     </fieldset>
                     <button type="submit">Submit</button>

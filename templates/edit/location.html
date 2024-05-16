@@ -11,13 +11,13 @@
         <div></div>
         <div>
             <article>
-                <form name="editlocation" id="editlocation" action="/edit/location/{{specific_location[0].locationID}}" method="post">
+                <form name="editlocation" id="editlocation" action="/edit/location/{{specific_location.locationID}}" method="post">
                     <!-- <legend><strong>Edit Weather Location:</strong></legend> -->
                     <fieldset>
-                        <input type="hidden" value="{{specific_location[0].locationID}}" class="form-control" id="locationID"
+                        <input type="hidden" value="{{specific_location.locationID}}" class="form-control" id="locationID"
                             name="locationID" required>
                         <label for="name">Weather Location Name:</label>
-                        <input type="text" value="{{specific_location[0].locationName}}" class="form-control" id="locationName"
+                        <input type="text" value="{{specific_location.locationName}}" class="form-control" id="locationName"
                             name="locationName" pattern="[A-Za-z0-9\s]+" required>
                     </fieldset>
                     <button type="submit">Submit</button>

@@ -1,40 +1,31 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-    <h4>{% block title %} Add a Sensor at a Location {% endblock %}</h4>
-    <div></div>
+    <h4>{% block title %} Add a Sensor {% endblock %}</h4>
     {% for mesg in get_flashed_messages() %}
     <h3>{{ mesg }}</h3>
     {% endfor %}
-    <div></div>
     <div class="grid">
         <div></div>
         <div>
             <article>
                 <form name="addSensor" id="addSensor" action="/add/sensor" method="post">
-                    <!-- <legend><strong>Add Sensor:</strong></legend> -->
                     <fieldset>
                         <label for="name">Sensor Name:</label>
-                        <input type="text" value="max 100 characters" class="form-control" id="sensorName"
-                            name="sensorName" pattern="[A-Za-z0-9\s]+" required>
+                        <input type="text" value="max 100 characters" class="form-control" id="sensorName" name="sensorName"
+                            pattern="[A-Za-z0-9\s]+" required>
                         <label for="key">Sensor API Key:</label>
-                        <input type="text" value="max 100 characters" class="form-control" id="sensorAPIKey"
-                            name="sensorAPIKey" required>
+                        <input type="text" value="max 100 characters" class="form-control" id="sensorAPIKey" name="sensorAPIKey" required>
                         <label for="number">Sensor Number:</label>
-                        <input type="text" value="integer" class="form-control" id="sensorNumber"
-                            name="sensorNumber" pattern="[0-9]+([0-9]+)?" required>
-                        <label for="latitude">Location Name:</label>
-                        <input type="text" value="max 100 characters" class="form-control" id="locationName"
-                            name="locationName" pattern="[A-Za-z0-9\s]+" required>
-                        <label for="latitude">Latitude:</label>
-                        <input type="text" value="decimal" class="form-control" id="locationLatitude"
-                            name="locationLatitude" pattern="[-+,0-9]+([\.,][0-9]+)?" step="0.0001" required>
-                        <label for="longitude">Longitude:</label>
-                        <input type="text" value="decimal" class="form-control" id="locationLongitude"
-                            name="locationLongitude" pattern="[-+,0-9]+([\.,][0-9]+)?" step="0.0001" required>
-                        <label for="altitude">Altitude:</label>
-                        <input type="text" value="decimal" class="form-control" id="locationAltitude"
-                            name="locationAltitude" pattern="[0-9]+([0-9]+)?" required>
+                        <input type="text" value="integer" class="form-control" id="sensorNumber" name="sensorNumber"
+                            pattern="[0-9]+([0-9]+)?" required>
+                        <select name="location" aria-label="location" required>
+                            <option selected disabled value="">Location:</option>
+                            {% for location in locations %}
+                            <option>{{location.Name}}</option>
+                    
+                            {% endfor %}
+                        </select>
                     </fieldset>
                     <button type="submit">Add New Sensor</button>
                 </form>

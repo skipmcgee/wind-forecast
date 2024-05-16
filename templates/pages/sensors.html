@@ -15,7 +15,7 @@
                     <tr>
                         {% for key in sensors[0].keys() %}
                         {% if key != 'sensorID' %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ sensor_dict[key] }}</th>
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
                         {% endif %}
                         {% endfor %}
                         <th>Edit</th>
@@ -32,7 +32,7 @@
                         {% endfor %}
                         <p></p>
                         <td><a href="/edit/sensor/{{item.sensorID}}" class="btn btn-default" method="get"><span class="material-icons">mode_edit</span></a></td>
-						<td><a href="/delete/sensor/{{item.sensorID}}" class="btn btn-default" method="post"><span class="material-icons">delete</span></a></td>
+						<td><a href="/delete/sensor/{{item.sensorID}}" class="btn btn-default" method="get"><span class="material-icons">delete</span></a></td>
                     </tr> 
                     {% endfor %}
                 </tbody>
@@ -43,8 +43,7 @@
             <div></div>
             <div><a href='/add/sensor'><input class="btn" type="button" value="Add a Sensor" method="get"></a></div>
             <div></div>
-        </div>
-        
+        </div> 
     </div>
 </article>
 
