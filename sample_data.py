@@ -40,66 +40,66 @@ sample_models = [
 sample_forecasts = [
 {
     'forecastID': 1,
-    'Date Time': '2024-04-01 15:00:00',
-    'Temperature': 58,
-    'Precipitation': 0,
-    'Weather Code': 'CLEAR',
-    'Pressure MSL': 3,
-    'Wind Speed': 10.0,
-    'Wind Direction': 220.0,
-    'Cape': 3.5,
-    'Location': 'La Bajada Ridge Launch',
-    'Model': 'ECMWF'
+    'forecastDateTime': '2024-04-01 15:00:00',
+    'forecastTemperature': 58,
+    'forecastPrecipitation': 0,
+    'forecastWeatherCode': 'CLEAR',
+    'forecastPressureMSL': 3,
+    'forecastWindSpeed': 10.0,
+    'forecastWindDirection': 220.0,
+    'forecastCape': 3.5,
+    'forecastLocation': 'La Bajada Ridge Launch',
+    'forecastModel': 'ECMWF'
 },
 {
     'forecastID': 2,
-    'Date Time': '2024-04-01 16:00:00',
-    'Temperature': 58,
-    'Precipitation': 0,
-    'Weather Code': 'CLEAR',
-    'Pressure MSL': 3,
-    'Wind Speed': 10.0,
-    'Wind Direction': 220.0,
-    'Cape': 4.1,
-    'Location': 'La Bajada Ridge Launch',
-    'Model': 'ECMWF'
+    'forecastDateTime': '2024-04-01 16:00:00',
+    'forecastTemperature': 58,
+    'forecastPrecipitation': 0,
+    'forecastWeatherCode': 'CLEAR',
+    'forecastPressureMSL': 3,
+    'forecastWindSpeed': 10.0,
+    'forecastWindDirection': 220.0,
+    'forecastCape': 4.1,
+    'forecastLocation': 'La Bajada Ridge Launch',
+    'forecastModel': 'ECMWF'
 },
 {
     'forecastID': 3,
-    'Date Time': '2024-04-01 17:00:00',
-    'Temperature': 62,
-    'Precipitation': 0,
-    'Weather Code': 'CLEAR',
-    'Pressure MSL': 4,
-    'Wind Speed': 14.0,
-    'Wind Direction': 230.0,
-    'Cape': 4.2,
-    'Location': 'La Bajada Ridge Launch',
-    'Model': 'ECMWF'
+    'forecastDateTime': '2024-04-01 17:00:00',
+    'forecastTemperature': 62,
+    'forecastPrecipitation': 0,
+    'forecastWeatherCode': 'CLEAR',
+    'forecastPressureMSL': 4,
+    'forecastWindSpeed': 14.0,
+    'forecastWindDirection': 230.0,
+    'forecastCape': 4.2,
+    'forecastLocation': 'La Bajada Ridge Launch',
+    'forecastModel': 'ECMWF'
 }
 ]
 
 sample_locations = [
 {
     'locationID': 1,
-    'Name': 'La Bajada Ridge Launch',
-    'Latitude': 35.56195,
-    'Longitude': -106.22596,
-    'Altitude': 6135
+    'locationName': 'La Bajada Ridge Launch',
+    'locationLatitude': 35.56195,
+    'locationLongitude': -106.22596,
+    'locationAltitude': 6135
 },
 {
     'locationID': 2,
-    'Name': 'Sandia Peak Launch',
-    'Latitude': 35.196576,
-    'Longitude': -106.434662,
-    'Altitude': 10275
+    'locationName': 'Sandia Peak Launch',
+    'locationLatitude': 35.196576,
+    'locationLongitude': -106.434662,
+    'locationAltitude': 10275
 },
 {
     'locationID': 3,
-    'Name': 'Sandia Crest Launch',
-    'Latitude': 35.21342,
-    'Longitude': -106.45026,
-    'Altitude': 10600
+    'locationName': 'Sandia Crest Launch',
+    'locationLatitude': 35.21342,
+    'locationLongitude': -106.45026,
+    'locationAltitude': 10600
 }
 ]
 

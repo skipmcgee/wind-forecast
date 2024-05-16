@@ -25,7 +25,7 @@ def root():
 def add_forecast():
     '''API Route to add a forecast'''
 
-    return render_template('add/forecast.html')
+    return render_template('add/forecast.html', models=sample_models, dates=sample_dates)
 
 @app.route('/add/location', methods=['POST', 'GET'])
 def add_location():

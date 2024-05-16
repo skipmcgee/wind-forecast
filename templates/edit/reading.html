@@ -16,7 +16,7 @@
                         name="readingID" required>
                     <label for="name">Weather Sensor:</label>
                     <select name="sensor" aria-label="sensor" required>
-                        <option selected disabled value="">Sensor:</option>
+                        <option selected disabled value="">{{specific_reading.readingSensor}}</option>
                         {% for sensor in sensors %}
                         <option>{{sensor.sensorName}}</option>
                         {% endfor %}
@@ -41,7 +41,7 @@
                     <input type="text" value="{{specific_reading.readingTemperature}}" class="form-control"
                         id="readingTemperature" name="readingTemperature" pattern="[A-Za-z0-9\s]+" required>
                     <select name="date" aria-label="date" required>
-                        <option selected disabled value="">Date:</option>
+                        <option selected disabled value="">{{specific_reading.readingDate}}</option>
                         {% for date in dates %}
                         <option>{{date.dateDateTime}}</option>
                         {% endfor %}

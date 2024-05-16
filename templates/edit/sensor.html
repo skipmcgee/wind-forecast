@@ -2,11 +2,9 @@
 
 {% block content %}
     <h4>{% block title %} Edit a Sensor {% endblock %}</h4>
-    <div></div>
     {% for mesg in get_flashed_messages() %}
     <h3>{{ mesg }}</h3>
     {% endfor %}
-    <div></div>
     <div class="grid">
         <div></div>
         <div>
@@ -28,10 +26,10 @@
                         <input type="text" value="{{specific_sensor.sensorNumber}}" class="form-control"
                             id="sensorNumber" name="sensorNumber" pattern="[0-9]+([0-9]+)?" required>
     
-                        <select name="location" aria-label="location" required>
-                            <option selected disabled value="">Location:</option>
+                        <select name="locationName" aria-label="locationName" required>
+                            <option selected disabled value="">{{specific_sensor.sensorLocation}}</option>
                             {% for location in locations %}
-                            <option>{{location.Name}}</option>
+                            <option>{{location.locationName}}</option>
                             
                             {% endfor %}
                         </select>

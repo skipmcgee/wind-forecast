@@ -1,41 +1,58 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-	<h4>{% block title %} Add a Forecast {% endblock %}</h4>
-    <article>
+<h4>{% block title %} Add a Forecast {% endblock %}</h4>
+{% for mesg in get_flashed_messages() %}
+<h3>{{ mesg }}</h3>
+{% endfor %}
+<div class="grid">
     <div></div>
-    {% for mesg in get_flashed_messages() %}
-    <h3>{{ mesg }}</h3>
-    {% endfor %}
-    <div></div>
-    <div class="grid">
-        <div>
-            <article>
-                <form action="/add/forecast" method="post">
-                    <label for="sensorlist">Select a Sensor and Model:</label>
-                    <select id="sensorlist" name="sensorlist" required>
-                        {% if sensors %}
-                        {% for sensor in sensors %}
-                        <option value="{{ sensor.sensorID }}">{{ sensor.sensorName }}</option>
-                        {% endfor %}
-                        {% else %}
-                        <a>You need to add a sensor before continuing</a>
-                        {% endif %}
-                    </select>
-                    <p></p>
-                    <select id="modellist" name="modellist" required>
-                        {% if models %}
-                        {% for model in models %}
-                        <option value="{{ model.modelID }}">{{ model.modelName }}</option>
-                        {% endfor %}
-                        {% else %}
-                        <a>You need to add a model before continuing</a>
-                        {% endif %}
-                    </select>
-                    <p></p>
-                    <button type="submit">Submit</button>
-                </form>
-            </article>
-        </div>
+    <div>
+        <article>
+            <form method="POST" action="/add/forecast">
+
+                <select name="date" aria-label="date" required>
+                    <option selected disabled value="">Date:</option>
+                    {% for date in dates %}
+                    <option>{{date.dateDateTime}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="forecastTemperature">Temperature (2m):</label>
+                <input type="number" step="0.01" id="forecastTemperature" name="forecastTemperature" required>
+
+                <label for="forecastPrecipitation">Precipitation:</label>
+                <input type="number" step="0.01" id="forecastPrecipitation" name="forecastPrecipitation" required>
+
+                <label for="forecastWeatherCode">Weather Code:</label>
+                <input type="text" id="forecastWeatherCode" name="forecastWeatherCode" required>
+
+                <label for="forecastPressureMSL">Pressure (MSL):</label>
+                <input type="number" id="forecastPressureMSL" name="forecastPressureMSL" required>
+
+                <label for="forecastWindSpeed">Wind Speed (10m):</label>
+                <input type="number" step="0.01" id="forecastWindSpeed" name="forecastWindSpeed" required>
+
+                <label for="forecastWindDirection">Wind Direction (10m):</label>
+                <input type="number" id="forecastWindDirection" name="forecastWindDirection" required>
+
+                <label for="forecastCape">CAPE:</label>
+                <input type="number" step="0.01" id="forecastCape" name="forecastCape" required>
+
+                <select name="model" aria-label="date" required>
+                    <option selected disabled value="">Model</option>
+                    {% for model in models %}
+                    <option>{{model.modelName}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="forecastForDateTime">Forecast Date/Time:</label>
+                <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime" required>
+
+                <button type="submit">Add Forecast</button>
+            </form>
+        </article>
     </div>
+    <div></div>
+</div>
 {% endblock %}
