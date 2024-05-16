@@ -17,12 +17,11 @@
                         <label for="key">Sensor API Key:</label>
                         <input type="text" value="max 100 characters" class="form-control" id="sensorAPIKey" name="sensorAPIKey" required>
                         <label for="number">Sensor Number:</label>
-                        <input type="text" value="integer" class="form-control" id="sensorNumber" name="sensorNumber"
-                            pattern="[0-9]+([0-9]+)?" required>
+                        <input type="number" id="sensorNumber" name="sensorNumber" value="1151">
                         <select name="location" aria-label="location" required>
                             <option selected disabled value="">Location:</option>
                             {% for location in locations %}
-                            <option>{{location.Name}}</option>
+                            <option>{{location.locationName}}</option>
                     
                             {% endfor %}
                         </select>

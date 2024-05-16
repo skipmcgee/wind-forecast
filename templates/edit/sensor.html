@@ -23,9 +23,8 @@
                             id="sensorAPIKey" name="sensorAPIKey" required>
     
                         <label for="number">Sensor Number:</label>
-                        <input type="text" value="{{specific_sensor.sensorNumber}}" class="form-control"
-                            id="sensorNumber" name="sensorNumber" pattern="[0-9]+([0-9]+)?" required>
-    
+                        <input type="number" id="sensorNumber" name="sensorNumber" value="{{specific_sensor.sensorNumber}}">
+
                         <select name="locationName" aria-label="locationName" required>
                             <option selected disabled value="">{{specific_sensor.sensorLocation}}</option>
                             {% for location in locations %}
