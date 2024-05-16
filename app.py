@@ -13,12 +13,14 @@ import pprint as pp
 from app.openmeteo_ecmwf_query import query_ecmwf
 from app.openmeteo_gfs_query import query_gfs
 from app.holfuy_query import fetch, gather_data
+from app.data import KeyTranslation
 
 # Configuration
 app = Flask(__name__)
 app.secret_key = 'mc)kNIk4cbIZQ,@jUve-Q}2^T3em$p'
 db_connection = db.connect_to_database()
 logger = logging.getLogger('werkzeug')
+keys = KeyTranslation()
 entities_list = ['models', 'locations', 'sensors', 'forecasts', 'readings', ] 
 valid_models_list = ['HRRR', 'ECMWF', 'MBLUE', 'GFS', 'NAM', 'ICON', ]
 current_supported_model_list = ['ECMWF', 'GFS']
@@ -84,7 +86,7 @@ def results():
         logger.info("results readings query: " + readings_query)
     readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
-    return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
+    return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict, key_dict=keys.key_dict)
 
 @app.route('/library', methods=["POST", "GET"])
 def library():
@@ -104,7 +106,7 @@ def library():
         locations_results = locations_obj.fetchall()
         if DEBUG:
             logger.info(locations_results)
-        return render_template("library.html", sensors=sensor_results, models=model_results, locations=locations_results)
+        return render_template("library.html", sensors=sensor_results, models=model_results, locations=locations_results, key_dict=keys.key_dict)
     elif request.method == "POST":
         return redirect("/")
     
@@ -115,16 +117,6 @@ def library():
 @app.route('/sensors', methods=["GET"])
 def sensors():
     '''View for the Sensors Admin Page'''
-    
-    sensor_dict = dict()
-    sensor_dict['sensorID'] = 'ID'
-    sensor_dict['sensorName'] = 'Name'
-    sensor_dict['sensorAPIKEY'] = 'API Key' 
-    sensor_dict['sensorNumber'] = 'Number'
-    sensor_dict['locationLatitude'] = 'Latitude'
-    sensor_dict['locationLongitude'] = 'Longitude'
-    sensor_dict['locationAltitude'] = 'Altitude'
-
     query = '''
     SELECT
         sensorID, 
@@ -146,15 +138,11 @@ def sensors():
     if DEBUG:
         logger.info(results)
 
-    return render_template("pages/sensors.html", sensors=results, sensor_dict=sensor_dict)
+    return render_template("pages/sensors.html", sensors=results, sensor_dict=keys.key_dict)
     
 @app.route('/models', methods=["GET"])
 def models():
     '''View for the Models Admin Page'''
-
-    model_dict = dict()
-    model_dict['modelID'] = 'ID' 
-    model_dict['modelName'] = 'Model Name'
 
     query = '''
     SELECT 
@@ -171,7 +159,7 @@ def models():
     if DEBUG:
         logger.info(results)
 
-    return render_template("pages/models.html", models=results, model_dict=model_dict)
+    return render_template("pages/models.html", models=results, model_dict=keys.key_dict)
     
 @app.route('/forecasts', methods=["GET"])
 def forecasts():
@@ -179,19 +167,6 @@ def forecasts():
 
     #TODO
     # Add join(s) to view relevant data from other tables
-    forecast_dict = dict()
-    forecast_dict['forecastID'] = 'ID'
-    forecast_dict['forecastDateID'] = 'Date'
-    forecast_dict['forecastTemperature2m'] = 'Temperature'
-    forecast_dict['forecastPrecipitation'] = 'Precipitation'
-    forecast_dict['forecastWeatherCode'] = 'Weather Code'
-    forecast_dict['forecastPressureMSL'] = 'Pressure MSL'
-    forecast_dict['forecastWindSpeed10m'] = 'Wind Speed'
-    forecast_dict['forecastWindDirection10m'] = 'Wind Direction'
-    forecast_dict['forecastCape'] = 'Cape'
-    forecast_dict['forecastModelID'] = 'Model'
-    forecast_dict['forecastLocationID'] = 'Location'
-    forecast_dict['forecastForDateTime'] = 'Date/Time'
 
     query = '''
     SELECT
@@ -216,18 +191,11 @@ def forecasts():
     if DEBUG:
         logger.info(results)
 
-    return render_template("pages/forecasts.html", forecasts=results, forecast_dict=forecast_dict)
+    return render_template("pages/forecasts.html", forecasts=results, forecast_dict=keys.key_dict)
 
 @app.route('/locations', methods=["GET"])
 def locations():
     '''View for the Locations Admin Page'''
-
-    location_dict = dict()
-    location_dict['locationID'] = 'ID'
-    location_dict['locationName'] = 'Location Name'
-    location_dict['locationLatitude'] = 'Latitude'
-    location_dict['locationLongitude'] = 'Longitude'
-    location_dict['locationAltitude'] = 'Altitude'
 
     query = '''
     SELECT
@@ -245,14 +213,11 @@ def locations():
     if DEBUG:
         logger.info(results)
 
-    return render_template("pages/locations.html", locations=results, location_dict=location_dict)
+    return render_template("pages/locations.html", locations=results, location_dict=keys.key_dict)
 
 @app.route('/dates', methods=["GET"])
 def dates():
     '''View for the Dates Admin Page'''
-    date_dict = dict()
-    date_dict['dateID'] = 'ID'
-    date_dict['dateDateTime'] = 'Date/Time'
 
     query = '''
     SELECT
@@ -266,21 +231,11 @@ def dates():
 
     if DEBUG:
         logger.info(results)
-    return render_template("pages/dates.html", dates=results, date_dict=date_dict)
+    return render_template("pages/dates.html", dates=results, date_dict=keys.key_dict)
 
 @app.route('/readings', methods=["GET"])
 def readings():
     '''View for the Readings Admin Page'''
-
-    reading_dict = dict()
-    reading_dict['readingID'] = 'ID'
-    reading_dict['readingSensorID'] = 'Sensor'
-    reading_dict['readingWindSpeed'] = 'Average Wind Speed'
-    reading_dict['readingWindGust'] = 'Wind Gust'
-    reading_dict['readingWindMin'] = 'Wind Minimum Speed'
-    reading_dict['readingWindDirection'] = 'Wind Direction'
-    reading_dict['readingTemperature'] = 'Temperature'
-    reading_dict['readingDateID'] = 'Date ID'
 
     query = '''
     SELECT readingID, 
@@ -300,7 +255,7 @@ def readings():
     if DEBUG:
         logger.info(results)
 
-    return render_template("pages/readings.html", readings=results, reading_dict=reading_dict)
+    return render_template("pages/readings.html", readings=results, reading_dict=keys.key_dict)
 
 ############
 # DELETE
