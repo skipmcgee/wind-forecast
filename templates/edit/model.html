@@ -1,7 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-    <h4>{% block title %} Edit a Model {% endblock %}</h4>
+    <h4>{% block title %} Edit Model #{{specific_model.modelID}} {% endblock %}</h4>
     {% for mesg in get_flashed_messages() %}
     <h3>{{ mesg }}</h3>
     {% endfor %}
