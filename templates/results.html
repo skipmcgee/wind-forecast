@@ -14,7 +14,7 @@
                     <tr>
                         {% for key in forecasts[0].keys() %}
                         {% if key != 'forecastDateID' %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key_dict[key] }}</th>
                         {% endif %}
                         {% endfor %}
                         <th>Delete</th> 
@@ -44,7 +44,7 @@
                     <tr>
                         {% for key in readings[0].keys() %}
                         {% if key != 'readingDateID' and key != 'readingSensorID' %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key_dict[key] }}</th>
                         {% endif %}
                         {% endfor %}
                         <th>Delete</th>
