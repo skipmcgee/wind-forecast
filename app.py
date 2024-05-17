@@ -28,62 +28,6 @@ current_supported_sensor_list = ['1',]
 info_dict = dict()
 DEBUG = True
 
-# fake data for assignment3
-model = dict()
-model['modelName'] = 'ECMWF'
-model['modelID'] = '1'
-models_test = list()
-models_test.append(model)
-location = dict()
-location['locationID'] = '1'
-location['locationName'] = 'La Bajada Ridge Launch'
-location['locationLatitude'] = 35.56195
-location['locationLongitude'] = -106.22596
-location['locationAltitude'] = 6135
-locations_test = list()
-locations_test.append(location)
-tdate = dict()
-tdate['dateID'] = 1
-tdate['dateDateTime'] = '2024-04-01 08:00:00'
-dates_test = list()
-dates_test.append(tdate)
-sensor = dict()
-sensor['sensorID'] = 1
-sensor['sensorName'] = 'La Bajada Holfuy'
-sensor['sensorLocationID'] = '1'
-sensor['sensorAPIKey'] = 'mytestapikey1234'
-sensor['sensorNumber'] = 1151
-sensors_test = list()
-sensors_test.append(sensor)
-reading = dict()
-reading['readingID'] = 1
-reading['readingSensorID'] = 1
-reading['readingDateID'] = 1
-reading['readingWindSpeed'] = 21.0
-reading['readingWindGust'] = 24
-reading['readingWindMin'] = 14.0
-reading['readingWindDirection'] = 250
-reading['readingTemperature'] = 64
-readings_test = list()
-readings_test.append(reading)
-forecast = dict()
-forecast['forecastID'] = 1
-forecast['forecastForDateTime'] = '2024-04-01 15:00:00'
-forecast['forecastDateID'] = 1
-forecast['forecastTemperature2m'] = 58
-forecast['forecastPrecipitation'] = 0
-forecast['forecastWeatherCode'] = 'CLEAR'
-forecast['forecastPressureMSL'] = 3
-forecast['forecastWindSpeed10m'] = 10.0
-forecast['forecastWindDirection10m'] = 220.0
-forecast['forecastCape'] = 3.5
-forecast['forecastLocationID'] = 1
-forecast['forecastModelID'] = 1
-forecasts_test = list()
-forecasts_test.append(forecast)
-# end test stuff
-
-
 # Routes 
 @app.route("/index")
 def plain_index():
@@ -98,11 +42,8 @@ def root():
     today = date.today()
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
-        '''
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        '''
-        return render_template("pages/index.html", sensors=sensors_test, today=str(today))
-    '''
+        return render_template("pages/index.html", sensors=sensors_results, today=str(today))
     elif request.method == "POST":
         if DEBUG:
             logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
@@ -128,7 +69,7 @@ def root():
         info_dict['sensorName'] = sensors_results[0]['sensorName']
         logger.info("found info dict: " + str(info_dict))
         return redirect("/results")
-    '''
+
 @app.route('/results', methods=["GET"])
 def results():
     if DEBUG:
@@ -191,13 +132,13 @@ def sensors():
     ORDER BY
         sensorName DESC;
     '''
-    '''
+
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
 
     if DEBUG:
         logger.info(results)
-    '''
-    return render_template("pages/sensors.html", sensors=sensors_test, sensor_dict=keys.key_dict)
+
+    return render_template("pages/sensors.html", sensors=results, sensor_dict=keys.key_dict)
     
 @app.route('/models', methods=["GET"])
 def models():
@@ -212,13 +153,13 @@ def models():
     ORDER BY 
         modelName DESC;
     '''
-    """
+
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
 
     if DEBUG:
         logger.info(results)
-    """
-    return render_template("pages/models.html", models=models_test, model_dict=keys.key_dict)
+
+    return render_template("pages/models.html", models=results, model_dict=keys.key_dict)
     
 @app.route('/forecasts', methods=["GET"])
 def forecasts():
@@ -244,13 +185,13 @@ def forecasts():
     FROM 
         Forecasts;
     '''
-    '''
+
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
 
     if DEBUG:
         logger.info(results)
-    '''
-    return render_template("pages/forecasts.html", forecasts=forecasts_test, forecast_dict=keys.key_dict)
+
+    return render_template("pages/forecasts.html", forecasts=results, forecast_dict=keys.key_dict)
 
 @app.route('/locations', methods=["GET"])
 def locations():
@@ -266,13 +207,13 @@ def locations():
     FROM
         Locations;
     '''
-    '''
+
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
 
     if DEBUG:
         logger.info(results)
-    '''
-    return render_template("pages/locations.html", locations=locations_test, location_dict=keys.key_dict)
+
+    return render_template("pages/locations.html", locations=results, location_dict=keys.key_dict)
 
 @app.route('/dates', methods=["GET"])
 def dates():
@@ -285,13 +226,12 @@ def dates():
     FROM
         Dates;
     '''
-    '''
+
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
 
     if DEBUG:
         logger.info(results)
-    '''
-    return render_template("pages/dates.html", dates=dates_test, date_dict=keys.key_dict)
+    return render_template("pages/dates.html", dates=results, date_dict=keys.key_dict)
 
 @app.route('/readings', methods=["GET"])
 def readings():
@@ -309,13 +249,13 @@ def readings():
     FROM
         Readings;
     '''
-    '''
+
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
 
     if DEBUG:
         logger.info(results)
-    '''
-    return render_template("pages/readings.html", readings=readings_test, reading_dict=keys.key_dict)
+
+    return render_template("pages/readings.html", readings=results, reading_dict=keys.key_dict)
 
 ############
 # DELETE
