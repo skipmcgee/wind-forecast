@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
   `forecastDateID` INT NOT NULL,
   `forecastTemperature2m` FLOAT NOT NULL,
   `forecastPrecipitation` FLOAT NOT NULL,
-  `forecastWeatherCode` VARCHAR(100) NOT NULL,
+  `forecastWeatherCode` FLOAT NOT NULL,
   `forecastPressureMSL` INT NOT NULL,
   `forecastWindSpeed10m` FLOAT NOT NULL,
   `forecastWindDirection10m` FLOAT NOT NULL,
@@ -231,13 +231,13 @@ VALUES
 INSERT INTO 
 	`Forecasts` (forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape, forecastLocationID, forecastModelID)
 VALUES 
-	('2024-04-01 15:00:00', 1, 58, 0, 'CLEAR', 3, 10.0, 220.0, 3.5, 1, 1),
-	('2024-04-01 16:00:00', 2, 58, 0, 'CLEAR', 3, 10.0, 220.0, 4.1, 1, 1),
-	('2024-04-01 17:00:00', 3, 62, 0, 'CLEAR', 4, 14.0, 230.0, 4.2, 1, 1),
-	('2024-04-01 18:00:00', 4, 64, 0, 'CLEAR', 4, 16.0, 232.0, 3.6, 1, 1),
-	('2024-04-01 19:00:00', 5, 66, 0, 'CLEAR', 4, 13.0, 228.0, 3.4, 1, 1),
-	('2024-04-01 20:00:00', 6, 62, 0, 'CLEAR', 4, 11.0, 220.0, 3.3, 1, 1),
-	('2024-04-01 21:00:00', 7, 58, 0, 'CLEAR', 3, 9.0, 218.0, 3.1, 1, 1);
+	('2024-04-01 15:00:00', 1, 58, 0, '0.0', 3, 10.0, 220.0, 3.5, 1, 1),
+	('2024-04-01 16:00:00', 2, 58, 0, '0.0', 3, 10.0, 220.0, 4.1, 1, 1),
+	('2024-04-01 17:00:00', 3, 62, 0, '0.0', 4, 14.0, 230.0, 4.2, 1, 1),
+	('2024-04-01 18:00:00', 4, 64, 0, '0.0', 4, 16.0, 232.0, 3.6, 1, 1),
+	('2024-04-01 19:00:00', 5, 66, 0, '0.0', 4, 13.0, 228.0, 3.4, 1, 1),
+	('2024-04-01 20:00:00', 6, 62, 0, '0.0', 4, 11.0, 220.0, 3.3, 1, 1),
+	('2024-04-01 21:00:00', 7, 58, 0, '0.0', 3, 9.0, 218.0, 3.1, 1, 1);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
