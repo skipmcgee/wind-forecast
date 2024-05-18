@@ -665,7 +665,8 @@ def add_location():
     elif request.method == "POST":
         if DEBUG:
             logger.info(str(request.form))
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
+        location_query = f"""INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`)
+                                VALUES ('{request.form['locationName']}', '{request.form['locationLatitude']}', '{request.form['locationLongitude']}', '{request.form['locationAltitude']}');"""
         if DEBUG: 
             logger.info("add sensor post first query: " + location_query)
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)

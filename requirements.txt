@@ -16,6 +16,8 @@ numpy
 python-dotenv
 click
 Flask
+Flask-WTF
+Flask-Security-Too
 gunicorn
 itsdangerous
 Jinja2
