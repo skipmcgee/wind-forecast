@@ -199,7 +199,7 @@ def add_forecast():
                         %(forecastWindDirection10m)s, 
                         %(forecastCape)s, 
                         %(forecastLocationID)s
-                    )
+                    );
             '''
 
             db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
@@ -233,7 +233,7 @@ def add_forecast():
                         %(forecastCape)s, 
                         %(forecastLocationID)s,
                         %(forecastModelID)s
-                    )
+                    );
                 '''
             db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
 
@@ -385,7 +385,7 @@ def add_reading():
 # Read
 ############
 
-@app.route('/forecasts', methods=["GET"])
+@app.route('/forecasts', methods=['GET'])
 def forecasts():
     '''View for the Forecasts Admin Page'''
 
@@ -418,7 +418,7 @@ def forecasts():
     if DEBUG:
         logger.info(forecasts_results)
 
-    return render_template("pages/forecasts.html", forecasts=forecasts_results, forecast_dict=keys.key_dict)
+    return render_template('pages/forecasts.html', forecasts=forecasts_results, forecast_dict=keys.key_dict)
 
 @app.route('/locations', methods=["GET"])
 def locations():
@@ -545,22 +545,34 @@ def readings():
 def update_forecast(forecastID):
     '''API Route to update a forecast'''
 
-    if request.method == "GET":
+    if request.method == 'GET':
 
-        forecast_query = '''
+        forecasts_query = '''
         SELECT 
-            * 
+            forecastID,
+            forecastDateID,
+            forecastTemperature2m,
+            forecastPrecipitation,
+            forecastWeatherCode,
+            forecastPressureMSL,
+            forecastWindSpeed10m,
+            forecastWindDirection10m,
+            forecastCape,
+            forecastModelID,
+            forecastLocationID,
+            forecastForDateTime
         FROM 
             Forecasts
-        INNER JOIN 
-            Locations ON Sensors.sensorLocationID = Locations.locationID
-        WHERE 
-            Sensors.sensorID = %(sensorID)s;
+        WHERE
+            forecastID = %(forecastID)s;
         '''
+        
+        forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query, query_params={'forecastID': forecastID}).fetchone()
 
         models_query = '''
         SELECT
-            modelID, modelName
+            modelID, 
+            modelName
         FROM
             models;
         '''
@@ -568,7 +580,8 @@ def update_forecast(forecastID):
 
         locations_query = '''
         SELECT
-            locationID, locationName
+            locationID, 
+            locationName
         FROM
             locations;
         '''
@@ -576,13 +589,79 @@ def update_forecast(forecastID):
 
         dates_query = '''
         SELECT
-            dateID, dateDateTime
+            dateID, 
+            dateDateTime
         FROM
             dates;
         '''
         dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
 
-    return render_template('edit/forecast.html', specific_forecast=result, dates=sample_dates, locations=sample_locations, models=sample_models)
+        return render_template('edit/editforecast.html', specific_forecast=forecasts_results, models=models_results, locations=locations_results, dates=dates_results)
+
+    elif request.method == 'POST':
+
+        model_id = request.form.get('modelID') or None
+
+        query_params = {
+            'forecastID': forecastID,
+            'forecastForDateTime': request.form.get('forecastForDateTime'), 
+            'forecastDateID': request.form.get('dateID'), 
+            'forecastTemperature2m': request.form.get('forecastTemperature'), 
+            'forecastPrecipitation': request.form.get('forecastPrecipitation'), 
+            'forecastWeatherCode': request.form.get('forecastWeatherCode'), 
+            'forecastPressureMSL': request.form.get('forecastPressureMSL'), 
+            'forecastWindSpeed10m': request.form.get('forecastWindSpeed'), 
+            'forecastWindDirection10m': request.form.get('forecastWindDirection'), 
+            'forecastCape': request.form.get('forecastCape'), 
+            'forecastLocationID': request.form.get('locationID'),
+            'forecastModelID': model_id
+        }
+
+        # Check for Null modelID
+        if model_id is None:
+            forecasts_query = '''
+                UPDATE 
+                    `Forecasts`
+                SET 
+                    forecastForDateTime = %(forecastForDateTime)s,
+                    forecastDateID = %(forecastDateID)s,
+                    forecastTemperature2m = %(forecastTemperature2m)s,
+                    forecastPrecipitation = %(forecastPrecipitation)s,
+                    forecastWeatherCode = %(forecastWeatherCode)s,
+                    forecastPressureMSL = %(forecastPressureMSL)s,
+                    forecastWindSpeed10m = %(forecastWindSpeed10m)s,
+                    forecastWindDirection10m = %(forecastWindDirection10m)s,
+                    forecastCape = %(forecastCape)s,
+                    forecastLocationID = %(forecastLocationID)s,
+                    forecastModelID = %(forecastModelID)s
+                WHERE 
+                    forecastID = %(forecastID)s;
+            '''
+
+            db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
+        
+        else:
+            forecasts_query = '''
+                UPDATE 
+                    `Forecasts`
+                SET 
+                    forecastForDateTime = %(forecastForDateTime)s,
+                    forecastDateID = %(forecastDateID)s,
+                    forecastTemperature2m = %(forecastTemperature2m)s,
+                    forecastPrecipitation = %(forecastPrecipitation)s,
+                    forecastWeatherCode = %(forecastWeatherCode)s,
+                    forecastPressureMSL = %(forecastPressureMSL)s,
+                    forecastWindSpeed10m = %(forecastWindSpeed10m)s,
+                    forecastWindDirection10m = %(forecastWindDirection10m)s,
+                    forecastCape = %(forecastCape)s,
+                    forecastLocationID = %(forecastLocationID)s,
+                    forecastModelID = %(forecastModelID)s
+                WHERE 
+                    forecastID = %(forecastID)s;
+            '''
+            db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
+
+        return redirect('/forecasts')
 
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
 def update_sensor(sensorID):
@@ -667,6 +746,26 @@ def modeledit(modelID):
 # DELETE
 ############
 
+@app.route('/delete/forecast/<int:forecastID>', methods=['GET'])
+def delete_forecast(forecastID):
+    '''API Route to delete a forecast'''
+
+    if DEBUG:
+        logger.info(f'Delete forecast: {forecastID}')
+
+    query = '''
+    DELETE FROM 
+        Forecasts
+    WHERE
+        forecastID = %(forecastID)s;
+    '''
+
+    db.execute_query(db_connection=db_connection, query=query, query_params={'forecastID': forecastID})
+    
+    flash(f'Successfully deleted forecast!')
+
+    return redirect('/forecasts')
+
 @app.route("/delete/sensor/<int:sensorID>", methods=["GET"])
 def delete_sensor(sensorID):
     '''API Route to delete a sensor'''
@@ -706,26 +805,6 @@ def delete_model(modelID):
     flash(f"Successfully deleted model!")
 
     return redirect("/models")
-
-@app.route("/delete/forecast/<int:forecastID>", methods=["GET"])
-def delete_forecast(forecastID):
-    '''API Route to delete a forecast'''
-
-    if DEBUG:
-        logger.info(f'Delete forecast: {forecastID}')
-
-    query = '''
-    DELETE FROM 
-        Forecasts
-    WHERE
-        forecastID = %(forecastID)s;
-    '''
-
-    db.execute_query(db_connection=db_connection, query=query, query_params={'forecastID': forecastID})
-    
-    flash(f"Successfully deleted forecast!")
-
-    return redirect("/forecasts")
 
 @app.route("/delete/reading/<int:readingID>", methods=["GET"])
 def delete_reading(readingID):

@@ -7,6 +7,36 @@
 -- --------------------
 
 -- Forecasts
+
+INSERT INTO 
+	`Forecasts` (
+		forecastForDateTime, 
+		forecastDateID, 
+		forecastTemperature2m, 
+		forecastPrecipitation, 
+		forecastWeatherCode, 
+		forecastPressureMSL, 
+		forecastWindSpeed10m, 
+		forecastWindDirection10m, 
+		forecastCape, 
+		forecastLocationID,
+        forecastModelID
+	)
+VALUES 
+	(
+		%(forecastForDateTime)s, 
+		%(forecastDateID)s, 
+		%(forecastTemperature2m)s, 
+		%(forecastPrecipitation)s, 
+		%(forecastWeatherCode)s, 
+		%(forecastPressureMSL)s, 
+		%(forecastWindSpeed10m)s, 
+		%(forecastWindDirection10m)s, 
+		%(forecastCape)s, 
+		%(forecastLocationID)s,
+        %(forecastModelID)s
+);
+                    
 -- Locations
 -- Sensors
 -- Models
@@ -107,6 +137,25 @@ JOIN
 -- --------------------
 
 -- Forecasts
+
+SELECT 
+	forecastID,
+	forecastDateID,
+	forecastTemperature2m,
+	forecastPrecipitation,
+	forecastWeatherCode,
+	forecastPressureMSL,
+	forecastWindSpeed10m,
+	forecastWindDirection10m,
+	forecastCape,
+	forecastModelID,
+	forecastLocationID,
+	forecastForDateTime
+FROM 
+	Forecasts
+WHERE
+	forecastID = %(forecastID)s;
+            
 -- Locations
 -- Sensors
 
@@ -127,6 +176,12 @@ JOIN
 -- --------------------
 
 -- Forecasts
+
+DELETE FROM 
+	Forecasts
+WHERE
+	forecastID = %(forecastID)s;
+        
 -- Locations
 -- Sensors
 -- Models
