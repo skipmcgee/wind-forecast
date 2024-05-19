@@ -523,7 +523,7 @@ def update_sensor(sensorID):
         WHERE 
             Sensors.sensorID = %(sensorID)s;
         '''
-        results = db.execute_query(db_connection=db_connection, query=sensor_query, query_params={'sensorID': sensorID}).fetchall()
+        sensor_results = db.execute_query(db_connection=db_connection, query=sensor_query, query_params={'sensorID': sensorID}).fetchall()
 
         locations_query = '''
         SELECT
@@ -534,9 +534,9 @@ def update_sensor(sensorID):
         locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
 
         if DEBUG:
-            logger.info(f"edit sensor get: {results}")
+            logger.info(f"edit sensor get: {sensor_results}")
 
-        return render_template("edit/editsensor.html", specific_sensor=results, locations=locations_results)
+        return render_template("edit/editsensor.html", specific_sensor=sensor_results, locations=locations_results)
     
     elif request.method == "POST":
         sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}' \n WHERE sensorID='{sensorID}';"
