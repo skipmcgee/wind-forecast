@@ -1,7 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-<h4>{% block title %} Edit Sensor #{{specific_sensor.sensorID}} {% endblock %}</h4>
+<h4>{% block title %} Edit Sensor #{{specific_sensor[0].sensorID}} {% endblock %}</h4>
 <div></div>
 {% for mesg in get_flashed_messages() %}
 <h3>{{ mesg }}</h3>
@@ -29,10 +29,11 @@
                         value="{{specific_sensor[0].sensorNumber}}">
 
                     <select name="locationName" aria-label="locationName" required>
-                        <option selected disabled value="">{{specific_sensor[0].sensorLocation}}</option>
+                        <option selected value="{{specific_sensor[0].locationID}}">{{specific_sensor[0].locationName}}</option>
                         {% for location in locations %}
-                        <option>{{location.locationName}}</option>
-
+                            {% if location.locationName != specific_sensor[0].locationName %}
+                                <option value="{{location.locationID}}">{{location.locationName}}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </fieldset>

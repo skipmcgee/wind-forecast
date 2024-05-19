@@ -22,7 +22,7 @@ class KeyTranslation:
         self.key_dict['forecastCape'] = 'Cape'
         self.key_dict['forecastModelID'] = 'Model'
         self.key_dict['forecastLocationID'] = 'Location'
-        self.key_dict['forecastForDateTime'] = 'Date/Time'
+        self.key_dict['forecastForDateTime'] = 'Forecast Date/Time'
         self.key_dict['locationID'] = 'ID'
         self.key_dict['locationName'] = 'Location Name'
         self.key_dict['locationLatitude'] = 'Latitude'

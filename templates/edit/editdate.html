@@ -1,7 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-<h4>{% block title %} Edit Date #{{specific_date.dateID}} {% endblock %}</h4>
+<h4>{% block title %} Edit Date #{{specific_date[0].dateID}} {% endblock %}</h4>
 <div></div>
 {% for mesg in get_flashed_messages() %}
 <h3>{{ mesg }}</h3>
@@ -11,13 +11,13 @@
     <div></div>
     <div>
         <article>
-            <form name="editdate" id="editdate" action="/edit/date/{{specific_date.dateID}}" method="post">
+            <form name="editdate" id="editdate" action="/edit/date/{{specific_date[0].dateID}}" method="post">
                 <fieldset>
-                    <input type="hidden" value="{{specific_date.dateID}}" class="form-control" id="dateID" name="dateID"
+                    <input type="hidden" value="{{specific_date[0].dateID}}" class="form-control" id="dateID" name="dateID"
                         required>
                     <label for="name">Date & Time:</label>
                     <input type="datetime-local" id="dateDateTime" name="dateDateTime"
-                        value="{{specific_date.dateDateTime}}" required>
+                        value="{{specific_date[0].dateDateTime}}" required>
                 </fieldset>
                 <button type="submit">Submit</button>
             </form>

@@ -1,7 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-<h4>{% block title %} Edit Forecast #{{specific_forecast.forecastID}} {% endblock %}</h4>
+<h4>{% block title %} Edit Forecast #{{specific_forecast[0].forecastID}} {% endblock %}</h4>
 <div></div>
 {% for mesg in get_flashed_messages() %}
 <h3>{{ mesg }}</h3>
@@ -11,14 +11,14 @@
     <div></div>
     <div>
         <article>
-            <form name="editforecast" id="editforecast" action="/edit/forecast/{{specific_forecast.forecastID}}"
+            <form name="editforecast" id="editforecast" action="/edit/forecast/{{specific_forecast[0].forecastID}}"
                 method="post">
                 <!-- <legend><strong>Edit Weather Forecast:</strong></legend> -->
                 <fieldset>
-                    <input type="hidden" value="{{specific_forecast.forecastID}}" class="form-control" id="forecastID"
+                    <input type="hidden" value="{{specific_forecast[0].forecastID}}" class="form-control" id="forecastID"
                         name="forecastID" required>
                     <select name="date" aria-label="date" required>
-                        <option selected disabled value="">{{specific_forecast.forecastDateTime}}</option>
+                        <option selected disabled value="">{{specific_forecast[0].forecastDateTime}}</option>
                         {% for date in dates %}
                         <option>{{date.dateDateTime}}</option>
                         {% endfor %}
@@ -26,34 +26,34 @@
 
                     <label for="forecastTemperature">Temperature (2m):</label>
                     <input type="number" step="0.01" id="forecastTemperature" name="forecastTemperature"
-                        value="{{specific_forecast.forecastTemperature}}" required>
+                        value="{{specific_forecast[0].forecastTemperature}}" required>
 
                     <label for="forecastPrecipitation">Precipitation:</label>
                     <input type="number" step="0.01" id="forecastPrecipitation" name="forecastPrecipitation"
-                        value="{{specific_forecast.forecastPrecipitation}}" required>
+                        value="{{specific_forecast[0].forecastPrecipitation}}" required>
 
                     <label for="forecastWeatherCode">Weather Code:</label>
                     <input type="text" id="forecastWeatherCode" name="forecastWeatherCode"
-                        value="{{specific_forecast.forecastWeatherCode}}" required>
+                        value="{{specific_forecast[0].forecastWeatherCode}}" required>
 
                     <label for="forecastPressureMSL">Pressure (MSL):</label>
                     <input type="number" id="forecastPressureMSL" name="forecastPressureMSL"
-                        value="{{specific_forecast.forecastPressureMSL}}" required>
+                        value="{{specific_forecast[0].forecastPressureMSL}}" required>
 
                     <label for="forecastWindSpeed">Wind Speed (10m):</label>
                     <input type="number" step="0.01" id="forecastWindSpeed" name="forecastWindSpeed"
-                        value="{{specific_forecast.forecastWindSpeed}}" required>
+                        value="{{specific_forecast[0].forecastWindSpeed}}" required>
 
                     <label for="forecastWindDirection">Wind Direction (10m):</label>
                     <input type="number" id="forecastWindDirection" name="forecastWindDirection"
-                        value="{{specific_forecast.forecastWindDirection}}" required>
+                        value="{{specific_forecast[0].forecastWindDirection}}" required>
 
                     <label for="forecastCape">CAPE:</label>
                     <input type="number" step="0.01" id="forecastCape" name="forecastCape"
-                        value="{{specific_forecast.forecastCape}}" required>
+                        value="{{specific_forecast[0].forecastCape}}" required>
 
                     <select name="model" aria-label="model" required>
-                        <option selected disabled value="">{{specific_forecast.forecastModel}}"</option>
+                        <option selected disabled value="">{{specific_forecast[0].forecastModel}}"</option>
                         {% for model in models %}
                         <option>{{model.modelName}}</option>
                         {% endfor %}
@@ -61,7 +61,7 @@
 
                     <label for="forecastForDateTime">Forecast Date/Time:</label>
                     <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime"
-                        value="{{specific_forecast.forecastDateTime}}" required>
+                        value="{{specific_forecast[0].forecastDateTime}}" required>
 
                 </fieldset>
                 <button type="submit">Submit</button>

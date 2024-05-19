@@ -109,6 +109,15 @@ JOIN
 -- Forecasts
 -- Locations
 -- Sensors
+
+SELECT 
+	* 
+FROM 
+	Sensors
+JOIN 
+	Locations ON Sensors.sensorLocationID = Locations.locationID;
+-- WHERE Sensors.sensorID = %(sensorID)s;
+            
 -- Models
 -- Dates
 -- Readings
