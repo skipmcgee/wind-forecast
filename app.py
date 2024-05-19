@@ -127,7 +127,8 @@ def add_forecast():
 
         models_query = '''
         SELECT
-            modelID, modelName
+            modelID, 
+            modelName
         FROM
             models;
         '''
@@ -135,7 +136,8 @@ def add_forecast():
 
         locations_query = '''
         SELECT
-            locationID, locationName
+            locationID, 
+            locationName
         FROM
             locations;
         '''
@@ -143,7 +145,8 @@ def add_forecast():
 
         dates_query = '''
         SELECT
-            dateID, dateDateTime
+            dateID, 
+            dateDateTime
         FROM
             dates;
         '''
@@ -153,9 +156,72 @@ def add_forecast():
     
     elif request.method == "POST":
         
+        # modelID can be Null
         model_id = request.form.get('modelID')
+
+        # Not nullable fields
         date_id = request.form.get('dateID')
         location_id = request.form.get('locationID')
+        temperature = request.form.get('forecastTemperature')
+        precipitation = request.form.get('forecastPrecipitation')
+        weather_code = request.form.get('forecastWeatherCode')
+        pressure_msl = request.form.get('forecastPressureMSL')
+        wind_speed = request.form.get('forecastWindSpeed')
+        wind_direction = request.form.get('forecastWindDirection')
+        cape = request.form.get('forecastCape')
+        forecast_date = request.form.get('forecastForDateTime')
+
+        query_params = {
+            'forecastForDateTime': request.form.get('forecastForDateTime'), 
+            'forecastDateID': request.form.get('dateID'), 
+            'forecastTemperature2m': request.form.get('forecastTemperature'), 
+            'forecastPrecipitation': request.form.get('forecastPrecipitation'), 
+            'forecastWeatherCode': request.form.get('forecastWeatherCode'), 
+            'forecastPressureMSL': request.form.get('forecastPressureMSL'), 
+            'forecastWindSpeed10m': request.form.get('forecastWindSpeed'), 
+            'forecastWindDirection10m': request.form.get('forecastWindDirection'), 
+            'forecastCape': request.form.get('forecastCape'), 
+            'forecastLocationID': request.form.get('locationID'),
+            'forecastModelID': request.form.get('modelID')
+        }
+
+        # Check for Null modelID
+        if model_id is None:
+            print('ModelID is None')
+            forecasts_query = '''
+            INSERT INTO 
+                `Forecasts` (
+                    forecastForDateTime, 
+                    forecastDateID, 
+                    forecastTemperature2m, 
+                    forecastPrecipitation, 
+                    forecastWeatherCode, 
+                    forecastPressureMSL, 
+                    forecastWindSpeed10m, 
+                    forecastWindDirection10m, 
+                    forecastCape, 
+                    forecastLocationID
+                )
+            VALUES 
+                (
+                    %(forecastForDateTime)s, 
+                    %(forecastDateID)s, 
+                    %(forecastTemperature2m)s, 
+                    %(forecastPrecipitation)s, 
+                    %(forecastWeatherCode)s, 
+                    %(forecastPressureMSL)s, 
+                    %(forecastWindSpeed10m)s, 
+                    %(forecastWindDirection10m)s, 
+                    %(forecastCape)s, 
+                    %(forecastLocationID)s
+                )
+            '''
+
+            db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
+        
+        else:
+            forecasts_query = ''''''
+            db.execute_query(db_connection=db_connection, query=forecasts_query)
 
         return redirect("/forecasts")
 
@@ -173,7 +239,7 @@ def add_location():
         if DEBUG: 
             logger.info("add sensor post first query: " + location_query)
         location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-        return redirect("/library")
+        return redirect("/locations")
 
 
 @app.route("/add/sensor", methods=["POST", "GET",])
@@ -220,7 +286,7 @@ def add_model():
         if DEBUG:
             logger.info("add model post query: " + model_update)
         model_obj = db.execute_query(db_connection=db_connection, query=model_update)
-        return redirect("/library")
+        return redirect("/models")
     
 @app.route("/add/date", methods=["POST", "GET",])
 def add_date():
@@ -236,7 +302,7 @@ def add_date():
         if DEBUG: 
             logger.info("add date post first query: " + date_query)
         date_obj = db.execute_query(db_connection=db_connection, query=date_query)
-        return redirect("/library")
+        return redirect("/dates")
 
 @app.route('/add/reading', methods=["POST", "GET"])
 def add_reading():
@@ -309,7 +375,7 @@ def add_reading():
 def forecasts():
     '''View for the Forecasts Admin Page'''
 
-    query = '''
+    forecasts_query = '''
     SELECT 
         Forecasts.forecastID,
         Dates.dateDateTime,
@@ -325,7 +391,7 @@ def forecasts():
         Forecasts.forecastForDateTime
     FROM 
         Forecasts
-    JOIN 
+    LEFT JOIN 
         Models ON Forecasts.forecastModelID = Models.modelID
     JOIN 
         Locations ON Forecasts.forecastLocationID = Locations.locationID
@@ -333,18 +399,18 @@ def forecasts():
         Dates ON Forecasts.forecastDateID = Dates.dateID;
     '''
 
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+    forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
 
     if DEBUG:
-        logger.info(results)
+        logger.info(forecasts_results)
 
-    return render_template("pages/forecasts.html", forecasts=results, forecast_dict=keys.key_dict)
+    return render_template("pages/forecasts.html", forecasts=forecasts_results, forecast_dict=keys.key_dict)
 
 @app.route('/locations', methods=["GET"])
 def locations():
     '''View for the Locations Admin Page'''
 
-    query = '''
+    locations_query = '''
     SELECT
         locationID,
         locationName,
@@ -355,17 +421,18 @@ def locations():
         Locations;
     '''
 
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+    locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
 
     if DEBUG:
-        logger.info(results)
+        logger.info(locations_results)
 
-    return render_template("pages/locations.html", locations=results, location_dict=keys.key_dict)
+    return render_template("pages/locations.html", locations=locations_results, location_dict=keys.key_dict)
 
 @app.route('/sensors', methods=["GET"])
 def sensors():
     '''View for the Sensors Admin Page'''
-    query = '''
+
+    sensor_query = '''
     SELECT 
         Sensors.sensorID,
         Sensors.sensorName,
@@ -380,18 +447,18 @@ def sensors():
         Locations ON Sensors.sensorLocationID = Locations.locationID;
     '''
 
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+    sensor_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
 
     if DEBUG:
-        logger.info(results)
+        logger.info(sensor_results)
 
-    return render_template("pages/sensors.html", sensors=results, sensor_dict=keys.key_dict)
+    return render_template("pages/sensors.html", sensors=sensor_results, sensor_dict=keys.key_dict)
     
 @app.route('/models', methods=["GET"])
 def models():
     '''View for the Models Admin Page'''
 
-    query = '''
+    models_query = '''
     SELECT 
         modelID, 
         modelName
@@ -401,18 +468,18 @@ def models():
         modelName DESC;
     '''
 
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+    models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
 
     if DEBUG:
-        logger.info(results)
+        logger.info(models_results)
 
-    return render_template("pages/models.html", models=results, model_dict=keys.key_dict)
+    return render_template("pages/models.html", models=models_results, model_dict=keys.key_dict)
 
 @app.route('/dates', methods=["GET"])
 def dates():
     '''View for the Dates Admin Page'''
 
-    query = '''
+    dates_query = '''
     SELECT
         dateID,
         dateDateTime
@@ -420,17 +487,17 @@ def dates():
         Dates;
     '''
 
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+    dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
 
     if DEBUG:
-        logger.info(results)
-    return render_template("pages/dates.html", dates=results, date_dict=keys.key_dict)
+        logger.info(dates_results)
+    return render_template("pages/dates.html", dates=dates_results, date_dict=keys.key_dict)
 
 @app.route('/readings', methods=["GET"])
 def readings():
     '''View for the Readings Admin Page'''
 
-    query = '''
+    readings_query = '''
     SELECT 
         Readings.readingID,
         Sensors.sensorName,
@@ -449,12 +516,12 @@ def readings():
         Dates ON Readings.readingDateID = Dates.dateID;
     '''
 
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+    readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
     if DEBUG:
-        logger.info(results)
+        logger.info(readings_results)
 
-    return render_template("pages/readings.html", readings=results, reading_dict=keys.key_dict)
+    return render_template("pages/readings.html", readings=readings_results, reading_dict=keys.key_dict)
 
 ############
 # Update

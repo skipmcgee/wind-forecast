@@ -14,7 +14,7 @@
             <form method="POST" name="addForecast" action="/add/forecast">
 
                 <select name="dateID" aria-label="date" required>
-                    <option selected disabled value="">Date:</option>
+                    <option selected disabled value="">Created Date/Time:</option>
                     {% for date in dates %}
                     <option value="{{date.dateID}}">{{date.dateDateTime}}</option>
                     {% endfor %}
@@ -29,7 +29,7 @@
                     required>
 
                 <label for="forecastWeatherCode">Weather Code:</label>
-                <input type="text" id="forecastWeatherCode" name="forecastWeatherCode" value="Max 100 characters"
+                <input type="text" id="forecastWeatherCode" name="forecastWeatherCode" value="0.0"
                     required>
 
                 <label for="forecastPressureMSL">Pressure (MSL):</label>
@@ -44,14 +44,14 @@
                 <label for="forecastCape">CAPE:</label>
                 <input type="number" step="0.01" id="forecastCape" name="forecastCape" value="0.00" required>
 
-                <select name="location" aria-label="location" required>
+                <select name="locationID" aria-label="locationID" required>
                     <option selected disabled value="">Location</option>
                     {% for location in locations %}
                     <option value="{{location.locationID}}">{{location.locationName}}</option>
                     {% endfor %}
                 </select>
 
-                <select name="modelID" aria-label="model" required>
+                <select name="modelID" aria-label="model">
                     <option selected disabled value="">Model</option>
                     {% for model in models %}
                     <option value="{{model.modelID}}">{{model.modelName}}</option>
