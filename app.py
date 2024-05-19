@@ -119,11 +119,11 @@ def library():
 # Create
 ############
 
-@app.route('/add/forecast', methods=["POST", "GET"])
+@app.route('/add/forecast', methods=['POST', 'GET'])
 def add_forecast():
     '''API Route to add a forecast'''
 
-    if request.method == "GET":
+    if request.method == 'GET':
 
         models_query = '''
         SELECT
@@ -152,24 +152,9 @@ def add_forecast():
         '''
         dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
 
-        return render_template("add/addforecast.html", models=models_results, locations=locations_results, dates=dates_results)
+        return render_template('add/addforecast.html', models=models_results, locations=locations_results, dates=dates_results)
     
-    elif request.method == "POST":
-        
-        # modelID can be Null
-        model_id = request.form.get('modelID')
-
-        # Not nullable fields
-        date_id = request.form.get('dateID')
-        location_id = request.form.get('locationID')
-        temperature = request.form.get('forecastTemperature')
-        precipitation = request.form.get('forecastPrecipitation')
-        weather_code = request.form.get('forecastWeatherCode')
-        pressure_msl = request.form.get('forecastPressureMSL')
-        wind_speed = request.form.get('forecastWindSpeed')
-        wind_direction = request.form.get('forecastWindDirection')
-        cape = request.form.get('forecastCape')
-        forecast_date = request.form.get('forecastForDateTime')
+    elif request.method == 'POST':
 
         query_params = {
             'forecastForDateTime': request.form.get('forecastForDateTime'), 
@@ -186,44 +171,73 @@ def add_forecast():
         }
 
         # Check for Null modelID
-        if model_id is None:
+        if request.form.get('modelID') is None:
             print('ModelID is None')
             forecasts_query = '''
-            INSERT INTO 
-                `Forecasts` (
-                    forecastForDateTime, 
-                    forecastDateID, 
-                    forecastTemperature2m, 
-                    forecastPrecipitation, 
-                    forecastWeatherCode, 
-                    forecastPressureMSL, 
-                    forecastWindSpeed10m, 
-                    forecastWindDirection10m, 
-                    forecastCape, 
-                    forecastLocationID
-                )
-            VALUES 
-                (
-                    %(forecastForDateTime)s, 
-                    %(forecastDateID)s, 
-                    %(forecastTemperature2m)s, 
-                    %(forecastPrecipitation)s, 
-                    %(forecastWeatherCode)s, 
-                    %(forecastPressureMSL)s, 
-                    %(forecastWindSpeed10m)s, 
-                    %(forecastWindDirection10m)s, 
-                    %(forecastCape)s, 
-                    %(forecastLocationID)s
-                )
+                INSERT INTO 
+                    `Forecasts` (
+                        forecastForDateTime, 
+                        forecastDateID, 
+                        forecastTemperature2m, 
+                        forecastPrecipitation, 
+                        forecastWeatherCode, 
+                        forecastPressureMSL, 
+                        forecastWindSpeed10m, 
+                        forecastWindDirection10m, 
+                        forecastCape, 
+                        forecastLocationID
+                    )
+                VALUES 
+                    (
+                        %(forecastForDateTime)s, 
+                        %(forecastDateID)s, 
+                        %(forecastTemperature2m)s, 
+                        %(forecastPrecipitation)s, 
+                        %(forecastWeatherCode)s, 
+                        %(forecastPressureMSL)s, 
+                        %(forecastWindSpeed10m)s, 
+                        %(forecastWindDirection10m)s, 
+                        %(forecastCape)s, 
+                        %(forecastLocationID)s
+                    )
             '''
 
             db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
         
         else:
-            forecasts_query = ''''''
-            db.execute_query(db_connection=db_connection, query=forecasts_query)
+            forecasts_query = '''
+                INSERT INTO 
+                    `Forecasts` (
+                        forecastForDateTime, 
+                        forecastDateID, 
+                        forecastTemperature2m, 
+                        forecastPrecipitation, 
+                        forecastWeatherCode, 
+                        forecastPressureMSL, 
+                        forecastWindSpeed10m, 
+                        forecastWindDirection10m, 
+                        forecastCape, 
+                        forecastLocationID,
+                        forecastModelID
+                    )
+                VALUES 
+                    (
+                        %(forecastForDateTime)s, 
+                        %(forecastDateID)s, 
+                        %(forecastTemperature2m)s, 
+                        %(forecastPrecipitation)s, 
+                        %(forecastWeatherCode)s, 
+                        %(forecastPressureMSL)s, 
+                        %(forecastWindSpeed10m)s, 
+                        %(forecastWindDirection10m)s, 
+                        %(forecastCape)s, 
+                        %(forecastLocationID)s,
+                        %(forecastModelID)s
+                    )
+                '''
+            db.execute_query(db_connection=db_connection, query=forecasts_query, query_params=query_params)
 
-        return redirect("/forecasts")
+        return redirect('/forecasts')
 
 @app.route("/add/location", methods=["POST", "GET",])
 def add_location():
