@@ -1,50 +1,53 @@
 {% extends 'base.j2' %}
 {% block content %}
-	<h4>{% block title %} Browse Forecasts {% endblock %}</h4>
-    <article>
+<h4>{% block title %} Browse Forecasts {% endblock %}</h4>
+<article>
     <div></div>
     {% for mesg in get_flashed_messages() %}
     <h3>{{ mesg }}</h3>
     {% endfor %}
     <div></div>
     <div id="forecastTable" class="overflow-auto">
-        <table class="striped"> 
-            <caption>Forecasts </caption>
+        <table class="striped">
+            <caption>Current Forecasts: </caption>
             {% if forecasts %}
-                <thead>
-                    <tr>
-                        {% for key in forecasts[0].keys() %}
-                        {% if key != 'forecastID' %}
-                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ forecast_dict[key] }}</th>
-                        {% endif %}
-                        {% endfor %}
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in forecasts %}
-                    <tr>
-                        {% for key in item.keys() %}
-                        {% if key != 'forecastID' %}
-                        <td>{{item[key]}}</td>
-                        {% endif %}
-                        {% endfor %}
-                        <p></p>
-                        <td><a href="/edit/forecast/{{item.forecastID}}" class="btn btn-default" method="get"><span class="material-icons">mode_edit</span></a></td>
-						<td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"><span class="material-icons">delete</span></a></td>
-                    </tr> 
+            <thead>
+                <tr>
+                    {% for key in forecasts[0].keys() %}
+                    {% if key != 'forecastID' %}
+                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ forecast_dict[key] }}</th>
+                    {% endif %}
                     {% endfor %}
-                </tbody>
-            {% endif %} 
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in forecasts %}
+                <tr>
+                    {% for key in item.keys() %}
+                    {% if key != 'forecastID' %}
+                    <td>{{item[key]}}</td>
+                    {% endif %}
+                    {% endfor %}
+                    <p></p>
+                    <td><a href="/edit/forecast/{{item.forecastID}}" class="btn btn-default" method="get"><span
+                                class="material-icons">mode_edit</span></a></td>
+                    <td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"><span
+                                class="material-icons">delete</span></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endif %}
         </table>
 
         <div class="grid">
             <div></div>
-            <div><a href='/add/forecast'><input class="btn" type="button" value="Add a Forecast" method="post"></a></div>
+            <div><a href='/add/forecast'><input class="btn" type="button" value="Add a Forecast" method="post"></a>
+            </div>
             <div></div>
         </div>
-        
+
     </div>
 </article>
 {% endblock %}

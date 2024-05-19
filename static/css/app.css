@@ -13,6 +13,10 @@ footer p {
     color: var(--pico-primary-hover-background);
 }
 
+table {
+    font-size: 16px;
+}
+
 /*
 :root {
         --heading-size:200%;

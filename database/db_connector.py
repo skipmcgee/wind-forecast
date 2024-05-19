@@ -52,5 +52,5 @@ def execute_query(db_connection = None, query = None, query_params = ()):
     cursor.execute(query, query_params)
     # this will actually commit any changes to the database. without this no
     # changes will be committed!
-    db_connection.commit();
+    db_connection.commit()
     return cursor

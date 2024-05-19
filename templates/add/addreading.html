@@ -1,31 +1,50 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-	<h4>{% block title %} Add a Reading {% endblock %}</h4>
-    <article>
+<h4>{% block title %} Add a Reading {% endblock %}</h4>
+<div></div>
+{% for mesg in get_flashed_messages() %}
+<h3>{{ mesg }}</h3>
+{% endfor %}
+<div></div>
+<div class="grid">
     <div></div>
-    {% for mesg in get_flashed_messages() %}
-    <h3>{{ mesg }}</h3>
-    {% endfor %}
-    <div></div>
-    <div class="grid">
-        <div>
-            <article>
-                <form action="/add/reading" method="post">
-                    <label for="sensorlist">Select a Sensor:</label>
-                    <select id="sensorlist" name="sensorlist" required>
-                        {% if sensors %}
+    <div>
+        <article>
+            <form name="addReading" id="addReading" action="/add/reading" method="post">
+                <fieldset>
+                    <select name="sensor" aria-label="sensor" required>
+                        <option selected disabled value="">Select Sensor</option>
                         {% for sensor in sensors %}
-                        <option value="{{ sensor.sensorID }}">{{ sensor.sensorName }}</option>
+                        <option>{{sensor.sensorName}}</option>
                         {% endfor %}
-                        {% else %}
-                        <a>You need to add a sensor before continuing</a>
-                        {% endif %}
                     </select>
-                    <p></p>
-                    <button type="submit">Submit</button>
-                </form>
-            </article>
-        </div>
+                    <label for="name">Wind Speed:</label>
+                    <input type="text" value="" class="form-control" id="readingWindSpeed" name="readingWindSpeed"
+                        pattern="[A-Za-z0-9\s]+" required>
+                    <label for="name">Wind Gust:</label>
+                    <input type="text" value="" class="form-control" id="readingWindGust" name="readingWindGust"
+                        pattern="[A-Za-z0-9\s]+" required>
+                    <label for="name">Wind Min:</label>
+                    <input type="text" value="" class="form-control" id="readingWindMin" name="readingWindMin"
+                        pattern="[A-Za-z0-9\s]+" required>
+                    <label for="name">Wind Direction:</label>
+                    <input type="text" value="" class="form-control" id="readingWindDirection"
+                        name="readingWindDirectionSpeed" pattern="[A-Za-z0-9\s]+" required>
+                    <label for="name">Wind Temperature:</label>
+                    <input type="text" value="" class="form-control" id="readingTemperature" name="readingTemperature"
+                        pattern="[A-Za-z0-9\s]+" required>
+                    <select name="date" aria-label="date" required>
+                        <option selected disabled value="">Date:</option>
+                        {% for date in dates %}
+                        <option>{{date.dateDateTime}}</option>
+                        {% endfor %}
+                    </select>
+                </fieldset>
+                <button type="submit">Submit</button>
+            </form>
+        </article>
     </div>
+    <div></div>
+</div>
 {% endblock %}
