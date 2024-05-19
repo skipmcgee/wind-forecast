@@ -130,7 +130,7 @@ def add_forecast():
             modelID, 
             modelName
         FROM
-            models;
+            Models;
         '''
         models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
 
@@ -139,7 +139,7 @@ def add_forecast():
             locationID, 
             locationName
         FROM
-            locations;
+            Locations;
         '''
         locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
 
@@ -148,7 +148,7 @@ def add_forecast():
             dateID, 
             dateDateTime
         FROM
-            dates;
+            Dates;
         '''
         dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
 
@@ -574,7 +574,7 @@ def update_forecast(forecastID):
             modelID, 
             modelName
         FROM
-            models;
+            Models;
         '''
         models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
 
@@ -583,7 +583,7 @@ def update_forecast(forecastID):
             locationID, 
             locationName
         FROM
-            locations;
+            Locations;
         '''
         locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
 
@@ -592,7 +592,7 @@ def update_forecast(forecastID):
             dateID, 
             dateDateTime
         FROM
-            dates;
+            Dates;
         '''
         dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
 
@@ -689,7 +689,7 @@ def update_sensor(sensorID):
         SELECT
             locationID, locationName
         FROM
-            locations;
+            Locations;
         '''
         locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
 
