@@ -149,7 +149,7 @@ def add_forecast():
         '''
         dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
 
-        return render_template("add/forecast.html", models=models_results, locations=locations_results, dates=dates_results)
+        return render_template("add/addforecast.html", models=models_results, locations=locations_results, dates=dates_results)
     
     elif request.method == "POST":
         
@@ -158,13 +158,30 @@ def add_forecast():
         location_id = request.form.get('locationID')
 
         return redirect("/forecasts")
-    
+
+@app.route("/add/location", methods=["POST", "GET",])
+def add_location():
+    '''API Route to add a location'''
+
+    if request.method == "GET":
+        return render_template("add/addlocation.html")
+
+    elif request.method == "POST":
+        if DEBUG:
+            logger.info(str(request.form))
+        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
+        if DEBUG: 
+            logger.info("add sensor post first query: " + location_query)
+        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
+        return redirect("/library")
+
+
 @app.route("/add/sensor", methods=["POST", "GET",])
 def add_sensor():
     '''API Route to add a sensor'''
 
     if request.method == "GET":
-        return render_template("add/sensor.html")
+        return render_template("add/addsensor.html")
 
     elif request.method == "POST":
 
@@ -191,7 +208,7 @@ def add_model():
     '''API Route to add a model'''
 
     if request.method == "GET":
-        return render_template("add/model.html")
+        return render_template("add/addmodel.html")
     
     elif request.method == "POST":
         if DEBUG:
@@ -204,6 +221,22 @@ def add_model():
             logger.info("add model post query: " + model_update)
         model_obj = db.execute_query(db_connection=db_connection, query=model_update)
         return redirect("/library")
+    
+@app.route("/add/date", methods=["POST", "GET",])
+def add_date():
+    '''API Route to add a date'''
+
+    if request.method == "GET":
+        return render_template("add/date.html")
+
+    elif request.method == "POST":
+        if DEBUG:
+            logger.info(str(request.form))
+        date_query = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{request.form['dateDateTime']}');"
+        if DEBUG: 
+            logger.info("add date post first query: " + date_query)
+        date_obj = db.execute_query(db_connection=db_connection, query=date_query)
+        return redirect("/library")
 
 @app.route('/add/reading', methods=["POST", "GET"])
 def add_reading():
@@ -212,7 +245,7 @@ def add_reading():
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        return render_template("add/reading.html", sensors=sensors_results)
+        return render_template("add/addreading.html", sensors=sensors_results)
     
     elif request.method == "POST":
         use_sensorID = request.form['sensorlist']
@@ -267,39 +300,6 @@ def add_reading():
         readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
 
         return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict)
-
-@app.route("/add/location", methods=["POST", "GET",])
-def add_location():
-    '''API Route to add a location'''
-
-    if request.method == "GET":
-        return render_template("add/location.html")
-
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
-        if DEBUG: 
-            logger.info("add sensor post first query: " + location_query)
-        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-        return redirect("/library")
-    
-@app.route("/add/date", methods=["POST", "GET",])
-def add_date():
-    '''API Route to add a date'''
-
-    if request.method == "GET":
-        return render_template("add/date.html")
-
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        date_query = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{request.form['dateDateTime']}');"
-        if DEBUG: 
-            logger.info("add date post first query: " + date_query)
-        date_obj = db.execute_query(db_connection=db_connection, query=date_query)
-        return redirect("/library")
-
 
 ############
 # Read
@@ -635,413 +635,6 @@ def delete_date(dateID):
     flash(f"Successfully deleted date!")
 
     return redirect("/dates")
-
-############
-# Update
-############
-
-@app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
-def update_sensor(sensorID):
-    '''API Route to update a sensor'''
-
-    sensorID = escape(sensorID)
-
-    if DEBUG:
-        logger.info(f"Edit sensor post: {sensorID}")
-
-    if request.method == "GET":
-        query = '''
-        SELECT 
-            * 
-        FROM 
-            Sensors
-        INNER JOIN 
-            Locations ON Sensors.sensorLocationID = Locations.locationID
-        WHERE 
-            Sensors.sensorID = %(sensorID)s;
-        '''
-        results = db.execute_query(db_connection=db_connection, query=query, query_params={'sensorID': sensorID}).fetchall()
-
-        if DEBUG:
-            logger.info(f"edit sensor get: {results}")
-
-        return render_template("edit/editsensor.html", specific_sensor=results)
-    
-    elif request.method == "POST":
-        sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}' \n WHERE sensorID='{sensorID}';"
-        if DEBUG:
-            logger.info("edit sensor post first query: " + sensor_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-        id_sensor_query = f"SELECT sensorLocationID FROM Sensors\n WHERE Sensors.sensorID='{sensorID}';"
-        if DEBUG:
-            logger.info("edit sensor post second query: " + id_sensor_query)
-        _sensorLocationID = db.execute_query(db_connection=db_connection, query=id_sensor_query).fetchall()
-        if DEBUG:
-            print(str(request.form))
-            logger.info("identified the sensorLocationID as: " + str(_sensorLocationID[0]['sensorLocationID']))
-        location_query = f"UPDATE Locations\nSET `locationName`='{request.form['locationName']}', `locationLatitude`='{request.form['locationLatitude']}', `locationLongitude`='{request.form['locationLongitude']}', `locationAltitude`='{request.form['locationAltitude']}' \nWHERE Locations.locationID='{_sensorLocationID[0]['sensorLocationID']}';"
-        if DEBUG:
-            logger.info("edit sensor post third query: " + location_query)
-        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-
-        return redirect("/sensors")
-
-@app.route("/edit/model/<int:modelID>", methods=["POST", "GET"])
-def modeledit(modelID):
-    '''API Route to update a model'''
-
-    modelID = escape(modelID)
-    if request.method == "GET":
-        models_query = f"SELECT * FROM Models\nWHERE Models.modelID = {modelID};"
-        query_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
-        if DEBUG:
-            logger.info("edit model get: " + str(query_results))
-        return render_template("edit/editmodel.html", specific_model=query_results)
-    
-    elif request.method == "POST":
-        if request.form['modelName'].upper() not in valid_models_list:
-            flash("Not a recognized Weather Model!")
-            return redirect(f"/edit/model/{request.form['modelID']}")
-        if DEBUG:
-            logger.info(f"updating name for {request.form['modelID']} to: {request.form['modelName']}")
-        model_query = f"UPDATE Models\nSET `modelName`='{request.form['modelName']}'\nWHERE Models.modelID = {modelID};"
-        if DEBUG:
-            logger.info("edit model post: " + model_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=model_query)
-
-        return redirect("/models")
-
-@app.route("/edit/forecast/<int:forecastID>", methods=["POST", "GET"])
-def forecastedit(forecastID):
-    '''API Route to update a forecast'''
-
-    forecastID = escape(forecastID)
-    if request.method == "GET":
-        forecasts_query = f"SELECT * FROM Forecasts\nWHERE Forecasts.forecastID = {forecastID};"
-        query_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
-        if DEBUG:
-            logger.info("edit forecast get: " + str(query_results))
-        return render_template("edit/editforecast.html", specific_forecast=query_results)
-    
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(f"updating name for {request.form['forecastID']}")
-        forecast_query = f"""
-        UPDATE Forecasts
-        SET `forecastDateID`='{request.form['forecastDateID']}', `forecastTemperature2m`='{request.form['forecastTemperature2m']}', `forecastPrecipitation`='{request.form['forecastPrecipitation']}', `forecastWeatherCode`='{request.form['forecastWeatherCode']}', `forecastPressureMSL`='{request.form['forecastPressureMSL']}', `forecastWindSpeed10m`='{request.form['forecastWindSpeed10m']}', `forecastWindDirection10m`='{request.form['forecastWindDirection10m']}', `forecastCape`='{request.form['forecastCape']}', `forecastModelID`='{request.form['forecastModelID']}', `forecastLocationID`='{request.form['forecastLocationID']}', `forecastForDateTime`='{request.form['forecastForDateTime']}'
-        WHERE Forecasts.forecastID = {forecastID}
-        """        
-        if DEBUG:
-            logger.info("edit forecast post: " + forecast_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
-
-        return redirect("/forecasts")
-
-@app.route("/edit/reading/<int:readingID>", methods=["POST", "GET"])
-def readingedit(readingID):
-    '''API Route to update a reading'''
-
-    readingID = escape(readingID)
-    if request.method == "GET":
-        readings_query = f"SELECT * FROM Readings\nWHERE Readings.readingID = {readingID};"
-        query_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
-        if DEBUG:
-            logger.info("edit reading get: " + str(query_results))
-        return render_template("edit/editreading.html", specific_reading=query_results)
-    
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(f"updating name for {request.form['readingID']}")
-        reading_query = f"""
-        UPDATE Readings
-        SET `readingSensorID`='{request.form['readingSensorID']}', `readingWindSpeed`='{request.form['readingWindSpeed']}', `readingWindGust`='{request.form['readingWindGust']}', `readingWindMin`='{request.form['readingWindMin']}', `readingWindDirection`='{request.form['readingWindDirection']}', `readingTemperature`='{request.form['readingTemperature']}', `readingDateID`='{request.form['readingDateID']}'
-        WHERE Readings.readingID = {readingID}
-        """
-        if DEBUG:
-            logger.info("edit reading post: " + reading_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=reading_query)
-
-        return redirect("/readings")
-
-@app.route("/edit/date/<int:dateID>", methods=["POST", "GET"])
-def dateedit(dateID):
-    '''API Route to update a date'''
-
-    dateID = escape(dateID)
-    if request.method == "GET":
-        dates_query = f"SELECT * FROM Dates\nWHERE Dates.dateID = {dateID};"
-        query_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
-        if DEBUG:
-            logger.info("edit date get: " + str(query_results))
-        return render_template("edit/editdate.html", specific_date=query_results)
-    
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(f"updating date for {request.form['dateID']}")
-        date_query = f"""
-        UPDATE Dates
-        SET `dateDateTime`='{request.form['dateDateTime']}'
-        WHERE Dates.dateID = {dateID};
-        """
-        if DEBUG:
-            logger.info("edit date post: " + date_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=date_query)
-
-        return redirect("/dates")
-
-@app.route("/edit/location/<int:locationID>", methods=["POST", "GET"])
-def locationedit(locationID):
-    '''API Route to update a date'''
-
-    locationID = escape(locationID)
-    if request.method == "GET":
-        locations_query = f"SELECT * FROM Locations\nWHERE Locations.locationID = {locationID};"
-        query_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
-        if DEBUG:
-            logger.info("edit location get: " + str(query_results))
-        return render_template("edit/editlocation.html", specific_location=query_results)
-    
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(f"updating location for {request.form['locationID']}")
-        location_query = f"""
-        UPDATE Locations
-        SET `locationName`='{request.form['locationName']}', `locationLatitude`='{request.form['locationLatitude']}', `locationLongitude`='{request.form['locationLongitude']}', `locationAltitude`='{request.form['locationAltitude']}'
-        WHERE Locations.locationID = {locationID};
-        """
-        if DEBUG:
-            logger.info("edit location post: " + location_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=location_query)
-
-        return redirect("/locations")
-
-
-############
-# Create
-############
-
-@app.route("/add/sensor", methods=["POST", "GET",])
-def add_sensor():
-    '''API Route to add a sensor'''
-
-    if request.method == "GET":
-        return render_template("add/addsensor.html")
-
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`)\nVALUES ('{request.form['locationName']}', '{request.form['locationLatitude']}', '{request.form['locationLongitude']}', '{request.form['locationAltitude']}');"
-        if DEBUG: 
-            logger.info("add sensor post first query: " + location_query)
-        get_loc_id_query = f"SELECT locationID FROM Locations\nWHERE locationName='{request.form['locationName']}';"
-        loc_id =  db.execute_query(db_connection=db_connection, query=get_loc_id_query).fetchall()
-        db.execute_query(db_connection=db_connection, query=location_query)
-        sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`)\nVALUES ('{request.form['sensorName']}', '{request.form['sensorAPIKey']}', '{request.form['sensorNumber']}', '{loc_id[0]['locationID']}');"
-        if DEBUG:
-            logger.info("add sensor post second query: " + sensor_query)
-        db.execute_query(db_connection=db_connection, query=sensor_query)
-
-        return redirect("/sensors")
-
-@app.route("/add/model", methods=["POST", "GET",])
-def add_model():
-    '''API Route to add a model'''
-
-    if request.method == "GET":
-        return render_template("add/addmodel.html")
-    
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info("add model post: " + request.form['modelName'].upper())
-        if request.form['modelName'].upper() not in valid_models_list:
-            flash("Not a recognized Weather Model!")
-            return render_template("add/addmodel.html")
-        model_update = f"INSERT INTO `Models` (modelName)\n VALUES ('{request.form['modelName'].upper()}');"
-        if DEBUG:
-            logger.info("add model post query: " + model_update)
-        model_obj = db.execute_query(db_connection=db_connection, query=model_update)
-        return redirect("/library")
-
-@app.route('/add/reading', methods=["POST", "GET"])
-def add_reading():
-    '''API Route to add a reading'''
-
-    if request.method == "GET":
-        sensors_query = "SELECT * FROM Sensors;"
-        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        return render_template("add/addreading.html", sensors=sensors_results)
-    
-    elif request.method == "POST":
-        use_sensorID = request.form['sensorlist']
-        if DEBUG:
-            logger.info("add reading post for sensor: " + use_sensorID)
-        if use_sensorID not in current_supported_sensor_list:
-            flash("This sensor is not currently supported for MVP!")
-            return redirect("/add/reading")
-        valid_obj_list,error_obj_list = asyncio.run(gather_data())
-        if DEBUG:
-            for sensor_obj in valid_obj_list:
-                pp.pprint(sensor_obj)
-            for error_obj in error_obj_list:
-                pp.pprint(error_obj)
-        # check for errors
-        for sensor_obj in valid_obj_list:
-            if "error" in sensor_obj.keys():
-                flash("Error accessing Holfuy API")
-                return redirect("/")
-        now = datetime.now()
-        date_format = "%Y-%m-%d %H:%M:%S"
-        datetime_str = now.strftime(date_format)
-        old_date = now - timedelta(hours=1)
-        new_date = now + timedelta(hours=1)
-        new_date_str = new_date.strftime(date_format)
-        old_date_str = old_date.strftime(date_format)
-        date_insert = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{datetime_str}');"
-        date_results = db.execute_query(db_connection=db_connection, query=date_insert).fetchall()
-        date_get_id = f"SELECT `dateID` FROM Dates\n WHERE `dateDateTime`='{datetime_str}';"
-        date_id_results = db.execute_query(db_connection=db_connection, query=date_get_id).fetchall()
-        if DEBUG:
-            logger.info("date results: " + str(date_id_results))
-        add_reading_query = f"INSERT INTO Readings (`readingSensorID`, `readingWindSpeed`, `readingWindGust`, `readingWindMin`, `readingWindDirection`, `readingTemperature`, `readingDateID`)\n VALUES "
-        for sensor_obj in valid_obj_list:
-            add_reading_query += f"\n('{use_sensorID}', '{sensor_obj['wind']['speed']}', '{sensor_obj['wind']['gust']}', '{sensor_obj['wind']['min']}', '{sensor_obj['wind']['direction']}', '{sensor_obj['temperature']}', '{date_id_results[0]['dateID']}')"
-        add_reading_query += ";"
-        reading_obj = db.execute_query(db_connection=db_connection, query=add_reading_query)
-        info_dict['fromdate'] = old_date_str
-        info_dict['todate'] = new_date_str
-        info_dict['sensorlist'] = request.form['sensorlist']
-        sensors_query = f"SELECT sensorName FROM Sensors\n WHERE sensorID='{request.form['sensorlist']}';"
-        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        info_dict['sensorName'] = sensors_results[0]['sensorName']
-        
-        forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
-        if DEBUG:
-            logger.info("results forecasts query: " + forecasts_query)
-        forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
-        readings_query = f"SELECT readingID, readingSensorID, readingDateID, readingWindSpeed, readingWindGust, readingWindMin, readingWindDirection, readingTemperature FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE ( dateDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Sensors.sensorLocationID='{info_dict['sensorlist']}' );"
-        if DEBUG:
-            logger.info("results readings query: " + readings_query)
-        readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
-
-        return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict, key_dict=keys.key_dict)
-
-@app.route('/add/forecast', methods=["POST", "GET"])
-def add_forecast():
-    '''API Route to add a forecast'''
-
-    if request.method == "GET":
-        sensors_query = "SELECT * FROM Sensors;"
-        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-        models_query = "SELECT * FROM Models;"
-        models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
-        return render_template("add/addforecast.html", sensors=sensors_results, models=models_results)
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        use_sensorID = request.form['sensorlist']
-        use_modelID = request.form['modellist']
-        if DEBUG:
-            logger.info("add forecast post for sensor: " + use_sensorID + " and model: " + use_modelID)
-        model_query = f"SELECT * from Models\n WHERE modelID='{use_modelID}';"
-        model_results = db.execute_query(db_connection=db_connection, query=model_query).fetchall()
-        if DEBUG:
-            logger.info("add forecast post model results: " + str(model_results))
-        sensor_query = f"SELECT * from Sensors\nJOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n WHERE sensorID='{use_sensorID}';"
-        sensor_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchall()
-        if DEBUG:
-            logger.info("add forecast post sensor results: " + str(sensor_results))
-        if model_results[0]['modelName'] not in current_supported_model_list:
-            flash(f"This model is not currently supported!")
-            return redirect("/add/forecast")
-        elif model_results[0]['modelName'] == "ECMWF":
-            ecmwf = query_ecmwf(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
-            forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
-            row_count = len(ecmwf.index)
-            for index,row in ecmwf.iterrows():
-                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
-                date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
-                date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
-                if len(date_results) == 0:
-                    date_create_id = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{row['date']}');"
-                    date_id = db.execute_query(db_connection=db_connection, query=date_create_id)
-                    date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
-                forecast_query += f"\n('{date_results[0]['dateID']}', '{row['temperature_2m']}', '{row['precipitation']}', '{row['weather_code']}', '{row['pressure_msl']}', '{row['wind_speed_10m']}', '{row['wind_direction_10m']}', '{row['cape']}', '{model_results[0]['modelID']}', '{sensor_results[0]['locationID']}', '{row['date']}')"
-                if index != row_count-1:
-                    forecast_query += ","
-            forecast_query += ";"
-            forecast_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
-
-        elif model_results[0]['modelName'] == "GFS":
-            gfs = query_gfs(sensor_results[0]['locationLatitude'], sensor_results[0]['locationLongitude'])
-            forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
-            row_count = len(gfs.index)
-            for index,row in gfs.iterrows():
-                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
-                date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
-                date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
-                if len(date_results) == 0:
-                    date_create_id = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{row['date']}');"
-                    date_id = db.execute_query(db_connection=db_connection, query=date_create_id)
-                    date_results = db.execute_query(db_connection=db_connection, query=date_check_query).fetchall()
-                forecast_query += f"\n('{date_results[0]['dateID']}', '{row['temperature_2m']}', '{row['precipitation']}', '{row['weather_code']}', '{row['pressure_msl']}', '{row['wind_speed_10m']}', '{row['wind_direction_10m']}', '{row['cape']}', '{model_results[0]['modelID']}', '{sensor_results[0]['locationID']}', '{row['date']}')"
-                if index != row_count-1:
-                    forecast_query += ","
-            forecast_query += ";"
-            forecast_obj = db.execute_query(db_connection=db_connection, query=forecast_query)
-        now = datetime.now()
-        date_format = "%Y-%m-%d %H:%M:%S"
-        datetime_str = now.strftime(date_format)
-        old_date = now - timedelta(hours=1)
-        new_date = now + timedelta(days=7)
-        new_date_str = new_date.strftime(date_format)
-        old_date_str = old_date.strftime(date_format)
-        info_dict['fromdate'] = old_date_str
-        info_dict['todate'] = new_date_str
-        info_dict['sensorlist'] = request.form['sensorlist']
-        info_dict['sensorName'] = sensor_results[0]['sensorName']
-        forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
-        if DEBUG:
-            logger.info("results forecasts query: " + forecasts_query)
-        forecasts_results = db.execute_query(db_connection=db_connection, query=forecasts_query).fetchall()
-        readings_query = f"SELECT readingID, readingSensorID, readingDateID, readingWindSpeed, readingWindGust, readingWindMin, readingWindDirection, readingTemperature FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE ( dateDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Sensors.sensorLocationID='{info_dict['sensorlist']}' );"
-        if DEBUG:
-            logger.info("results readings query: " + readings_query)
-        readings_results = db.execute_query(db_connection=db_connection, query=readings_query).fetchall()
-
-        return render_template("results.html", forecasts=forecasts_results, readings=readings_results, info_dict=info_dict, key_dict=keys.key_dict)
-
-@app.route("/add/location", methods=["POST", "GET",])
-def add_location():
-    '''API Route to add a location'''
-
-    if request.method == "GET":
-        return render_template("add/addlocation.html")
-
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        location_query = f"""INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`)
-                                VALUES ('{request.form['locationName']}', '{request.form['locationLatitude']}', '{request.form['locationLongitude']}', '{request.form['locationAltitude']}');"""
-        if DEBUG: 
-            logger.info("add sensor post first query: " + location_query)
-        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-        return redirect("/library")
-    
-@app.route("/add/date", methods=["POST", "GET",])
-def add_date():
-    '''API Route to add a date'''
-
-    if request.method == "GET":
-        return render_template("add/adddate.html")
-
-    elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        date_query = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{request.form['dateDateTime']}');"
-        if DEBUG: 
-            logger.info("add date post first query: " + date_query)
-        date_obj = db.execute_query(db_connection=db_connection, query=date_query)
-        return redirect("/library")
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 3000))

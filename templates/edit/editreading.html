@@ -1,0 +1,58 @@
+{% extends 'base.j2' %}
+
+{% block content %}
+<h4>{% block title %} Edit Reading #{{specific_reading.readingID}} {% endblock %}</h4>
+{% for mesg in get_flashed_messages() %}
+<h3>{{ mesg }}</h3>
+{% endfor %}
+<div class="grid">
+    <div></div>
+    <div>
+        <article>
+            <form name="editreading" id="editreading" action="/edit/reading/{{specific_reading.readingID}}"
+                method="post">
+                <fieldset>
+                    <input type="hidden" value="{{specific_reading.readingID}}" class="form-control" id="readingID"
+                        name="readingID" required>
+                    <label for="name">Weather Sensor:</label>
+                    <select name="sensor" aria-label="sensor" required>
+                        <option selected disabled value="">{{specific_reading.readingSensor}}</option>
+                        {% for sensor in sensors %}
+                        <option>{{sensor.sensorName}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="name">Wind Speed:</label>
+                    <input type="text" value="{{specific_reading.readingWindSpeed}}" class="form-control"
+                        id="readingWindSpeed" name="readingWindSpeed" pattern="[A-Za-z0-9\s]+" required>
+
+                    <label for="name">Wind Gust:</label>
+                    <input type="text" value="{{specific_reading.readingWindGust}}" class="form-control"
+                        id="readingWindGust" name="readingWindGust" pattern="[A-Za-z0-9\s]+" required>
+
+                    <label for="name">Wind Min:</label>
+                    <input type="text" value="{{specific_reading.readingWindMin}}" class="form-control"
+                        id="readingWindMin" name="readingWindMin" pattern="[A-Za-z0-9\s]+" required>
+                    <label for="name">Wind Direction:</label>
+                    <input type="text" value="{{specific_reading.readingWindDirection}}" class="form-control"
+                        id="readingWindDirection" name="readingWindDirectionSpeed" pattern="[A-Za-z0-9\s]+" required>
+
+                    <label for="name">Wind Temperature:</label>
+                    <input type="text" value="{{specific_reading.readingTemperature}}" class="form-control"
+                        id="readingTemperature" name="readingTemperature" pattern="[A-Za-z0-9\s]+" required>
+                    <select name="date" aria-label="date" required>
+                        <option selected disabled value="">{{specific_reading.readingDate}}</option>
+                        {% for date in dates %}
+                        <option>{{date.dateDateTime}}</option>
+                        {% endfor %}
+                    </select>
+
+                </fieldset>
+                <button type="submit">Submit</button>
+            </form>
+        </article>
+    </div>
+    <div></div>
+</div>
+
+{% endblock %}
