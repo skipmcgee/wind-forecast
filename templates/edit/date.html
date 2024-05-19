@@ -16,9 +16,9 @@
                     <fieldset>
                         <input type="hidden" value="{{specific_date[0].dateID}}" class="form-control" id="dateID"
                             name="dateID" required>
-                        <label for="name">Weather Date Name:</label>
-                        <input type="text" value="{{specific_date[0].dateName}}" class="form-control" id="dateName"
-                            name="dateName" pattern="[A-Za-z0-9\s]+" required>
+                        <label for="dateDateTime">Date:</label>
+                        <input type="datetime" value="{{specific_date[0].dateDateTime}}" class="form-control" id="dateDateTime"
+                            name="dateDateTime" required>
                     </fieldset>
                     <button type="submit">Submit</button>
                 </form>
