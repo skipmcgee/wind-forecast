@@ -34,7 +34,7 @@ SELECT
 	Forecasts.forecastForDateTime
 FROM 
 	Forecasts
-JOIN 
+LEFT JOIN 
 	Models ON Forecasts.forecastModelID = Models.modelID
 JOIN 
 	Locations ON Forecasts.forecastLocationID = Locations.locationID
