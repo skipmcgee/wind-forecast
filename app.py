@@ -170,18 +170,7 @@ def forecasts():
 
     query = '''
     SELECT
-        forecastID,
-        forecastDateID,
-        forecastTemperature2m,
-        forecastPrecipitation,
-        forecastWeatherCode,
-        forecastPressureMSL,
-        forecastWindSpeed10m,
-        forecastWindDirection10m,
-        forecastCape,
-        forecastModelID,
-        forecastLocationID,
-        forecastForDateTime
+        *
     FROM 
         Forecasts;
     '''
@@ -570,25 +559,20 @@ def add_sensor():
     '''API Route to add a sensor'''
 
     if request.method == "GET":
-        ''''''
         return render_template("add/addsensor.html")
 
     elif request.method == "POST":
-
         if DEBUG:
             logger.info(str(request.form))
-
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
-        
+        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`)\nVALUES ('{request.form['locationName']}', '{request.form['locationLatitude']}', '{request.form['locationLongitude']}', '{request.form['locationAltitude']}');"
         if DEBUG: 
             logger.info("add sensor post first query: " + location_query)
-
+        get_loc_id_query = f"SELECT locationID FROM Locations\nWHERE locationName='{request.form['locationName']}';"
+        loc_id =  db.execute_query(db_connection=db_connection, query=get_loc_id_query).fetchall()
         db.execute_query(db_connection=db_connection, query=location_query)
-        sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)\nVALUES ({request.form['sensorName']}, {request.form['sensorAPIKey']}, {request.form['sensorNumber']}, {request.form['sensorLocationID']},);"
-        
+        sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`)\nVALUES ('{request.form['sensorName']}', '{request.form['sensorAPIKey']}', '{request.form['sensorNumber']}', '{loc_id[0]['locationID']}');"
         if DEBUG:
             logger.info("add sensor post second query: " + sensor_query)
-
         db.execute_query(db_connection=db_connection, query=sensor_query)
 
         return redirect("/sensors")

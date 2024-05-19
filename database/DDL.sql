@@ -47,7 +47,6 @@ CREATE TABLE IF NOT EXISTS `Dates` (
   `dateID` INT NOT NULL AUTO_INCREMENT,
   `dateDateTime` DATETIME NOT NULL,
   PRIMARY KEY (`dateID`),
-  UNIQUE INDEX `dateDateTime_UNIQUE` (`dateDateTime` ASC) VISIBLE)
 ENGINE = InnoDB
 COMMENT = 'Date information in DateTime.';
 

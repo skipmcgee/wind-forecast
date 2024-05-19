@@ -14,7 +14,7 @@
                 <thead>
                     <tr>
                         {% for key in forecasts[0].keys() %}
-                        {% if key != 'forecastID' and key != 'forecastModelID' and key != 'forecastLocationID' %}
+                        {% if key != 'forecastID' %}
                         <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ forecast_dict[key] }}</th>
                         {% endif %}
                         {% endfor %}
@@ -26,7 +26,7 @@
                     {% for item in forecasts %}
                     <tr>
                         {% for key in item.keys() %}
-                        {% if key != 'forecastID' and key != 'forecastModelID' and key != 'forecastLocationID' %}
+                        {% if key != 'forecastID' %}
                         <td>{{item[key]}}</td>
                         {% endif %}
                         {% endfor %}
