@@ -15,17 +15,18 @@
                 method="post">
                 <fieldset>
                     <input type="hidden" value="{{specific_forecast.forecastID}}" class="form-control" id="forecastID" name="forecastID">
+                    <label for="dateID">Date:</label>
                     <select name="dateID" aria-label="dateID">
-                            {% for date in dates %}
-                                {% if specific_forecast.dateID == date.dateID %}
-                                    <option selected value="{{date.dateID}}">{{date.dateDateTime}}</option>
-                                {% elif date.dateDateTime != specific_forecast.dateDateTime %}
-                                    <option value="{{date.dateID}}">{{date.dateDateTime}}</option>
-                                {% endif %}
-                            {% endfor %}
+                    {% for date in dates %}
+                        {% if specific_forecast.dateID == date.dateID %}
+                        <option selected value="{{date.dateID}}">{{date.dateDateTime}}</option>
+                        {% elif date.dateDateTime != specific_forecast.dateDateTime %}
+                        <option value="{{date.dateID}}">{{date.dateDateTime}}</option>
+                        {% endif %}
+                    {% endfor %}
                     </select>
 
-                    <label for="forecastTemperature">Temperature (2m):</label>
+                    <label for="forecastTemperature">Temperature (F):</label>
                     <input type="number" step="0.01" id="forecastTemperature" name="forecastTemperature"
                         value="{{specific_forecast.forecastTemperature2m}}" required>
 
@@ -53,17 +54,19 @@
                     <input type="number" step="0.01" id="forecastCape" name="forecastCape" value="{{specific_forecast.forecastCape}}"
                         required>
                     
+                    <label for="locationID">Location:</label>
                     <select name="locationID" aria-label="locationID" required>
-                        {% for location in locations %}
-                            {% if location.locationID == specific_forecast.locationID %}
-                                <option selected value="{{location.locationID}}">{{location.locationName}}</option>
-                            {% endif %}
-                            {% if location.locationID != specific_forecast.locationID %}
-                                <option value="{{location.locationID}}">{{location.locationName}}</option>
-                            {% endif %}
-                        {% endfor %}
+                    {% for location in locations %}
+                        {% if location.locationID == specific_forecast.locationID %}
+                        <option selected value="{{location.locationID}}">{{location.locationName}}</option>
+                        {% endif %}
+                        {% if location.locationID != specific_forecast.locationID %}
+                        <option value="{{location.locationID}}">{{location.locationName}}</option>
+                        {% endif %}
+                    {% endfor %}
                     </select>
 
+                    <label for="modelID">Weather Model:</label>
                     <select name="modelID" aria-label="modelID">
                         {% for model in models %}
                             {% if model.modelID != specific_forecast.modelID %}
@@ -73,7 +76,6 @@
                             {% endif %}
                         {% endfor %}
                             <option value="">None</option>
-
                     </select>
 
                     <label for="forecastForDateTime">Forecast Date/Time:</label>

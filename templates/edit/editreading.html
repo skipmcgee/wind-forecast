@@ -11,41 +11,50 @@
     <div></div>
     <div>
         <article>
-            <form name="editreading" id="editreading" action="/edit/reading/{{specific_reading[0].readingID}}"
+            <form name="editreading" id="editreading" action="/edit/reading/{{specific_reading.readingID}}"
                 method="post">
                 <fieldset>
-                    <input type="hidden" value="{{specific_reading[0].readingID}}" class="form-control" id="readingID"
+                    <input type="hidden" value="{{specific_reading.readingID}}" class="form-control" id="readingID"
                         name="readingID" required>
-                    <label for="name">Weather Sensor:</label>
-                    <select name="sensor" aria-label="sensor" required>
-                        <option selected disabled value="">{{specific_reading[0].readingSensor}}</option>
+                    <label for="readingSensorID">Weather Sensor:</label>
+                    <select name="readingSensorID" aria-label="sensor" id="readingSensorID" required>
                         {% for sensor in sensors %}
-                        <option>{{sensor.sensorName}}</option>
+                        {% if specific_reading[0].readingSensorID == sensor.sensorID %}
+                        <option selected value="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
+                        {% else %}
+                        <option value="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
 
-                    <label for="name">Wind Speed:</label>
-                    <input type="text" value="{{specific_reading[0].readingWindSpeed}}" class="form-control"
-                        id="readingWindSpeed" name="readingWindSpeed" pattern="[A-Za-z0-9\s]+" required>
+                    <label for="readingWindSpeed">Wind Speed:</label>
+                    <input type="number" step="0.1" value="{{specific_reading.readingWindSpeed}}" class="form-control"
+                        id="readingWindSpeed" name="readingWindSpeed" required>
 
-                    <label for="name">Wind Gust:</label>
-                    <input type="text" value="{{specific_reading[0].readingWindGust}}" class="form-control"
-                        id="readingWindGust" name="readingWindGust" pattern="[A-Za-z0-9\s]+" required>
+                    <label for="readingWindGust">Wind Gust:</label>
+                    <input type="number" step="0.1" value="{{specific_reading.readingWindGust}}" class="form-control"
+                        id="readingWindGust" name="readingWindGust" required>
 
-                    <label for="name">Wind Min:</label>
-                    <input type="text" value="{{specific_reading[0].readingWindMin}}" class="form-control"
-                        id="readingWindMin" name="readingWindMin" pattern="[A-Za-z0-9\s]+" required>
-                    <label for="name">Wind Direction:</label>
-                    <input type="text" value="{{specific_reading[0].readingWindDirection}}" class="form-control"
-                        id="readingWindDirection" name="readingWindDirectionSpeed" pattern="[A-Za-z0-9\s]+" required>
+                    <label for="readingWindMin">Wind Min:</label>
+                    <input type="number" step="0.1"  value="{{specific_reading.readingWindMin}}" class="form-control"
+                        id="readingWindMin" name="readingWindMin" required>
 
-                    <label for="name">Wind Temperature:</label>
-                    <input type="text" value="{{specific_reading[0].readingTemperature}}" class="form-control"
-                        id="readingTemperature" name="readingTemperature" pattern="[A-Za-z0-9\s]+" required>
-                    <select name="date" aria-label="date" required>
-                        <option selected disabled value="">{{specific_reading[0].readingDate}}</option>
+                    <label for="readingWindDirection">Wind Direction:</label>
+                    <input type="number" step="0.1"  value="{{specific_reading.readingWindDirection}}" class="form-control"
+                        id="readingWindDirection" name="readingWindDirection" required>
+
+                    <label for="readingTemperature">Wind Temperature:</label>
+                    <input type="number" step="0.1"  value="{{specific_reading.readingTemperature}}" class="form-control"
+                        id="readingTemperature" name="readingTemperature" required>
+                    
+                    <label for="readingDateID">Reading Date:</label>
+                    <select name="readingDateID" id="readingDateID" aria-label="date" required>
                         {% for date in dates %}
-                        <option>{{date.dateDateTime}}</option>
+                        {% if specific_reading.readingDateID == date.dateID %}
+                        <option selected value="{{date.dateID}}">{{date.dateDateTime}}</option>
+                        {% else %}
+                        <option value="{{date.dateID}}">{{date.dateDateTime}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
 
