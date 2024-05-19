@@ -1,28 +1,30 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-    <h4>{% block title %} Edit Model #{{specific_model.modelID}} {% endblock %}</h4>
-    {% for mesg in get_flashed_messages() %}
-    <h3>{{ mesg }}</h3>
-    {% endfor %}
-    <div class="grid">
-        <div></div>
-        <div>
-            <article>
-                <form name="editmodel" id="editmodel" action="/edit/model/{{specific_model.modelID}}" method="post">
-                    <!-- <legend><strong>Edit Weather Model:</strong></legend> -->
-                    <fieldset>
-                        <input type="hidden" value="{{specific_model.modelID}}" class="form-control" id="modelID"
-                            name="modelID" required>
-                        <label for="name">Weather Model Name:</label>
-                        <input type="text" value="{{specific_model.modelName}}" class="form-control" id="modelName"
-                            name="modelName" pattern="[A-Za-z0-9\s]+" required>
-                    </fieldset>
-                    <button type="submit">Submit</button>
-                </form>
-            </article>
-        </div>
-        <div></div>
+<h4>{% block title %} Edit Model #{{specific_model.modelID}} {% endblock %}</h4>
+<div></div>
+{% for mesg in get_flashed_messages() %}
+<h3>{{ mesg }}</h3>
+{% endfor %}
+<div></div>
+<div class="grid">
+    <div></div>
+    <div>
+        <article>
+            <form name="editmodel" id="editmodel" action="/edit/model/{{specific_model.modelID}}" method="post">
+                <!-- <legend><strong>Edit Weather Model:</strong></legend> -->
+                <fieldset>
+                    <input type="hidden" value="{{specific_model.modelID}}" class="form-control" id="modelID"
+                        name="modelID" required>
+                    <label for="name">Weather Model Name:</label>
+                    <input type="text" value="{{specific_model.modelName}}" class="form-control" id="modelName"
+                        name="modelName" pattern="[A-Za-z0-9\s]+" required>
+                </fieldset>
+                <button type="submit">Submit</button>
+            </form>
+        </article>
     </div>
+    <div></div>
+</div>
 
 {% endblock %}

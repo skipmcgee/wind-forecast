@@ -1,49 +1,56 @@
 {% extends 'base.j2' %}
 {% block content %}
 <h4>{% block title %} Browse Dates {% endblock %}</h4>
-<article>
-    {% for mesg in get_flashed_messages() %}
-    <h3>{{ mesg }}</h3>
-    {% endfor %}
-    <div id="dateTable" class="overflow-auto">
-        <table class="striped">
-            <caption>Current Dates: </caption>
-            {% if dates %}
-            <thead>
-                <tr>
-                    {% for key in dates[0].keys() %}
-                    {% if key != 'dateID' %}
-                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ date_dict[key] }}</th>
-                    {% endif %}
-                    {% endfor %}
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in dates %}
-                <tr>
-                    {% for key in item.keys() %}
-                    {% if key != 'dateID' %}
-                    <td>{{item[key]}}</td>
-                    {% endif %}
-                    {% endfor %}
-                    <p></p>
-                    <td><a href="/edit/date/{{item.dateID}}" class="btn btn-default" method="get"><span
-                                class="material-icons">mode_edit</span></a></td>
-                    <td><a href="/delete/date/{{item.dateID}}" class="btn btn-default" method="post"><span
-                                class="material-icons">delete</span></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            {% endif %}
-        </table>
+<div class="grid">
+    <div></div>
+    <div>
+        <article>
+            <div></div>
+            {% for mesg in get_flashed_messages() %}
+            <h3>{{ mesg }}</h3>
+            {% endfor %}
+            <div></div>
 
-        <div class="grid">
-            <div></div>
-            <div><a href='/add/date'><input class="btn" type="button" value="Add a Date" method="get"></a></div>
-            <div></div>
-        </div>
+            <div id="dateTable" class="overflow-auto">
+                <table class="striped">
+                    <caption>Current Dates: </caption>
+                    {% if dates %}
+                    <thead>
+                        <tr>
+                            {% for key in dates[0].keys() %}
+                            {% if key != 'dateID' %}
+                            <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ date_dict[key] }}</th>
+                            {% endif %}
+                            {% endfor %}
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in dates %}
+                        <tr>
+                            {% for key in item.keys() %}
+                            {% if key != 'dateID' %}
+                            <td>{{item[key]}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            <p></p>
+                            <td><a href="/edit/date/{{item.dateID}}" class="btn btn-default" method="get"><span
+                                        class="material-icons">mode_edit</span></a></td>
+                            <td><a href="/delete/date/{{item.dateID}}" class="btn btn-default" method="post"><span
+                                        class="material-icons">delete</span></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+
+                <div class="grid">
+                    <div><a href='/add/date'><input class="btn" type="button" value="Add a Date" method="get"></a></div>
+                </div>
+            </div>
+        </article>
     </div>
-</article>
+    <div></div>
+</div>
 {% endblock %}

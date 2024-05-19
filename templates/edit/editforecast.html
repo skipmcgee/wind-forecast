@@ -2,9 +2,11 @@
 
 {% block content %}
 <h4>{% block title %} Edit Forecast #{{specific_forecast.forecastID}} {% endblock %}</h4>
+<div></div>
 {% for mesg in get_flashed_messages() %}
 <h3>{{ mesg }}</h3>
 {% endfor %}
+<div></div>
 <div class="grid">
     <div></div>
     <div>
@@ -58,7 +60,9 @@
                     </select>
 
                     <label for="forecastForDateTime">Forecast Date/Time:</label>
-                    <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime" value="{{specific_forecast.forecastDateTime}}" required>
+                    <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime"
+                        value="{{specific_forecast.forecastDateTime}}" required>
+
                 </fieldset>
                 <button type="submit">Submit</button>
             </form>

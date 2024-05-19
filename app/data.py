@@ -3,9 +3,9 @@ class KeyTranslation:
     def __init__(self):
         self.key_dict = dict()
         self.key_dict['sensorID'] = 'ID'
-        self.key_dict['sensorName'] = 'Name'
+        self.key_dict['sensorName'] = 'Sensor Name'
         self.key_dict['sensorAPIKEY'] = 'API Key' 
-        self.key_dict['sensorNumber'] = 'Number'
+        self.key_dict['sensorNumber'] = 'Sensor Number'
         self.key_dict['locationLatitude'] = 'Latitude'
         self.key_dict['locationLongitude'] = 'Longitude'
         self.key_dict['locationAltitude'] = 'Altitude'

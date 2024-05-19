@@ -1,3 +1,128 @@
+-- MySQL Script created by David McGee and Theodore Norred
+-- CS-340 Group 10 Project
+
+
+-- --------------------
+-- Create
+-- --------------------
+
+-- Forecasts
+-- Locations
+-- Sensors
+-- Models
+-- Dates
+-- Readings
+
+-- --------------------
+-- Read
+-- --------------------
+
+-- Forecasts
+
+SELECT 
+	Forecasts.forecastID,
+	Dates.dateDateTime,
+	Forecasts.forecastTemperature2m,
+	Forecasts.forecastPrecipitation,
+	Forecasts.forecastWeatherCode,
+	Forecasts.forecastPressureMSL,
+	Forecasts.forecastWindSpeed10m,
+	Forecasts.forecastWindDirection10m,
+	Forecasts.forecastCape,
+	Models.modelName,
+	Locations.locationName,
+	Forecasts.forecastForDateTime
+FROM 
+	Forecasts
+JOIN 
+	Models ON Forecasts.forecastModelID = Models.modelID
+JOIN 
+	Locations ON Forecasts.forecastLocationID = Locations.locationID
+JOIN 
+	Dates ON Forecasts.forecastDateID = Dates.dateID;
+    
+-- Locations
+
+SELECT 
+    locationID,
+    locationName,
+    locationLatitude,
+    locationLongitude,
+    locationAltitude
+FROM
+    Locations;
+        
+-- Sensors
+
+SELECT 
+    Sensors.sensorID,
+    Sensors.sensorName,
+    Sensors.sensorAPIKEY,
+    Sensors.sensorNumber,
+    Locations.locationLatitude,
+    Locations.locationLongitude,
+    Locations.locationAltitude
+FROM
+    Sensors
+JOIN
+    Locations ON Sensors.sensorLocationID = Locations.locationID;
+
+-- Models
+
+SELECT 
+    modelID, 
+    modelName
+FROM
+    Models;
+        
+-- Dates
+
+SELECT 
+    dateID, 
+    dateDateTime
+FROM
+    Dates;
+
+-- Readings
+
+SELECT 
+    Readings.readingID,
+    Sensors.sensorName,
+    Sensors.sensorNumber,
+    Readings.readingWindSpeed,
+    Readings.readingWindGust,
+    Readings.readingWindMin,
+    Readings.readingWindDirection,
+    Readings.readingTemperature,
+    Dates.dateDateTime
+FROM
+    Readings
+JOIN 
+	Sensors ON Readings.readingSensorID = Sensors.sensorID
+JOIN 
+	Dates ON Readings.readingDateID = Dates.dateID;
+
+-- --------------------
+-- Update
+-- --------------------
+
+-- Forecasts
+-- Locations
+-- Sensors
+-- Models
+-- Dates
+-- Readings
+
+-- --------------------
+-- Delete
+-- --------------------
+
+-- Forecasts
+-- Locations
+-- Sensors
+-- Models
+-- Dates
+-- Readings
 
 -- -----------------------------------------------------
 -- Get Sensor + Location Information
@@ -17,7 +142,7 @@ DELETE FROM Forecasts WHERE forecastID=_forecastID;
 -- Get Forecast Information
 -- '_' is used to denote backend language variables
 -- -----------------------------------------------------
-SELECT * FROM Forecasts;
+
 
 -- OR get Forecasts from a date range
 

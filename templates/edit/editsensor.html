@@ -1,43 +1,46 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-    <h4>{% block title %} Edit Sensor #{{specific_sensor.sensorID}} {% endblock %}</h4>
-    {% for mesg in get_flashed_messages() %}
-    <h3>{{ mesg }}</h3>
-    {% endfor %}
-    <div class="grid">
-        <div></div>
-        <div>
-            <article>
-                <form name="editsensor" id="editsensor" action="/edit/sensor/{{specific_sensor.sensorID}}" method="post">
-                    <fieldset>
-                        <input type="hidden" value="{{specific_sensor.sensorID}}" class="form-control" id="sensorID"
-                            name="sensorID" required>
+<h4>{% block title %} Edit Sensor #{{specific_sensor.sensorID}} {% endblock %}</h4>
+<div></div>
+{% for mesg in get_flashed_messages() %}
+<h3>{{ mesg }}</h3>
+{% endfor %}
+<div></div>
+<div class="grid">
+    <div></div>
+    <div>
+        <article>
+            <form name="editsensor" id="editsensor" action="/edit/sensor/{{specific_sensor[0].sensorID}}" method="post">
+                <fieldset>
+                    <input type="hidden" value="{{specific_sensor[0].sensorID}}" class="form-control" id="sensorID"
+                        name="sensorID" required>
 
-                        <label for="name">Sensor Name:</label>
-                        <input type="text" value="{{specific_sensor.sensorName}}" class="form-control" id="sensorName"
-                            name="sensorName" pattern="[A-Za-z0-9\s]+" required>
-    
-                        <label for="key">Sensor API Key:</label>
-                        <input type="text" value="{{specific_sensor.sensorAPIKey}}" class="form-control"
-                            id="sensorAPIKey" name="sensorAPIKey" required>
-    
-                        <label for="number">Sensor Number:</label>
-                        <input type="number" id="sensorNumber" name="sensorNumber" value="{{specific_sensor.sensorNumber}}">
+                    <label for="name">Sensor Name:</label>
+                    <input type="text" value="{{specific_sensor[0].sensorName}}" class="form-control" id="sensorName"
+                        name="sensorName" pattern="[A-Za-z0-9\s]+" required>
 
-                        <select name="locationName" aria-label="locationName" required>
-                            <option selected disabled value="">{{specific_sensor.sensorLocation}}</option>
-                            {% for location in locations %}
-                            <option>{{location.locationName}}</option>
-                            
-                            {% endfor %}
-                        </select>
-                    </fieldset>
-                    <button type="submit">Submit</button>
-                </form>
-            </article>
-        </div>
-        <div></div>
+                    <label for="key">Sensor API Key:</label>
+                    <input type="text" value="{{specific_sensor[0].sensorAPIKey}}" class="form-control"
+                        id="sensorAPIKey" name="sensorAPIKey" required>
+
+                    <label for="number">Sensor Number:</label>
+                    <input type="number" id="sensorNumber" name="sensorNumber"
+                        value="{{specific_sensor[0].sensorNumber}}">
+
+                    <select name="locationName" aria-label="locationName" required>
+                        <option selected disabled value="">{{specific_sensor[0].sensorLocation}}</option>
+                        {% for location in locations %}
+                        <option>{{location.locationName}}</option>
+
+                        {% endfor %}
+                    </select>
+                </fieldset>
+                <button type="submit">Submit</button>
+            </form>
+        </article>
     </div>
+    <div></div>
+</div>
 
 {% endblock %}

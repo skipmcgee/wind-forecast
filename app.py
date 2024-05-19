@@ -305,65 +305,32 @@ def add_reading():
 # Read
 ############
 
-@app.route('/sensors', methods=["GET"])
-def sensors():
-    '''View for the Sensors Admin Page'''
-    query = '''
-    SELECT
-        sensorID, 
-        sensorName, 
-        sensorAPIKEY, 
-        sensorNumber, 
-        locationLatitude, 
-        locationLongitude, 
-        locationAltitude
-    FROM 
-        Sensors
-    JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
-    ORDER BY
-        sensorName DESC;
-    '''
-
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
-
-    if DEBUG:
-        logger.info(results)
-
-    return render_template("pages/sensors.html", sensors=results, sensor_dict=keys.key_dict)
-    
-@app.route('/models', methods=["GET"])
-def models():
-    '''View for the Models Admin Page'''
-
-    query = '''
-    SELECT 
-        modelID, 
-        modelName
-    FROM 
-        Models
-    ORDER BY 
-        modelName DESC;
-    '''
-
-    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
-
-    if DEBUG:
-        logger.info(results)
-
-    return render_template("pages/models.html", models=results, model_dict=keys.key_dict)
-    
 @app.route('/forecasts', methods=["GET"])
 def forecasts():
     '''View for the Forecasts Admin Page'''
 
-    #TODO
-    # Add join(s) to view relevant data from other tables
-
     query = '''
-    SELECT
-        *
+    SELECT 
+        Forecasts.forecastID,
+        Dates.dateDateTime,
+        Forecasts.forecastTemperature2m,
+        Forecasts.forecastPrecipitation,
+        Forecasts.forecastWeatherCode,
+        Forecasts.forecastPressureMSL,
+        Forecasts.forecastWindSpeed10m,
+        Forecasts.forecastWindDirection10m,
+        Forecasts.forecastCape,
+        Models.modelName,
+        Locations.locationName,
+        Forecasts.forecastForDateTime
     FROM 
-        Forecasts;
+        Forecasts
+    JOIN 
+        Models ON Forecasts.forecastModelID = Models.modelID
+    JOIN 
+        Locations ON Forecasts.forecastLocationID = Locations.locationID
+    JOIN 
+        Dates ON Forecasts.forecastDateID = Dates.dateID;
     '''
 
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
@@ -395,6 +362,52 @@ def locations():
 
     return render_template("pages/locations.html", locations=results, location_dict=keys.key_dict)
 
+@app.route('/sensors', methods=["GET"])
+def sensors():
+    '''View for the Sensors Admin Page'''
+    query = '''
+    SELECT 
+        Sensors.sensorID,
+        Sensors.sensorName,
+        Sensors.sensorAPIKEY,
+        Sensors.sensorNumber,
+        Locations.locationLatitude,
+        Locations.locationLongitude,
+        Locations.locationAltitude
+    FROM
+        Sensors
+    JOIN
+        Locations ON Sensors.sensorLocationID = Locations.locationID;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/sensors.html", sensors=results, sensor_dict=keys.key_dict)
+    
+@app.route('/models', methods=["GET"])
+def models():
+    '''View for the Models Admin Page'''
+
+    query = '''
+    SELECT 
+        modelID, 
+        modelName
+    FROM 
+        Models
+    ORDER BY 
+        modelName DESC;
+    '''
+
+    results = db.execute_query(db_connection=db_connection, query=query).fetchall()
+
+    if DEBUG:
+        logger.info(results)
+
+    return render_template("pages/models.html", models=results, model_dict=keys.key_dict)
+
 @app.route('/dates', methods=["GET"])
 def dates():
     '''View for the Dates Admin Page'''
@@ -418,16 +431,22 @@ def readings():
     '''View for the Readings Admin Page'''
 
     query = '''
-    SELECT readingID, 
-        readingSensorID,
-        readingWindSpeed,
-        readingWindGust,
-        readingWindMin,
-        readingWindDirection,
-        readingTemperature,
-        readingDateID
+    SELECT 
+        Readings.readingID,
+        Sensors.sensorName,
+        Sensors.sensorNumber,
+        Readings.readingWindSpeed,
+        Readings.readingWindGust,
+        Readings.readingWindMin,
+        Readings.readingWindDirection,
+        Readings.readingTemperature,
+        Dates.dateDateTime
     FROM
-        Readings;
+        Readings
+    JOIN 
+        Sensors ON Readings.readingSensorID = Sensors.sensorID
+    JOIN 
+        Dates ON Readings.readingDateID = Dates.dateID;
     '''
 
     results = db.execute_query(db_connection=db_connection, query=query).fetchall()
@@ -440,6 +459,49 @@ def readings():
 ############
 # Update
 ############
+
+@app.route('/edit/forecast/<int:forecastID>', methods=['POST', 'GET'])
+def update_forecast(forecastID):
+    '''API Route to update a forecast'''
+
+    if request.method == "GET":
+
+        forecast_query = '''
+        SELECT 
+            * 
+        FROM 
+            Forecasts
+        INNER JOIN 
+            Locations ON Sensors.sensorLocationID = Locations.locationID
+        WHERE 
+            Sensors.sensorID = %(sensorID)s;
+        '''
+
+        models_query = '''
+        SELECT
+            modelID, modelName
+        FROM
+            models;
+        '''
+        models_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
+
+        locations_query = '''
+        SELECT
+            locationID, locationName
+        FROM
+            locations;
+        '''
+        locations_results = db.execute_query(db_connection=db_connection, query=locations_query).fetchall()
+
+        dates_query = '''
+        SELECT
+            dateID, dateDateTime
+        FROM
+            dates;
+        '''
+        dates_results = db.execute_query(db_connection=db_connection, query=dates_query).fetchall()
+
+    return render_template('edit/forecast.html', specific_forecast=result, dates=sample_dates, locations=sample_locations, models=sample_models)
 
 @app.route("/edit/sensor/<int:sensorID>", methods=["POST", "GET"])
 def update_sensor(sensorID):
@@ -466,7 +528,7 @@ def update_sensor(sensorID):
         if DEBUG:
             logger.info(f"edit sensor get: {results}")
 
-        return render_template("edit/sensor.html", specific_sensor=results)
+        return render_template("edit/editsensor.html", specific_sensor=results)
     
     elif request.method == "POST":
         sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}' \n WHERE sensorID='{sensorID}';"
@@ -497,12 +559,12 @@ def modeledit(modelID):
         query_results = db.execute_query(db_connection=db_connection, query=models_query).fetchall()
         if DEBUG:
             logger.info("edit model get: " + str(query_results))
-        return render_template("edit/model.html", specific_model=query_results)
+        return render_template("edit/editmodel.html", specific_model=query_results)
     
     elif request.method == "POST":
         if request.form['modelName'].upper() not in valid_models_list:
             flash("Not a recognized Weather Model!")
-            return redirect(f"/edit/model/{request.form['modelID']}")
+            return redirect(f"/edit/editmodel/{request.form['modelID']}")
         if DEBUG:
             logger.info(f"updating name for {request.form['modelID']} to: {request.form['modelName']}")
         model_query = f"UPDATE Models\nSET `modelName`='{request.form['modelName']}'\nWHERE Models.modelID = {modelID};"

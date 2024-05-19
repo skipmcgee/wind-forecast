@@ -1,51 +1,55 @@
 {% extends 'base.j2' %}
 {% block content %}
 <h4>{% block title %} Browse Models {% endblock %}</h4>
-<article>
+<div class="grid">
     <div></div>
-    {% for mesg in get_flashed_messages() %}
-    <h3>{{ mesg }}</h3>
-    {% endfor %}
-    <div></div>
-    <div id="modelTable" class="overflow-auto">
-        <table class="striped">
-            <caption>Current Models: </caption>
-            {% if models %}
-            <thead>
-                <tr>
-                    {% for key in models[0].keys() %}
-                    {% if key != 'modelID' %}
-                    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ model_dict[key] }}</th>
-                    {% endif %}
-                    {% endfor %}
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in models %}
-                <tr>
-                    {% for key in item.keys() %}
-                    {% if key != 'modelID' %}
-                    <td>{{item[key]}}</td>
-                    {% endif %}
-                    {% endfor %}
-                    <p></p>
-                    <td><a href="/edit/model/{{item.modelID}}" class="btn btn-default" method="get"><span
-                                class="material-icons">mode_edit</span></a></td>
-                    <td><a href="/delete/model/{{item.modelID}}" class="btn btn-default" method="post"><span
-                                class="material-icons">delete</span></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            {% endif %}
-        </table>
-        <div class="grid">
+    <div>
+        <article>
             <div></div>
-            <div><a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a></div>
+            {% for mesg in get_flashed_messages() %}
+            <h3>{{ mesg }}</h3>
+            {% endfor %}
             <div></div>
-        </div>
-
+            <div id="modelTable" class="overflow-auto">
+                <table class="striped">
+                    <caption>Current Models: </caption>
+                    {% if models %}
+                    <thead>
+                        <tr>
+                            {% for key in models[0].keys() %}
+                            {% if key != 'modelID' %}
+                            <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ model_dict[key] }}
+                            </th>
+                            {% endif %}
+                            {% endfor %}
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in models %}
+                        <tr>
+                            {% for key in item.keys() %}
+                            {% if key != 'modelID' %}
+                            <td>{{item[key]}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            <p></p>
+                            <td><a href="/edit/model/{{item.modelID}}" class="btn btn-default" method="get"><span
+                                        class="material-icons">mode_edit</span></a></td>
+                            <td><a href="/delete/model/{{item.modelID}}" class="btn btn-default" method="post"><span
+                                        class="material-icons">delete</span></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+                <div class="grid">
+                    <div><a href='/add/model'><input class="btn" type="button" value="Add a Model" method="get"></a></div>
+                </div>
+            </div>
+        </article>
     </div>
-</article>
+    <div></div>
+</div>
 {% endblock %}
