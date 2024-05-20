@@ -12,55 +12,39 @@
     <div>
         <article>
             <form method="POST" name="addForecast" action="/add/forecast">
-
+                <!--
                 <select name="dateID" aria-label="date" required>
                     <option selected disabled value="">Created Date/Time:</option>
                     {% for date in dates %}
                     <option value="{{date.dateID}}">{{date.dateDateTime}}</option>
                     {% endfor %}
                 </select>
-
-                <label for="forecastTemperature">Temperature (2m):</label>
-                <input type="number" step="0.01" id="forecastTemperature" name="forecastTemperature" value="0.00"
-                    required>
-
-                <label for="forecastPrecipitation">Precipitation:</label>
-                <input type="number" step="0.01" id="forecastPrecipitation" name="forecastPrecipitation" value="0.00"
-                    required>
-
-                <label for="forecastWeatherCode">Weather Code:</label>
-                <input type="text" id="forecastWeatherCode" name="forecastWeatherCode" value="0.0"
-                    required>
-
-                <label for="forecastPressureMSL">Pressure (MSL):</label>
-                <input type="number" id="forecastPressureMSL" name="forecastPressureMSL" value="0" required>
-
-                <label for="forecastWindSpeed">Wind Speed (10m):</label>
-                <input type="number" step="0.01" id="forecastWindSpeed" name="forecastWindSpeed" value="0.00" required>
-
-                <label for="forecastWindDirection">Wind Direction (10m):</label>
-                <input type="number" id="forecastWindDirection" name="forecastWindDirection" value="0" required>
-
-                <label for="forecastCape">CAPE:</label>
-                <input type="number" step="0.01" id="forecastCape" name="forecastCape" value="0.00" required>
-
+                -->
+                <label for="modelID">Pick a Weather Model:</label>
+                <select name="modelID" aria-label="modelID" required>
+                    {% for model in models %}
+                    <option value="{{model.modelID}}">{{model.modelName}}</option>
+                    {% endfor %}
+                </select>
+                <!--
+                <label for="locationID">Pick a Location:</label>
                 <select name="locationID" aria-label="locationID" required>
                     <option selected disabled value="">Location</option>
                     {% for location in locations %}
                     <option value="{{location.locationID}}">{{location.locationName}}</option>
                     {% endfor %}
                 </select>
-
-                <select name="modelID" aria-label="modelID">
-                    <option selected disabled value="">Model</option>
-                    {% for model in models %}
-                    <option value="{{model.modelID}}">{{model.modelName}}</option>
+                -->
+                <label for="sensorID">Pick a Sensor:</label>
+                <select name="sensorID" aria-label="sensorID" required>
+                    {% for sensor in sensors %}
+                    <option value="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
                     {% endfor %}
                 </select>
-
+                <!--
                 <label for="forecastForDateTime">Forecast Date/Time:</label>
                 <input type="datetime-local" id="forecastForDateTime" name="forecastForDateTime" value="" required>
-
+                -->
 
                 <button type="submit">Add Forecast</button>
             </form>

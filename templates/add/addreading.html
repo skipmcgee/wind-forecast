@@ -13,31 +13,10 @@
         <article>
             <form name="addReading" id="addReading" action="/add/reading" method="post">
                 <fieldset>
-                    <select name="sensor" aria-label="sensor" required>
-                        <option selected disabled value="">Select Sensor</option>
+                    <label for="sensorID">Select a Sensor:</label>
+                    <select name="sensorID" aria-label="sensorID" required>                        
                         {% for sensor in sensors %}
-                        <option>{{sensor.sensorName}}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="name">Wind Speed:</label>
-                    <input type="text" value="" class="form-control" id="readingWindSpeed" name="readingWindSpeed"
-                        pattern="[A-Za-z0-9\s]+" required>
-                    <label for="name">Wind Gust:</label>
-                    <input type="text" value="" class="form-control" id="readingWindGust" name="readingWindGust"
-                        pattern="[A-Za-z0-9\s]+" required>
-                    <label for="name">Wind Min:</label>
-                    <input type="text" value="" class="form-control" id="readingWindMin" name="readingWindMin"
-                        pattern="[A-Za-z0-9\s]+" required>
-                    <label for="name">Wind Direction:</label>
-                    <input type="text" value="" class="form-control" id="readingWindDirection"
-                        name="readingWindDirectionSpeed" pattern="[A-Za-z0-9\s]+" required>
-                    <label for="name">Wind Temperature:</label>
-                    <input type="text" value="" class="form-control" id="readingTemperature" name="readingTemperature"
-                        pattern="[A-Za-z0-9\s]+" required>
-                    <select name="date" aria-label="date" required>
-                        <option selected disabled value="">Date:</option>
-                        {% for date in dates %}
-                        <option>{{date.dateDateTime}}</option>
+                        <option value="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
                         {% endfor %}
                     </select>
                 </fieldset>
