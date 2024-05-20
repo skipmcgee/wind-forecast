@@ -1,7 +1,7 @@
 {% extends 'base.j2' %}
 
 {% block content %}
-<h4>{% block title %} Edit Reading #{{specific_reading[0].readingID}} {% endblock %}</h4>
+<h4>{% block title %} Edit Reading #{{specific_reading.readingID}} {% endblock %}</h4>
 <div></div>
 {% for mesg in get_flashed_messages() %}
 <h3>{{ mesg }}</h3>
@@ -17,10 +17,10 @@
                     <input type="hidden" value="{{specific_reading.readingID}}" class="form-control" id="readingID"
                         name="readingID" required>
                     <label for="readingSensorID">Weather Sensor:</label>
-                    <select name="readingSensorID" aria-label="sensor" id="readingSensorID" required>
+                    <select name="readingSensorID" aria-label="sensor" required>
                         {% for sensor in sensors %}
-                        {% if specific_reading[0].readingSensorID == sensor.sensorID %}
-                        <option selected value="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
+                        {% if specific_reading.readingSensorID == sensor.sensorID %}
+                        <option selected value="{{sensor.sensorID}}" default="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
                         {% else %}
                         <option value="{{sensor.sensorID}}">{{sensor.sensorName}}</option>
                         {% endif %}
@@ -48,7 +48,7 @@
                         id="readingTemperature" name="readingTemperature" required>
                     
                     <label for="readingDateID">Reading Date:</label>
-                    <select name="readingDateID" id="readingDateID" aria-label="date" required>
+                    <select name="readingDateID" aria-label="date" required>
                         {% for date in dates %}
                         {% if specific_reading.readingDateID == date.dateID %}
                         <option selected value="{{date.dateID}}">{{date.dateDateTime}}</option>

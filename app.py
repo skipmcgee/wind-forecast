@@ -685,18 +685,19 @@ def readingedit(readingID):
 
         sensors_query = '''
         SELECT
-            sensorID
+            sensorID,
             sensorName
         FROM
             Sensors;
         '''
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
-
+        print(str(sensors_results))
         return render_template("edit/editreading.html", specific_reading=query_results, dates=dates_results, sensors=sensors_results)
 
     elif request.method == "POST":
         if DEBUG:
-            logger.info(f"updating name for {request.form['readingID']}")
+            logger.info(f"updating reading for {request.form['readingID']}")
+        print(str(request.form))
         reading_query = f"""
         UPDATE Readings
         SET `readingSensorID`='{request.form['readingSensorID']}', `readingWindSpeed`='{request.form['readingWindSpeed']}', `readingWindGust`='{request.form['readingWindGust']}', `readingWindMin`='{request.form['readingWindMin']}', `readingWindDirection`='{request.form['readingWindDirection']}', `readingTemperature`='{request.form['readingTemperature']}', `readingDateID`='{request.form['readingDateID']}'
