@@ -16,19 +16,20 @@
                     <input type="hidden" value="{{specific_sensor[0].sensorID}}" class="form-control" id="sensorID"
                         name="sensorID" required>
 
-                    <label for="name">Sensor Name:</label>
+                    <label for="sensorName">Sensor Name:</label>
                     <input type="text" value="{{specific_sensor[0].sensorName}}" class="form-control" id="sensorName"
                         name="sensorName" pattern="[A-Za-z0-9\s]+" required>
 
-                    <label for="key">Sensor API Key:</label>
+                    <label for="sensorAPIKey">Sensor API Key:</label>
                     <input type="text" value="{{specific_sensor[0].sensorAPIKey}}" class="form-control"
                         id="sensorAPIKey" name="sensorAPIKey" required>
 
-                    <label for="number">Sensor Number:</label>
+                    <label for="sensorNumber">Sensor Number:</label>
                     <input type="number" id="sensorNumber" name="sensorNumber"
                         value="{{specific_sensor[0].sensorNumber}}">
-
-                    <select name="locationName" aria-label="locationName" required>
+                        
+                    <label for="locationID">Location:</label>
+                    <select name="locationID" aria-label="locationID" required>
                         <option selected value="{{specific_sensor[0].locationID}}">{{specific_sensor[0].locationName}}</option>
                         {% for location in locations %}
                             {% if location.locationName != specific_sensor[0].locationName %}

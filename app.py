@@ -725,22 +725,11 @@ def update_sensor(sensorID):
         return render_template("edit/editsensor.html", specific_sensor=sensor_results, locations=locations_results)
     
     elif request.method == "POST":
-        sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}' \n WHERE sensorID='{sensorID}';"
+        sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}', `sensorLocationID`='{request.form['locationID']}' \n WHERE sensorID='{sensorID}';"
         if DEBUG:
             logger.info("edit sensor post first query: " + sensor_query)
         query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
-        id_sensor_query = f"SELECT sensorLocationID FROM Sensors\n WHERE Sensors.sensorID='{sensorID}';"
-        if DEBUG:
-            logger.info("edit sensor post second query: " + id_sensor_query)
-        _sensorLocationID = db.execute_query(db_connection=db_connection, query=id_sensor_query).fetchall()
-        if DEBUG:
-            print(str(request.form))
-            logger.info("identified the sensorLocationID as: " + str(_sensorLocationID[0]['sensorLocationID']))
-        location_query = f"UPDATE Locations\nSET `locationName`='{request.form['locationName']}', `locationLatitude`='{request.form['locationLatitude']}', `locationLongitude`='{request.form['locationLongitude']}', `locationAltitude`='{request.form['locationAltitude']}' \nWHERE Locations.locationID='{_sensorLocationID[0]['sensorLocationID']}';"
-        if DEBUG:
-            logger.info("edit sensor post third query: " + location_query)
-        location_obj = db.execute_query(db_connection=db_connection, query=location_query)
-
+        
         return redirect("/sensors")
 
 @app.route("/edit/model/<int:modelID>", methods=["POST", "GET"])
