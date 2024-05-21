@@ -53,9 +53,9 @@ def root():
         return render_template("pages/index.html", sensors=sensors_results, today=str(today))
     elif request.method == "POST":
         if DEBUG:
-            logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
-        to_date_obj = datetime.strptime(request.form['todate'], str(date_format)).date()
-        from_date_obj = datetime.strptime(request.form['fromdate'], str(date_format)).date()
+            logger.info(f"today: {today}, fromdate: {request.form['fromDate']}, toDate: {request.form['toDate']}")
+        to_date_obj = datetime.strptime(request.form['toDate'], str(date_format)).date()
+        from_date_obj = datetime.strptime(request.form['fromDate'], str(date_format)).date()
         # validation 1) fromdate needs to be before todate
         if to_date_obj > today:
             flash("The To Date cannot be in the future!")
@@ -70,8 +70,8 @@ def root():
             return redirect("/")
         sensors_query = f"SELECT sensorName FROM Sensors\n WHERE sensorID='{request.form['sensorlist']}';"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchone()
-        info_dict['fromdate'] = request.form['fromdate']
-        info_dict['todate'] = request.form['todate']
+        info_dict['fromdate'] = request.form['fromDate']
+        info_dict['todate'] = request.form['toDate']
         info_dict['sensorlist'] = request.form['sensorlist']
         info_dict['sensorName'] = sensors_results['sensorName']
         logger.info("found info dict: " + str(info_dict))
