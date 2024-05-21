@@ -44,9 +44,9 @@ def dot_index():
 def root():
     '''View for the website index'''
 
-    now = datetime.now()
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     date_format = "%Y-%m-%d %H:%M:%S"
-    today = now.strftime(date_format)
+    today = datetime.strptime(now, str(date_format)).date()
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
@@ -54,8 +54,8 @@ def root():
     elif request.method == "POST":
         if DEBUG:
             logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
-        to_date_obj = datetime.strptime(request.form['todate'], '%Y-%m-%d %H:%M:%S').date()
-        from_date_obj = datetime.strptime(request.form['fromdate'], date_format).date()
+        to_date_obj = datetime.strptime(request.form['todate'], str(date_format)).date()
+        from_date_obj = datetime.strptime(request.form['fromdate'], str(date_format)).date()
         # validation 1) fromdate needs to be before todate
         if to_date_obj > today:
             flash("The To Date cannot be in the future!")
@@ -69,11 +69,11 @@ def root():
             flash("The From Date cannot be equal to the To Date!")
             return redirect("/")
         sensors_query = f"SELECT sensorName FROM Sensors\n WHERE sensorID='{request.form['sensorlist']}';"
-        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchall()
+        sensors_results = db.execute_query(db_connection=db_connection, query=sensors_query).fetchone()
         info_dict['fromdate'] = request.form['fromdate']
         info_dict['todate'] = request.form['todate']
         info_dict['sensorlist'] = request.form['sensorlist']
-        info_dict['sensorName'] = sensors_results[0]['sensorName']
+        info_dict['sensorName'] = sensors_results['sensorName']
         logger.info("found info dict: " + str(info_dict))
         return redirect("/results")
 
