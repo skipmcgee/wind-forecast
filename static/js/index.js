@@ -11,11 +11,34 @@
     let minutes = String(today.getMinutes()).padStart(2, '0');
     let dateTimeLocalFormat = (`${year}-${month}-${day}T${hours}:${minutes}`);
 
-    // Select toDate element
+    // Select document elements
     const toDate = document.getElementById('toDate');
+    const fromDate = document.getElementById('fromDate');
+    const submitButton = document.getElementById('submitButton');
 
     // Update max and value with the date
+    fromDate.max = dateTimeLocalFormat;
     toDate.max = dateTimeLocalFormat;
     toDate.value = dateTimeLocalFormat;
 
-    // If we want a minimum date then we need to subtract from date and add to the fromDate
+    function checkDates() {
+      const fromDateValue = fromDate.value;
+      const toDateValue = toDate.value;
+      
+      if (fromDateValue && toDateValue) {
+        const fromDateSelection = new Date(fromDateValue);
+        const toDateSelection = new Date(toDateValue);
+        if (fromDateSelection < toDateSelection) {
+          submitButton.disabled = false;
+        } else {
+          fromDate.value = '';
+          submitButton.disabled = true;
+          alert('The "From" date cannot be after the "To" date.');
+        }
+      } else {
+        submitButton.disabled = true;
+      }
+    }
+
+    fromDate.addEventListener('change', checkDates);
+    toDate.addEventListener('change', checkDates);
