@@ -53,14 +53,14 @@ def root():
         return render_template("pages/index.html", sensors=sensors_results, today=str(today))
     elif request.method == "POST":
 
-        from_date = request.form['fromDate']
-        to_date = request.form['toDate']
-
         if DEBUG:
-            logger.info(f"today: {today}, fromdate: {from_date}, todate: {to_date}")
+            logger.info(f"today: {today}, fromdate: {request.form['fromDate']}, todate: {request.form['toDate']}")
         
         # Added these checks on the Front end so we aren't sending uneccessary requests to the backend of the application
         '''
+        from_date = request.form['fromDate']
+        to_date = request.form['toDate']
+        
         to_date_obj = datetime.strptime(to_date, str(date_format)).date()
         from_date_obj = datetime.strptime(request.form['fromDate'], str(date_format)).date()
         # validation 1) fromdate needs to be before todate
