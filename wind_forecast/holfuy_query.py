@@ -4,7 +4,7 @@ import json
 from pprintjson import pprintjson as ppjson
 
 # local imports
-from app.sensor_credentials import Credentials
+from wind_forecast.sensor_credentials import Credentials
 
 async def fetch(session, url):
     async with session.get(url) as response:

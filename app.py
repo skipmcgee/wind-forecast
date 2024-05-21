@@ -10,10 +10,10 @@ import asyncio
 import pprint as pp
 
 # local imports
-from app.openmeteo_ecmwf_query import query_ecmwf
-from app.openmeteo_gfs_query import query_gfs
-from app.holfuy_query import fetch, gather_data
-from app.data import KeyTranslation
+from wind_forecast.openmeteo_ecmwf_query import query_ecmwf
+from wind_forecast.openmeteo_gfs_query import query_gfs
+from wind_forecast.holfuy_query import fetch, gather_data
+from wind_forecast.data import KeyTranslation
 
 # Configuration
 app = Flask(__name__)

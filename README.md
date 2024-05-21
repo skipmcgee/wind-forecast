@@ -33,3 +33,6 @@ wind forecast data
 ### To actually run the app:
 1) `source venv/bin/activate` or if on Windows `venv\Scripts\activate`
 2) `python3 app.py`
+
+### Syntax to run via Gunicorn:
+`gunicorn --config gunicorn.py wsgi:app`
