@@ -22,10 +22,9 @@
                     <label for="number">Sensor Number:</label>
                     <input type="number" id="sensorNumber" name="sensorNumber" value="1151">
                     <select name="location" aria-label="location" required>
-                        <option selected disabled value="">Location:</option>
+                        <option selected disabled >Location:</option>
                         {% for location in locations %}
-                        <option>{{location.locationName}}</option>
-
+                        <option value="{{location.locationID}}">{{location.locationName}}</option>
                         {% endfor %}
                     </select>
                 </fieldset>

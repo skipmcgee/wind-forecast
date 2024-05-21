@@ -54,8 +54,8 @@ def root():
     elif request.method == "POST":
         if DEBUG:
             logger.info(f"today: {today}, fromdate: {request.form['fromdate']}, todate: {request.form['todate']}")
-        to_date_obj = datetime.strptime(request.form['todate'], '%Y-%m-%d').date()
-        from_date_obj = datetime.strptime(request.form['fromdate'], '%Y-%m-%d').date()
+        to_date_obj = datetime.strptime(request.form['todate'], '%Y-%m-%d %H:%M:%S').date()
+        from_date_obj = datetime.strptime(request.form['fromdate'], date_format).date()
         # validation 1) fromdate needs to be before todate
         if to_date_obj > today:
             flash("The To Date cannot be in the future!")
@@ -241,7 +241,11 @@ def add_sensor():
     '''API Route to add a sensor'''
 
     if request.method == "GET":
-        return render_template("add/addsensor.html")
+        location_query = f"SELECT * FROM Locations;"
+        if DEBUG: 
+            logger.info("add sensor get: " + location_query)
+        location_results = db.execute_query(db_connection=db_connection, query=location_query).fetchall()
+        return render_template("add/addsensor.html", locations=location_results)
 
     elif request.method == "POST":
 
@@ -287,7 +291,7 @@ def add_date():
     '''API Route to add a date'''
 
     if request.method == "GET":
-        return render_template("add/date.html")
+        return render_template("add/adddate.html")
 
     elif request.method == "POST":
         if DEBUG:
