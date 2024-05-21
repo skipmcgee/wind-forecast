@@ -53,7 +53,7 @@ def root():
         return render_template("pages/index.html", sensors=sensors_results, today=str(today))
     elif request.method == "POST":
         if DEBUG:
-            logger.info(f"today: {today}, fromdate: {request.form['fromDate']}, toDate: {request.form['toDate']}")
+            logger.info(f"today: {today}, fromdate: {request.form['fromDate']}, todate: {request.form['toDate']}")
         to_date_obj = datetime.strptime(request.form['toDate'], str(date_format)).date()
         from_date_obj = datetime.strptime(request.form['fromDate'], str(date_format)).date()
         # validation 1) fromdate needs to be before todate
