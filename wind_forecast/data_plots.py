@@ -8,7 +8,8 @@ def wind_speed(pandas_df: object):
         x='',
         y=''
         color='red',
-        ax=ax,)
+        ax=ax,
+        )
     plt.title('Wind Speed Line Plot')
     plt.xlabel('')
     plt.ylabel('')
