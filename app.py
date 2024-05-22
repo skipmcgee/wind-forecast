@@ -186,7 +186,7 @@ def add_forecast():
         sensor_results = db.execute_query(db_connection=db_connection, query=sensor_query).fetchone()
         if DEBUG:
             logger.info("add forecast post sensor results: " + str(sensor_results))
-        if str(sensor_results['sensorID']) not in current_supported_sensor_list:
+        if use_sensorID not in current_supported_sensor_list:
             flash(f"This sensor is not currently supported!")
             return redirect("/add/forecast")
         if use_model_name == "ECMWF":
