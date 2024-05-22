@@ -57,16 +57,21 @@
                 </select>
                 <p></p>
                 <p>Select a Start Date:</p>
-                <input type="datetime" id="fromdate" name="fromdate" required>
+                <input type="datetime-local" id="fromDate" name="fromDate" required>
                 <p></p>
                 <p>Select an End Date:</p>
-                <input type="datetime" id="todate" name="todate" value="{{today}}" required>
+                <input type="datetime-local" id="toDate" name="toDate" required>
                 <p></p>
-                <button type="submit">Submit</button>
+                <button type="submit" id="submitButton" disabled>Submit</button>
             </form>
         </article>
     </div>
     <div></div>
 </div>
 <div></div>
+
+{% block javascript %}
+<script type="text/javascript" src="{{ url_for('static',filename='js/index.js') }}"></script>
+{% endblock javascript %}
+
 {% endblock %}
