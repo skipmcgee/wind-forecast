@@ -1,7 +1,15 @@
 #!/bin/env python3
 import logging
 from markupsafe import Markup, escape
-from flask import Flask, render_template, json, request, redirect, flash, url_for
+from flask import (
+    Flask,
+    render_template,
+    json,
+    request,
+    redirect,
+    flash,
+    url_for,
+)
 from flask_mysqldb import MySQL
 import os
 import database.db_connector as db
@@ -118,7 +126,9 @@ def results():
     if DEBUG:
         logger.info("results info_dict: " + str(info_dict))
     if len(info_dict) == 0:
-        logger.error("results info_dict was not created when resource was requested")
+        logger.error(
+            "results info_dict was not created when resource was requested"
+        )
         return redirect("/")
     forecasts_query = f"SELECT forecastID, forecastForDateTime, forecastDateID, forecastTemperature2m, forecastPrecipitation, forecastWeatherCode, forecastPressureMSL, forecastWindSpeed10m, forecastWindDirection10m, forecastCape FROM Forecasts\nJOIN Models ON Forecasts.forecastModelID = Models.modelID\nJOIN Locations ON Forecasts.forecastLocationID = Locations.locationID\nWHERE ( forecastForDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Locations.locationID='{info_dict['sensorlist']}' );"
     if DEBUG:
@@ -146,16 +156,22 @@ def results():
 def library():
     if request.method == "GET":
         sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationName FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
-        sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
+        sensor_obj = db.execute_query(
+            db_connection=db_connection, query=sensor_query
+        )
         sensor_results = sensor_obj.fetchall()
         if DEBUG:
             logger.info(sensor_results)
         model_query = f"SELECT * FROM Models\n ORDER BY modelName DESC;"
-        model_obj = db.execute_query(db_connection=db_connection, query=model_query)
+        model_obj = db.execute_query(
+            db_connection=db_connection, query=model_query
+        )
         model_results = model_obj.fetchall()
         if DEBUG:
             logger.info(model_results)
-        locations_query = f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
+        locations_query = (
+            f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
+        )
         locations_obj = db.execute_query(
             db_connection=db_connection, query=locations_query
         )
@@ -237,7 +253,9 @@ def add_forecast():
                 + " and sensor: "
                 + use_sensorID
             )
-        model_query = f"SELECT modelName from Models\n WHERE modelID='{use_modelID}';"
+        model_query = (
+            f"SELECT modelName from Models\n WHERE modelID='{use_modelID}';"
+        )
         model_results = db.execute_query(
             db_connection=db_connection, query=model_query
         ).fetchone()
@@ -246,24 +264,31 @@ def add_forecast():
             flash(f"This model is not currently supported!")
             return redirect("/add/forecast")
         if DEBUG:
-            logger.info("add forecast post model results: " + str(model_results))
+            logger.info(
+                "add forecast post model results: " + str(model_results)
+            )
         sensor_query = f"SELECT * from Sensors\nJOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n WHERE sensorID='{use_sensorID}';"
         sensor_results = db.execute_query(
             db_connection=db_connection, query=sensor_query
         ).fetchone()
         if DEBUG:
-            logger.info("add forecast post sensor results: " + str(sensor_results))
+            logger.info(
+                "add forecast post sensor results: " + str(sensor_results)
+            )
         if use_sensorID not in current_supported_sensor_list:
             flash(f"This sensor is not currently supported!")
             return redirect("/add/forecast")
         if use_model_name == "ECMWF":
             ecmwf = query_ecmwf(
-                sensor_results["locationLatitude"], sensor_results["locationLongitude"]
+                sensor_results["locationLatitude"],
+                sensor_results["locationLongitude"],
             )
             forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
             row_count = len(ecmwf.index)
             for index, row in ecmwf.iterrows():
-                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
+                logger.info(
+                    f"index: {index}, row: {row}, values: {row['date']}"
+                )
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -286,12 +311,15 @@ def add_forecast():
 
         elif use_model_name == "GFS":
             gfs = query_gfs(
-                sensor_results["locationLatitude"], sensor_results["locationLongitude"]
+                sensor_results["locationLatitude"],
+                sensor_results["locationLongitude"],
             )
             forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
             row_count = len(gfs.index)
             for index, row in gfs.iterrows():
-                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
+                logger.info(
+                    f"index: {index}, row: {row}, values: {row['date']}"
+                )
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -402,7 +430,9 @@ def add_model():
         model_update = f"INSERT INTO `Models` (modelName)\n VALUES ('{request.form['modelName'].upper()}');"
         if DEBUG:
             logger.info("add model post query: " + model_update)
-        model_obj = db.execute_query(db_connection=db_connection, query=model_update)
+        model_obj = db.execute_query(
+            db_connection=db_connection, query=model_update
+        )
         return redirect("/models")
 
 
@@ -425,7 +455,9 @@ def add_date():
         date_query = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{request.form['dateDateTime']}');"
         if DEBUG:
             logger.info("add date post first query: " + date_query)
-        date_obj = db.execute_query(db_connection=db_connection, query=date_query)
+        date_obj = db.execute_query(
+            db_connection=db_connection, query=date_query
+        )
         return redirect("/dates")
 
 
@@ -465,13 +497,13 @@ def add_reading():
         new_date = now + timedelta(hours=1)
         new_date_str = new_date.strftime(date_format)
         old_date_str = old_date.strftime(date_format)
-        date_insert = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{datetime_str}');"
+        date_insert = (
+            f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{datetime_str}');"
+        )
         date_results = db.execute_query(
             db_connection=db_connection, query=date_insert
         ).fetchall()
-        date_get_id = (
-            f"SELECT `dateID` FROM Dates\n WHERE `dateDateTime`='{datetime_str}';"
-        )
+        date_get_id = f"SELECT `dateID` FROM Dates\n WHERE `dateDateTime`='{datetime_str}';"
         date_id_results = db.execute_query(
             db_connection=db_connection, query=date_get_id
         ).fetchall()
@@ -558,7 +590,9 @@ def forecasts():
         logger.info(forecasts_results)
 
     return render_template(
-        "pages/forecasts.html", forecasts=forecasts_results, forecast_dict=keys.key_dict
+        "pages/forecasts.html",
+        forecasts=forecasts_results,
+        forecast_dict=keys.key_dict,
     )
 
 
@@ -585,7 +619,9 @@ def locations():
         logger.info(locations_results)
 
     return render_template(
-        "pages/locations.html", locations=locations_results, location_dict=keys.key_dict
+        "pages/locations.html",
+        locations=locations_results,
+        location_dict=keys.key_dict,
     )
 
 
@@ -700,7 +736,9 @@ def readings():
         logger.info(readings_results)
 
     return render_template(
-        "pages/readings.html", readings=readings_results, reading_dict=keys.key_dict
+        "pages/readings.html",
+        readings=readings_results,
+        reading_dict=keys.key_dict,
     )
 
 
@@ -795,7 +833,9 @@ def update_forecast(forecastID):
             "forecastWeatherCode": request.form.get("forecastWeatherCode"),
             "forecastPressureMSL": request.form.get("forecastPressureMSL"),
             "forecastWindSpeed10m": request.form.get("forecastWindSpeed"),
-            "forecastWindDirection10m": request.form.get("forecastWindDirection"),
+            "forecastWindDirection10m": request.form.get(
+                "forecastWindDirection"
+            ),
             "forecastCape": request.form.get("forecastCape"),
             "forecastLocationID": request.form.get("locationID"),
             "forecastModelID": model_id,
@@ -911,7 +951,9 @@ def readingedit(readingID):
         """
         if DEBUG:
             logger.info("edit reading post: " + reading_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=reading_query)
+        query_obj = db.execute_query(
+            db_connection=db_connection, query=reading_query
+        )
 
         return redirect("/readings")
 
@@ -965,7 +1007,9 @@ def update_sensor(sensorID):
         sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}', `sensorLocationID`='{request.form['locationID']}' \n WHERE sensorID='{sensorID}';"
         if DEBUG:
             logger.info("edit sensor post first query: " + sensor_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
+        query_obj = db.execute_query(
+            db_connection=db_connection, query=sensor_query
+        )
 
         return redirect("/sensors")
 
@@ -976,13 +1020,17 @@ def modeledit(modelID):
 
     modelID = escape(modelID)
     if request.method == "GET":
-        models_query = f"SELECT * FROM Models\nWHERE Models.modelID = {modelID};"
+        models_query = (
+            f"SELECT * FROM Models\nWHERE Models.modelID = {modelID};"
+        )
         query_results = db.execute_query(
             db_connection=db_connection, query=models_query
         ).fetchall()
         if DEBUG:
             logger.info("edit model get: " + str(query_results))
-        return render_template("edit/editmodel.html", specific_model=query_results)
+        return render_template(
+            "edit/editmodel.html", specific_model=query_results
+        )
 
     elif request.method == "POST":
         if request.form["modelName"].upper() not in valid_models_list:
@@ -995,7 +1043,9 @@ def modeledit(modelID):
         model_query = f"UPDATE Models\nSET `modelName`='{request.form['modelName']}'\nWHERE Models.modelID = {modelID};"
         if DEBUG:
             logger.info("edit model post: " + model_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=model_query)
+        query_obj = db.execute_query(
+            db_connection=db_connection, query=model_query
+        )
 
         return redirect("/library")
 
@@ -1012,7 +1062,9 @@ def dateedit(dateID):
         ).fetchall()
         if DEBUG:
             logger.info("edit date get: " + str(query_results))
-        return render_template("edit/editdate.html", specific_date=query_results)
+        return render_template(
+            "edit/editdate.html", specific_date=query_results
+        )
 
     elif request.method == "POST":
         if DEBUG:
@@ -1024,7 +1076,9 @@ def dateedit(dateID):
         """
         if DEBUG:
             logger.info("edit date post: " + date_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=date_query)
+        query_obj = db.execute_query(
+            db_connection=db_connection, query=date_query
+        )
 
         return redirect("/dates")
 
@@ -1035,9 +1089,7 @@ def locationedit(locationID):
 
     locationID = escape(locationID)
     if request.method == "GET":
-        locations_query = (
-            f"SELECT * FROM Locations\nWHERE Locations.locationID = {locationID};"
-        )
+        locations_query = f"SELECT * FROM Locations\nWHERE Locations.locationID = {locationID};"
         query_results = db.execute_query(
             db_connection=db_connection, query=locations_query
         ).fetchall()
@@ -1057,7 +1109,9 @@ def locationedit(locationID):
         """
         if DEBUG:
             logger.info("edit location post: " + location_query)
-        query_obj = db.execute_query(db_connection=db_connection, query=location_query)
+        query_obj = db.execute_query(
+            db_connection=db_connection, query=location_query
+        )
 
         return redirect("/locations")
 
@@ -1107,7 +1161,9 @@ def delete_sensor(sensorID):
     """
 
     db.execute_query(
-        db_connection=db_connection, query=query, query_params={"sensorID": sensorID}
+        db_connection=db_connection,
+        query=query,
+        query_params={"sensorID": sensorID},
     )
 
     flash(f"Successfully deleted sensor!")
@@ -1130,7 +1186,9 @@ def delete_model(modelID):
     """
 
     db.execute_query(
-        db_connection=db_connection, query=query, query_params={"modelID": modelID}
+        db_connection=db_connection,
+        query=query,
+        query_params={"modelID": modelID},
     )
 
     flash(f"Successfully deleted model!")
@@ -1153,7 +1211,9 @@ def delete_reading(readingID):
     """
 
     db.execute_query(
-        db_connection=db_connection, query=query, query_params={"readingID": readingID}
+        db_connection=db_connection,
+        query=query,
+        query_params={"readingID": readingID},
     )
 
     flash(f"Successfully deleted reading!")
@@ -1201,7 +1261,9 @@ def delete_date(dateID):
     """
 
     db.execute_query(
-        db_connection=db_connection, query=query, query_params={"dateID": dateID}
+        db_connection=db_connection,
+        query=query,
+        query_params={"dateID": dateID},
     )
 
     flash(f"Successfully deleted date!")

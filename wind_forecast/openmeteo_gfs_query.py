@@ -9,7 +9,9 @@ import pprint
 
 def query_gfs(query_lat: float, query_long: float) -> tuple:
 
-    print(f"query_gfs started for lat: {str(query_lat)}, long: {str(query_long)}")
+    print(
+        f"query_gfs started for lat: {str(query_lat)}, long: {str(query_long)}"
+    )
 
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession(".cache", expire_after=3600)
@@ -78,7 +80,12 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
         "wind_speed_unit": "mph",
         "precipitation_unit": "inch",
         "timezone": "America/Denver",
-        "models": ["gfs_seamless", "gfs_global", "gfs_hrrr", "gfs_graphcast025"],
+        "models": [
+            "gfs_seamless",
+            "gfs_global",
+            "gfs_hrrr",
+            "gfs_graphcast025",
+        ],
     }
     responses = openmeteo.weather_api(url, params=params)
 
