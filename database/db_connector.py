@@ -38,7 +38,7 @@ class DBConnector:
             self.conn.commit()
 
         except (AttributeError, MySQLdb.OperationalError):
-            self._connect_to_db()
+            self.connect_to_db()
             cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(query, query_params)
             self.conn.commit()
