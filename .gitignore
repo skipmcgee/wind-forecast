@@ -5,3 +5,4 @@ database/.env
 venv
 .cache.sqlite
 __pycache__
+*.log
