@@ -11,13 +11,13 @@ user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
 
-# https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
+# Source: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
 
 class DBConnector:
     '''DB Connector Class'''
     conn = None
     
-    def _connect_to_database(self, host=host, user=user, passwd=passwd, db=db):
+    def connect_to_db(self, host=host, user=user, passwd=passwd, db=db):
         """Connects to a database and returns a database objects"""
 
         self.conn = MySQLdb.connect(host, user, passwd, db)
@@ -38,7 +38,7 @@ class DBConnector:
             self.conn.commit()
 
         except (AttributeError, MySQLdb.OperationalError):
-            self._connect_to_database()
+            self._connect_to_db()
             cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(query, query_params)
             self.conn.commit()
@@ -107,9 +107,16 @@ def execute_query(db_connection=None, query=None, query_params=()):
 if __name__ == '__main__':
     print("Executing a sample query on the database")
     db = connect_to_database()
+    db2 = DBConnector()
     query = "SELECT * from sensors;"
-    results = execute_query(db, query)
+    results1 = execute_query(db, query)
+    sensorID = 1
+    query = f"SELECT * from sensors WHERE sensorID = {sensorID};"
+    results2 = db2._execute_query(query)
     print(f"Printing results of {query}")
 
-    for r in results.fetchall():
+    for r in results1.fetchall():
+        print(r)
+    print("######")
+    for r in results2.fetchall():
         print(r)
