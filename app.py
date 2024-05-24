@@ -27,7 +27,12 @@ from wind_forecast.data import KeyTranslation
 app = Flask(__name__)
 app.secret_key = "mc)kNIk4cbIZQ,@jUve-Q}2^T3em$p"
 db_connection = db.connect_to_database()
+
+
+# Logger
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s : %(message)s') #filename='app.log', 
 logger = logging.getLogger("werkzeug")
+
 keys = KeyTranslation()
 entities_list = [
     "models",
@@ -58,11 +63,13 @@ DEBUG = True
 
 @app.route("/index")
 def plain_index():
+    app.logger.info('Index page accessed')
     return redirect("/")
 
 
 @app.route("/index.html")
 def dot_index():
+    app.logger.info('Index.html page accessed')
     return redirect("/")
 
 
@@ -71,62 +78,56 @@ def root():
     """View for the website index"""
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    app.logger.debug(f'Getting current time: {now}')
     date_format = "%Y-%m-%d %H:%M:%S"
     today = datetime.strptime(now, str(date_format)).date()
+    app.logger.debug(f'Getting the date: {today}')
+
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(
             db_connection=db_connection, query=sensors_query
         ).fetchall()
+        app.logger.debug(f'Retrieved Sensors: {sensors_results}')
         return render_template(
             "pages/index.html", sensors=sensors_results, today=str(today)
         )
+    
     elif request.method == "POST":
 
-        if DEBUG:
-            logger.info(
-                f"today: {today}, fromdate: {request.form['fromDate']}, todate: {request.form['toDate']}"
-            )
+        app.logger.debug(f"today: {today}, fromdate: {request.form['fromDate']}, todate: {request.form['toDate']}")
 
-        # Added these checks on the Front end so we aren't sending uneccessary requests to the backend of the application
-        """
-        from_date = request.form['fromDate']
-        to_date = request.form['toDate']
+        query_params = {
+            'sensorID': request.form['sensorlist']
+            }
         
-        to_date_obj = datetime.strptime(to_date, str(date_format)).date()
-        from_date_obj = datetime.strptime(request.form['fromDate'], str(date_format)).date()
-        # validation 1) fromdate needs to be before todate
-        if to_date > today:
-            flash("The To Date cannot be in the future!")
-            return redirect("/")
-        # validation 2) todate can't be later than today
-        elif from_date > to_date:
-            flash("The From Date cannot be greater than the To Date!")
-            return redirect("/")
-        # validation 3) from and to dates cannot be equal
-        elif from_date == to_date:
-            flash("The From Date cannot be equal to the To Date!")
-            return redirect("/")
+        sensors_query = """
+            SELECT 
+                sensorName
+            FROM 
+                Sensors
+            WHERE
+                sensorID=%(sensorID)s;
         """
-
-        sensors_query = f"SELECT sensorName FROM Sensors\n WHERE sensorID='{request.form['sensorlist']}';"
+        
         sensors_results = db.execute_query(
-            db_connection=db_connection, query=sensors_query
+            db_connection=db_connection, query=sensors_query, query_params=query_params
         ).fetchone()
+
         info_dict["fromdate"] = request.form["fromDate"]
         info_dict["todate"] = request.form["toDate"]
         info_dict["sensorlist"] = request.form["sensorlist"]
         info_dict["sensorName"] = sensors_results["sensorName"]
-        logger.info("found info dict: " + str(info_dict))
+        app.logger.debug(f"found info dict: {str(info_dict)}")
         return redirect("/results")
 
 
 @app.route("/results", methods=["GET"])
 def results():
-    if DEBUG:
-        logger.info("results info_dict: " + str(info_dict))
+
+    app.logger.debug(f"results info_dict: {str(info_dict)}")
     if len(info_dict) == 0:
-        logger.error(
+        app.logger.error(
             "results info_dict was not created when resource was requested"
         )
         return redirect("/")
@@ -318,8 +319,7 @@ def add_forecast():
             row_count = len(gfs.index)
             for index, row in gfs.iterrows():
                 logger.info(
-                    f"index: {index}, row: {row}, values: {row['date']}"
-                )
+                    f"index: {index}, row: {row}, values: {row['date']}")
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -357,14 +357,26 @@ def add_location():
         return render_template("add/addlocation.html")
 
     elif request.method == "POST":
-        if DEBUG:
-            logger.info(str(request.form))
-        location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
-        if DEBUG:
-            logger.info("add sensor post first query: " + location_query)
-        location_obj = db.execute_query(
-            db_connection=db_connection, query=location_query
+        app.logger.debug(str(request.form))
+        query_params = {
+            'locationName': request.form['locationName'],
+            'locationLatitude': request.form['locationLatitude'],
+            'locationLongitude': request.form['locationLongitude'],
+            'locationAltitude': request.form['locationAltitude'],
+        }
+        
+        location_query = """
+        INSERT INTO
+            Locations (locationName, locationLatitude, locationLongitude, locationAltitude)
+        VALUES
+            (%(locationName)s, %(locationLatitude)s, %(locationLongitude)s, %(locationAltitude)s);
+        """
+
+        db.execute_query(
+            db_connection=db_connection, query=location_query, query_params=query_params
         )
+        app.logger.debug(f"Location \"{request.form['locationName']}\" added.")
+
         return redirect("/locations")
 
 
