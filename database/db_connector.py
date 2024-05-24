@@ -11,7 +11,39 @@ user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
 
+# https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
 
+class DBConnector:
+    '''DB Connector Class'''
+    conn = None
+    
+    def _connect_to_database(self, host=host, user=user, passwd=passwd, db=db):
+        """Connects to a database and returns a database objects"""
+
+        self.conn = MySQLdb.connect(host, user, passwd, db)
+
+    def _execute_query(self, query=None, query_params=()):
+        """
+        executes a given SQL query on the given db connection and returns a Cursor object
+
+        db_connection: a MySQLdb connection object created by connect_to_database()
+        query: string containing SQL query
+
+        returns: A Cursor object as specified at https://www.python.org/dev/peps/pep-0249/#cursor-objects.
+        You need to run .fetchall() or .fetchone() on that object to actually acccess the results.
+        """
+        try:
+            cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(query, query_params)
+            self.conn.commit()
+
+        except (AttributeError, MySQLdb.OperationalError):
+            self._connect_to_database()
+            cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(query, query_params)
+            self.conn.commit()
+        return cursor
+    
 def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """
     connects to a database and returns a database objects
@@ -44,6 +76,8 @@ def execute_query(db_connection=None, query=None, query_params=()):
 
     print("Executing %s with %s" % (query, query_params))
 
+    # Referenced: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
+    # Modified the class based version to fit within the existing functions
     try:
         cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query, query_params)
@@ -69,3 +103,13 @@ def execute_query(db_connection=None, query=None, query_params=()):
     # changes will be committed!
     #db_connection.commit()
     return cursor
+
+if __name__ == '__main__':
+    print("Executing a sample query on the database")
+    db = connect_to_database()
+    query = "SELECT * from sensors;"
+    results = execute_query(db, query)
+    print(f"Printing results of {query}")
+
+    for r in results.fetchall():
+        print(r)
