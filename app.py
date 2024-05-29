@@ -438,7 +438,7 @@ def add_model():
             logger.info("add model post: " + request.form["modelName"].upper())
         if request.form["modelName"].upper() not in valid_models_list:
             flash("Not a recognized Weather Model!")
-            return render_template("add/model.html")
+            return render_template("add/addmodel.html")
         model_update = f"INSERT INTO `Models` (modelName)\n VALUES ('{request.form['modelName'].upper()}');"
         if DEBUG:
             logger.info("add model post query: " + model_update)
