@@ -13,7 +13,7 @@ SET AUTOCOMMIT = 0;
 DROP TABLE IF EXISTS `Models` ;
 
 CREATE TABLE IF NOT EXISTS `Models` (
-  `modelID` INT NOT NULL AUTO_INCREMENT,
+  `modelID` INT NOT NULL,
   `modelName` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`modelID`),
   UNIQUE INDEX `modelID_UNIQUE` (`modelID` ASC) VISIBLE)
@@ -151,14 +151,11 @@ COMMENT = 'The actual measured sensor reading values.';
 
 INSERT
 	INTO
-	`Models` (modelName)
+	`Models` (modelID, modelName)
 VALUES 
-	('ECMWF'),
-	('HRRR'),
-	('GFS'),
-	('ICON'),
-	('MBLUE'),
-	('NAM');
+	(1, 'ECMWF'),
+	(2, 'HRRR'),
+	(3, 'GFS');
 
 -- -----------------------------------------------------
 -- Insert `Locations`

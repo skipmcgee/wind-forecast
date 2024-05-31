@@ -49,6 +49,15 @@ valid_models_list = [
     "NAM",
     "ICON",
 ]
+valid_models_tuple = (
+    { 'modelID': 1, 'modelName': 'ECMWF', },
+    { 'modelID': 2, 'modelName': 'HRRR', },
+    { 'modelID': 3, 'modelName': 'GFS', },
+    { 'modelID': 4, 'modelName': 'ICON', },
+    { 'modelID': 5, 'modelName': 'MBLUE', },
+    { 'modelID': 6, 'modelName': 'NAM', },
+)
+
 current_supported_model_list = ["ECMWF", "GFS"]
 current_supported_sensor_list = [
     "1",
@@ -438,15 +447,44 @@ def add_model():
     """API Route to add a model"""
 
     if request.method == "GET":
-        return render_template("add/addmodel.html")
+        can_add_list = list()
+        removals_list = valid_models_list[::]
+        get_models = "SELECT * FROM Models;"
+        models_obj = db.execute_query(
+            db_connection=db_connection, query=get_models
+        ).fetchall()
+        for model in models_obj:
+            removals_list.remove(model['modelName'])
+        for modelname in removals_list:
+            print(modelname)
+            for model_dict in valid_models_tuple:
+                print(str(model_dict))
+                if model_dict['modelName'] == modelname:
+                    can_add_list.append({ "modelID": model_dict['modelID'], "modelName": modelname, })
+        print(can_add_list)
+        if len(can_add_list) == 0:
+            can_add_list.append({ "modelID": 0, "modelName": "No more weather models to add", })
+        return render_template("add/addmodel.html", add_models_list=can_add_list)
 
     elif request.method == "POST":
+        modelname = str()
         if DEBUG:
-            logger.info("add model post: " + request.form["modelName"].upper())
-        if request.form["modelName"].upper() not in valid_models_list:
-            flash("Not a recognized Weather Model!")
-            return render_template("add/addmodel.html")
-        model_update = f"INSERT INTO `Models` (modelName)\n VALUES ('{request.form['modelName'].upper()}');"
+            logger.info("add model post: " + request.form["modelID"])
+        if request.form["modelID"] == 0:
+            return redirect("/models")
+        for model_dict in valid_models_tuple:
+            print(request.form['modelID'])
+            print(model_dict)
+            if str(model_dict['modelID']) == str(request.form['modelID']):
+                print("Yes!")
+                modelname = model_dict['modelName']
+                if modelname.upper() not in valid_models_list:
+                    flash("Not a recognized Weather Model!")
+                    return render_template("add/addmodel.html")
+        if len(modelname) == 0:
+            flash("No more models to add!")
+            return redirect("/models")
+        model_update = f"INSERT INTO `Models` (modelID, modelName)\n VALUES ('{request.form['modelID']}', '{modelname.upper()}');"
         if DEBUG:
             logger.info("add model post query: " + model_update)
         model_obj = db.execute_query(
