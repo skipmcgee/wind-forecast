@@ -18,6 +18,7 @@
                     <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key_dict[key] }}</th>
                     {% endif %}
                     {% endfor %}
+                    <th>Edit</th>
                     <th>Delete</th>
                 </tr>
             <tbody>
@@ -28,7 +29,10 @@
                     <td>{{item[key]}}</td>
                     {% endif %}
                     {% endfor %}
-                    <td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"><span
+                    <td><a href="/edit/forecast/{{item.forecastID}}" class="btn btn-default" method="get"><span
+                            class="material-icons">mode_edit</span></a></td>
+                    <td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"
+                            onclick="return confirm('Are you sure you want to delete this forecast?')"><span
                                 class="material-icons">delete</span></a></td>
                 </tr>
                 {% endfor %}
@@ -46,21 +50,25 @@
             <thead>
                 <tr>
                     {% for key in readings[0].keys() %}
-                    {% if key != 'readingDateID' and key != 'readingSensorID' %}
+                    {% if key != 'readingID' and key != 'readingDateID' and key != 'readingSensorID' %}
                     <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key_dict[key] }}</th>
                     {% endif %}
                     {% endfor %}
+                    <th>Edit</th>
                     <th>Delete</th>
                 </tr>
             <tbody>
                 {% for item in readings %}
                 <tr>
                     {% for key in item.keys() %}
-                    {% if key != 'readingDateID' and key != 'readingSensorID' %}
+                    {% if key != 'readingID' and key != 'readingDateID' and key != 'readingSensorID' %}
                     <td>{{item[key]}}</td>
                     {% endif %}
                     {% endfor %}
-                    <td><a href="/delete/reading/{{item.readingID}}" class="btn btn-default" method="post"><span
+                    <td><a href="/edit/reading/{{item.readingID}}" class="btn btn-default" method="get"><span
+                        class="material-icons">mode_edit</span></a></td>
+                    <td><a href="/delete/reading/{{item.readingID}}" class="btn btn-default" method="post"
+                            onclick="return confirm('Are you sure you want to delete this reading?')"><span
                                 class="material-icons">delete</span></a></td>
                 </tr>
                 {% endfor %}

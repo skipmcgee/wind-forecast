@@ -58,7 +58,7 @@ DROP TABLE IF EXISTS `Forecasts` ;
 
 CREATE TABLE IF NOT EXISTS `Forecasts` (
   `forecastID` INT NOT NULL AUTO_INCREMENT,
-  `forecastDateID` INT NOT NULL,
+  `forecastDateID` INT,
   `forecastTemperature2m` FLOAT NOT NULL,
   `forecastPrecipitation` FLOAT NOT NULL,
   `forecastWeatherCode` FLOAT NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
   CONSTRAINT `fk_Forecasts_Dates1`
     FOREIGN KEY (`forecastDateID`)
     REFERENCES `Dates` (`dateID`)
-    ON DELETE CASCADE
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'Forecast information that uses attributes that are common across all weather models.\n';
