@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `Readings` (
   `readingSensorID` INT,
   `readingWindSpeed` FLOAT NOT NULL,
   `readingWindGust` FLOAT NOT NULL,
-  `readingWindMin` INT NOT NULL,
+  `readingWindMin` FLOAT NOT NULL,
   `readingWindDirection` INT NOT NULL,
   `readingTemperature` FLOAT NOT NULL,
   `readingDateID` INT,
