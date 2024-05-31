@@ -409,11 +409,14 @@ def add_sensor():
         if DEBUG:
             logger.info(str(request.form))
 
-        #location_query = f"INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)\nVALUES ({request.form['locationName']}, {request.form['locationLatitude']}, {request.form['locationLongitude']}, {request.form['locationAltitude']},);"
-        #if DEBUG:
-        #    logger.info("add sensor post first query: " + location_query)
-        #db.execute_query(db_connection=db_connection, query=location_query)
-        
+        check_sensors_query = f"SELECT * FROM Sensors;"
+        all_sensors = db.execute_query(db_connection=db_connection, query=check_sensors_query).fetchall()
+        for sensor in all_sensors:
+            if str(sensor['sensorNumber']) == str(request.form['sensorNumber']):
+                logger.warning("Duplicate Sensor")
+                flash("Duplicate Sensor!")
+                return redirect("/add/sensor")
+
         sensor_query = f"INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`)\nVALUES ('{request.form['sensorName']}', '{request.form['sensorAPIKey']}', '{request.form['sensorNumber']}', '{request.form['location']}');"
 
         if DEBUG:
