@@ -16,71 +16,41 @@ import database.db_connector as db
 from datetime import date, datetime, timedelta
 import asyncio
 import pprint as pp
+import pandas as pd
+from flask.views import View, MethodView
 
 # local imports
 from wind_forecast.openmeteo_ecmwf_query import query_ecmwf
 from wind_forecast.openmeteo_gfs_query import query_gfs
 from wind_forecast.holfuy_query import fetch, gather_data
 from wind_forecast.data import KeyTranslation
+from wind_forecast.data_plots import DisplayPlots
 
 # Configuration
 app = Flask(__name__)
 app.secret_key = "mc)kNIk4cbIZQ,@jUve-Q}2^T3em$p"
 db_connection = db.connect_to_database()
 
-
 # Logger
 logging.basicConfig(level=logging.DEBUG, format='%(levelname)s : %(message)s') #filename='app.log', 
 logger = logging.getLogger("werkzeug")
-
 keys = KeyTranslation()
-entities_list = [
-    "models",
-    "locations",
-    "sensors",
-    "forecasts",
-    "readings",
-]
-valid_models_list = [
-    "HRRR",
-    "ECMWF",
-    "MBLUE",
-    "GFS",
-    "NAM",
-    "ICON",
-]
-valid_models_tuple = (
-    { 'modelID': 1, 'modelName': 'ECMWF', },
-    { 'modelID': 2, 'modelName': 'HRRR', },
-    { 'modelID': 3, 'modelName': 'GFS', },
-    { 'modelID': 4, 'modelName': 'ICON', },
-    { 'modelID': 5, 'modelName': 'MBLUE', },
-    { 'modelID': 6, 'modelName': 'NAM', },
-)
-
-current_supported_model_list = ["ECMWF", "GFS"]
-current_supported_sensor_list = [
-    "1",
-]
+plots = DisplayPlots()
 info_dict = dict()
 DEBUG = True
 
 ############
 # Routes
 ############
-
-
 @app.route("/index")
 def plain_index():
     app.logger.info('Index page accessed')
     return redirect("/")
 
-
 @app.route("/index.html")
 def dot_index():
     app.logger.info('Index.html page accessed')
     return redirect("/")
-
 
 @app.route("/", methods=["POST", "GET"])
 def root():
@@ -158,12 +128,39 @@ def results():
     ).fetchall()
     if DEBUG:
         app.logger.info("results of selected readings: " + str(readings_results))
+    
+    # now lets generate the data plots
+    forecasts_df = pd.DataFrame(forecasts_results)
+    forecasts_df.sort_values("forecastForDateTime", inplace=True)
+    readings_df = pd.DataFrame(readings_results)
+    readings_df.sort_values("dateDateTime", inplace=True)
+    wind_direction = str()
+    wind_speed = str()
+    
+    if len(readings_results) > 0 and len(forecasts_results) > 0:
+        merged_df = pd.merge_asof(
+            forecasts_df,
+            readings_df,
+            left_on="forecastForDateTime",
+            right_on="dateDateTime",
+            direction="nearest",
+            tolerance=pd.Timedelta(minutes=60),
+            )
+        merged_df = merged_df.dropna(how='any')
+        #print(str(merged_df["forecastForDateTime"]), str(merged_df["dateDateTime"]), str(merged_df["forecastWindSpeed10m"]), str(merged_df["readingWindSpeed"]))
+        wind_speed = plots.wind_speed(merged_df)
+        #wind_gust = plots.wind_gust(readings_df)
+        wind_direction = plots.wind_direction(merged_df)
+
+
     return render_template(
         "results.html",
         forecasts=forecasts_results,
         readings=readings_results,
         info_dict=info_dict,
         key_dict=keys.key_dict,
+        wind_speed=wind_speed,
+        wind_direction=wind_direction,
     )
 
 
@@ -275,7 +272,8 @@ def add_forecast():
             db_connection=db_connection, query=model_query
         ).fetchone()
         use_model_name = model_results["modelName"]
-        if use_model_name not in current_supported_model_list:
+        
+        if keys.check_valid_model(use_model_name) is False:
             flash(f"This model is not currently supported!")
             return redirect("/add/forecast")
         if DEBUG:
@@ -290,7 +288,7 @@ def add_forecast():
             logger.info(
                 "add forecast post sensor results: " + str(sensor_results)
             )
-        if use_sensorID not in current_supported_sensor_list:
+        if keys.check_valid_sensor(use_sensorID) is False:
             flash(f"This sensor is not currently supported!")
             return redirect("/add/forecast")
         if use_model_name == "ECMWF":
@@ -448,7 +446,7 @@ def add_model():
 
     if request.method == "GET":
         can_add_list = list()
-        removals_list = valid_models_list[::]
+        removals_list = keys.valid_models_list[::]
         get_models = "SELECT * FROM Models;"
         models_obj = db.execute_query(
             db_connection=db_connection, query=get_models
@@ -457,7 +455,7 @@ def add_model():
             removals_list.remove(model['modelName'])
         for modelname in removals_list:
             print(modelname)
-            for model_dict in valid_models_tuple:
+            for model_dict in keys.valid_models_tuple:
                 print(str(model_dict))
                 if model_dict['modelName'] == modelname:
                     can_add_list.append({ "modelID": model_dict['modelID'], "modelName": modelname, })
@@ -472,13 +470,13 @@ def add_model():
             logger.info("add model post: " + request.form["modelID"])
         if request.form["modelID"] == 0:
             return redirect("/models")
-        for model_dict in valid_models_tuple:
+        for model_dict in keys.valid_models_tuple:
             print(request.form['modelID'])
             print(model_dict)
             if str(model_dict['modelID']) == str(request.form['modelID']):
                 print("Yes!")
                 modelname = model_dict['modelName']
-                if modelname.upper() not in valid_models_list:
+                if modelname.upper() not in keys.valid_models_list:
                     flash("Not a recognized Weather Model!")
                     return render_template("add/addmodel.html")
         if len(modelname) == 0:
@@ -533,7 +531,7 @@ def add_reading():
         use_sensorID = request.form["sensorID"]
         if DEBUG:
             logger.info("add reading post for sensor: " + use_sensorID)
-        if use_sensorID not in current_supported_sensor_list:
+        if use_sensorID not in keys.current_supported_sensor_list:
             flash("This sensor is not currently supported for MVP!")
             return redirect("/add/reading")
         valid_obj_list, error_obj_list = asyncio.run(gather_data())
@@ -603,6 +601,8 @@ def add_reading():
             readings=readings_results,
             info_dict=info_dict,
             key_dict=keys.key_dict,
+            wind_speed="",
+            wind_direction="",
         )
 
 
@@ -1090,7 +1090,7 @@ def modeledit(modelID):
         )
 
     elif request.method == "POST":
-        if request.form["modelName"].upper() not in valid_models_list:
+        if request.form["modelName"].upper() not in keys.valid_models_list:
             flash("Not a recognized Weather Model!")
             return redirect(f"/edit/editmodel/{request.form['modelID']}")
         if DEBUG:

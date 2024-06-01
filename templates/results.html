@@ -7,6 +7,15 @@
     {{info_dict['todate']}}:</h6>
 <div></div>
 <article>
+    <div></div>
+    {% if wind_speed|length > 0 %}
+    <img src="data:image/png;base64,{{wind_speed.decode('utf8')}}" />
+    <div></div>
+    {% endif %}
+    {% if wind_direction|length > 0 %}
+    <img src="data:image/png;base64,{{wind_direction.decode('utf8')}}" />
+    <div></div>
+    {% endif %}
     <div>
         {% if forecasts %}
         <table>
