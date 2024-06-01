@@ -16,6 +16,14 @@
     <img src="data:image/png;base64,{{wind_direction.decode('utf8')}}" />
     <div></div>
     {% endif %}
+    {% if wind_speed_diff|length > 0 %}
+    <img src="data:image/png;base64,{{wind_speed_diff.decode('utf8')}}" />
+    <div></div>
+    {% endif %}
+    {% if wind_direction_diff|length > 0 %}
+    <img src="data:image/png;base64,{{wind_direction_diff.decode('utf8')}}" />
+    <div></div>
+    {% endif %}
     <div>
         {% if forecasts %}
         <table>

@@ -145,13 +145,24 @@ def results():
             right_on="dateDateTime",
             direction="nearest",
             tolerance=pd.Timedelta(minutes=60),
-            )
+        )
+        # clean the merged dataframe
         merged_df = merged_df.dropna(how='any')
-        #print(str(merged_df["forecastForDateTime"]), str(merged_df["dateDateTime"]), str(merged_df["forecastWindSpeed10m"]), str(merged_df["readingWindSpeed"]))
+        merged_df = merged_df.drop_duplicates(subset=["forecastForDateTime"])
+        if DEBUG:
+            logger.info(str(merged_df["forecastForDateTime"]), str(merged_df["dateDateTime"]), str(merged_df["forecastWindSpeed10m"]), str(merged_df["readingWindSpeed"]))
+        
+        # generate the comparison area plots based on the baseline merged dataframe
         wind_speed = plots.wind_speed(merged_df)
-        #wind_gust = plots.wind_gust(readings_df)
         wind_direction = plots.wind_direction(merged_df)
+        
+        # calculate the difference columns for the difference plots
+        merged_df["windSpeedDiff"] = merged_df["forecastWindSpeed10m"] - merged_df["readingWindSpeed"]
+        merged_df["windDirectionDiff"] = merged_df["forecastWindDirection10m"] - merged_df["readingWindDirection"]
 
+        # generate the difference scatter plots based on the new df
+        wind_speed_diff = plots.wind_direction_diff(merged_df)
+        wind_direction_diff = plots.wind_speed_diff(merged_df)
 
     return render_template(
         "results.html",
@@ -161,6 +172,8 @@ def results():
         key_dict=keys.key_dict,
         wind_speed=wind_speed,
         wind_direction=wind_direction,
+        wind_speed_diff=wind_speed_diff,
+        wind_direction_diff=wind_direction_diff,
     )
 
 
@@ -603,6 +616,8 @@ def add_reading():
             key_dict=keys.key_dict,
             wind_speed="",
             wind_direction="",
+            wind_speed_diff="",
+            wind_direction_diff="",
         )
 
 
