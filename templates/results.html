@@ -24,9 +24,9 @@
     <img src="data:image/png;base64,{{wind_direction_diff.decode('utf8')}}" />
     <div></div>
     {% endif %}
-    <div>
+    <div id="forecastTable" class="overflow-auto">
         {% if forecasts %}
-        <table>
+        <table class="striped">
             <caption> Display the Forecasts: </caption>
             <thead>
                 <tr>
@@ -60,9 +60,9 @@
     </div>
 </article>
 <article>
-    <div>
+    <div id="readingsTable" class="overflow-auto">
         {% if readings %}
-        <table>
+        <table class="striped">
             <caption> Display the Readings: </caption>
             <thead>
                 <tr>
