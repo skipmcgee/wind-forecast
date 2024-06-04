@@ -129,14 +129,18 @@ def results():
     if DEBUG:
         app.logger.info("results of selected readings: " + str(readings_results))
     
-    # now lets generate the data plots
-    forecasts_df = pd.DataFrame(forecasts_results)
-    forecasts_df.sort_values("forecastForDateTime", inplace=True)
-    readings_df = pd.DataFrame(readings_results)
-    readings_df.sort_values("dateDateTime", inplace=True)
-    wind_direction = str()
-    wind_speed = str()
-    
+    if len(forecasts_results) > 0 and len(readings_results) > 0:
+        # now lets generate the data plots
+        forecasts_df = pd.DataFrame(forecasts_results)
+        forecasts_df.sort_values("forecastForDateTime", inplace=True)
+        readings_df = pd.DataFrame(readings_results)
+        readings_df.sort_values("dateDateTime", inplace=True)
+        wind_direction = str()
+        wind_speed = str()
+    else:
+        flash("Not enough data in the selected time window to display, please select a different time interval.")
+        return redirect("/")
+
     if len(readings_results) > 0 and len(forecasts_results) > 0:
         merged_df = pd.merge_asof(
             forecasts_df,

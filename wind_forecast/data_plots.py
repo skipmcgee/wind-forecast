@@ -12,7 +12,7 @@ class DisplayPlots():
         image = BytesIO()
         plt.plot([],[], color='y', label = 'Actual Wind Speed', linewidth=5)
         plt.plot([],[], color='g', label = 'Predicted Wind Speed', linewidth=5)
-        plt.plot([],[],color = 'r', label='Actual Wind Gust', linewidth=5)
+        plt.plot([],[], color = 'r', label='Actual Wind Gust', linewidth=5)
         plt.stackplot(
             merged_df["forecastForDateTime"],
             merged_df["readingWindSpeed"],
