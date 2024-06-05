@@ -32,54 +32,59 @@ app.secret_key = "mc)kNIk4cbIZQ,@jUve-Q}2^T3em$p"
 db_connection = db.connect_to_database()
 
 # Logger
-logging.basicConfig(level=logging.DEBUG, format='%(levelname)s : %(message)s') #filename='app.log', 
+logging.basicConfig(
+    level=logging.DEBUG, format="%(levelname)s : %(message)s"
+)  # filename='app.log',
 logger = logging.getLogger("werkzeug")
 keys = KeyTranslation()
 plots = DisplayPlots()
 info_dict = dict()
 DEBUG = True
 
+
 ############
 # Routes
 ############
 @app.route("/index")
 def plain_index():
-    app.logger.info('Index page accessed')
+    app.logger.info("Index page accessed")
     return redirect("/")
+
 
 @app.route("/index.html")
 def dot_index():
-    app.logger.info('Index.html page accessed')
+    app.logger.info("Index.html page accessed")
     return redirect("/")
+
 
 @app.route("/", methods=["POST", "GET"])
 def root():
     """View for the website index"""
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    app.logger.debug(f'Getting current time: {now}')
+    app.logger.debug(f"Getting current time: {now}")
     date_format = "%Y-%m-%d %H:%M:%S"
     today = datetime.strptime(now, str(date_format)).date()
-    app.logger.debug(f'Getting the date: {today}')
+    app.logger.debug(f"Getting the date: {today}")
 
     if request.method == "GET":
         sensors_query = "SELECT * FROM Sensors;"
         sensors_results = db.execute_query(
             db_connection=db_connection, query=sensors_query
         ).fetchall()
-        app.logger.debug(f'Retrieved Sensors: {sensors_results}')
+        app.logger.debug(f"Retrieved Sensors: {sensors_results}")
         return render_template(
             "pages/index.html", sensors=sensors_results, today=str(today)
         )
-    
+
     elif request.method == "POST":
 
-        app.logger.debug(f"today: {today}, fromdate: {request.form['fromDate']}, todate: {request.form['toDate']}")
+        app.logger.debug(
+            f"today: {today}, fromdate: {request.form['fromDate']}, todate: {request.form['toDate']}"
+        )
 
-        query_params = {
-            'sensorID': request.form['sensorlist']
-            }
-        
+        query_params = {"sensorID": request.form["sensorlist"]}
+
         sensors_query = """
             SELECT 
                 sensorName
@@ -88,7 +93,7 @@ def root():
             WHERE
                 sensorID=%(sensorID)s;
         """
-        
+
         sensors_results = db.execute_query(
             db_connection=db_connection, query=sensors_query, query_params=query_params
         ).fetchone()
@@ -119,7 +124,7 @@ def results():
     ).fetchall()
     if DEBUG:
         logger.info("results of selected forecasts: " + str(forecasts_results))
-    
+
     readings_query = f"SELECT * FROM Readings\nJOIN Sensors ON Readings.readingSensorID = Sensors.sensorID\nJOIN Dates ON Readings.readingDateID = Dates.dateID\nWHERE ( dateDateTime BETWEEN '{info_dict['fromdate']}' AND '{info_dict['todate']}' ) AND ( Sensors.sensorLocationID='{info_dict['sensorlist']}' );"
     if DEBUG:
         app.logger.info("readings query: " + readings_query)
@@ -128,7 +133,7 @@ def results():
     ).fetchall()
     if DEBUG:
         app.logger.info("results of selected readings: " + str(readings_results))
-    
+
     if len(forecasts_results) > 0 and len(readings_results) > 0:
         # now lets generate the data plots
         forecasts_df = pd.DataFrame(forecasts_results)
@@ -138,7 +143,9 @@ def results():
         wind_direction = str()
         wind_speed = str()
     else:
-        flash("Not enough data in the selected time window to display, please select a different time interval.")
+        flash(
+            "Not enough data in the selected time window to display, please select a different time interval."
+        )
         return redirect("/")
 
     if len(readings_results) > 0 and len(forecasts_results) > 0:
@@ -151,18 +158,27 @@ def results():
             tolerance=pd.Timedelta(minutes=60),
         )
         # clean the merged dataframe
-        merged_df = merged_df.dropna(how='any')
+        merged_df = merged_df.dropna(how="any")
         merged_df = merged_df.drop_duplicates(subset=["forecastForDateTime"])
         if DEBUG:
-            logger.info(str(merged_df["forecastForDateTime"]), str(merged_df["dateDateTime"]), str(merged_df["forecastWindSpeed10m"]), str(merged_df["readingWindSpeed"]))
-        
+            logger.info(
+                str(merged_df["forecastForDateTime"]),
+                str(merged_df["dateDateTime"]),
+                str(merged_df["forecastWindSpeed10m"]),
+                str(merged_df["readingWindSpeed"]),
+            )
+
         # generate the comparison area plots based on the baseline merged dataframe
         wind_speed = plots.wind_speed(merged_df)
         wind_direction = plots.wind_direction(merged_df)
-        
+
         # calculate the difference columns for the difference plots
-        merged_df["windSpeedDiff"] = merged_df["forecastWindSpeed10m"] - merged_df["readingWindSpeed"]
-        merged_df["windDirectionDiff"] = merged_df["forecastWindDirection10m"] - merged_df["readingWindDirection"]
+        merged_df["windSpeedDiff"] = (
+            merged_df["forecastWindSpeed10m"] - merged_df["readingWindSpeed"]
+        )
+        merged_df["windDirectionDiff"] = (
+            merged_df["forecastWindDirection10m"] - merged_df["readingWindDirection"]
+        )
 
         # generate the difference scatter plots based on the new df
         wind_speed_diff = plots.wind_direction_diff(merged_df)
@@ -185,22 +201,16 @@ def results():
 def library():
     if request.method == "GET":
         sensor_query = f"SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationName FROM Sensors\n JOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n ORDER BY sensorName DESC;"
-        sensor_obj = db.execute_query(
-            db_connection=db_connection, query=sensor_query
-        )
+        sensor_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
         sensor_results = sensor_obj.fetchall()
         if DEBUG:
             logger.info(sensor_results)
         model_query = f"SELECT * FROM Models\n ORDER BY modelName DESC;"
-        model_obj = db.execute_query(
-            db_connection=db_connection, query=model_query
-        )
+        model_obj = db.execute_query(db_connection=db_connection, query=model_query)
         model_results = model_obj.fetchall()
         if DEBUG:
             logger.info(model_results)
-        locations_query = (
-            f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
-        )
+        locations_query = f"SELECT * FROM Locations\n ORDER BY locationName DESC;"
         locations_obj = db.execute_query(
             db_connection=db_connection, query=locations_query
         )
@@ -282,29 +292,23 @@ def add_forecast():
                 + " and sensor: "
                 + use_sensorID
             )
-        model_query = (
-            f"SELECT modelName from Models\n WHERE modelID='{use_modelID}';"
-        )
+        model_query = f"SELECT modelName from Models\n WHERE modelID='{use_modelID}';"
         model_results = db.execute_query(
             db_connection=db_connection, query=model_query
         ).fetchone()
         use_model_name = model_results["modelName"]
-        
+
         if keys.check_valid_model(use_model_name) is False:
             flash(f"This model is not currently supported!")
             return redirect("/add/forecast")
         if DEBUG:
-            logger.info(
-                "add forecast post model results: " + str(model_results)
-            )
+            logger.info("add forecast post model results: " + str(model_results))
         sensor_query = f"SELECT * from Sensors\nJOIN Locations ON Sensors.sensorLocationID = Locations.locationID\n WHERE sensorID='{use_sensorID}';"
         sensor_results = db.execute_query(
             db_connection=db_connection, query=sensor_query
         ).fetchone()
         if DEBUG:
-            logger.info(
-                "add forecast post sensor results: " + str(sensor_results)
-            )
+            logger.info("add forecast post sensor results: " + str(sensor_results))
         if keys.check_valid_sensor(use_sensorID) is False:
             flash(f"This sensor is not currently supported!")
             return redirect("/add/forecast")
@@ -316,9 +320,7 @@ def add_forecast():
             forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
             row_count = len(ecmwf.index)
             for index, row in ecmwf.iterrows():
-                logger.info(
-                    f"index: {index}, row: {row}, values: {row['date']}"
-                )
+                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -347,8 +349,7 @@ def add_forecast():
             forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
             row_count = len(gfs.index)
             for index, row in gfs.iterrows():
-                logger.info(
-                    f"index: {index}, row: {row}, values: {row['date']}")
+                logger.info(f"index: {index}, row: {row}, values: {row['date']}")
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -388,12 +389,12 @@ def add_location():
     elif request.method == "POST":
         app.logger.debug(str(request.form))
         query_params = {
-            'locationName': request.form['locationName'],
-            'locationLatitude': request.form['locationLatitude'],
-            'locationLongitude': request.form['locationLongitude'],
-            'locationAltitude': request.form['locationAltitude'],
+            "locationName": request.form["locationName"],
+            "locationLatitude": request.form["locationLatitude"],
+            "locationLongitude": request.form["locationLongitude"],
+            "locationAltitude": request.form["locationAltitude"],
         }
-        
+
         location_query = """
         INSERT INTO
             Locations (locationName, locationLatitude, locationLongitude, locationAltitude)
@@ -434,9 +435,11 @@ def add_sensor():
             logger.info(str(request.form))
 
         check_sensors_query = f"SELECT * FROM Sensors;"
-        all_sensors = db.execute_query(db_connection=db_connection, query=check_sensors_query).fetchall()
+        all_sensors = db.execute_query(
+            db_connection=db_connection, query=check_sensors_query
+        ).fetchall()
         for sensor in all_sensors:
-            if str(sensor['sensorNumber']) == str(request.form['sensorNumber']):
+            if str(sensor["sensorNumber"]) == str(request.form["sensorNumber"]):
                 logger.warning("Duplicate Sensor")
                 flash("Duplicate Sensor!")
                 return redirect("/add/sensor")
@@ -469,16 +472,26 @@ def add_model():
             db_connection=db_connection, query=get_models
         ).fetchall()
         for model in models_obj:
-            removals_list.remove(model['modelName'])
+            removals_list.remove(model["modelName"])
         for modelname in removals_list:
             print(modelname)
             for model_dict in keys.valid_models_tuple:
                 print(str(model_dict))
-                if model_dict['modelName'] == modelname:
-                    can_add_list.append({ "modelID": model_dict['modelID'], "modelName": modelname, })
+                if model_dict["modelName"] == modelname:
+                    can_add_list.append(
+                        {
+                            "modelID": model_dict["modelID"],
+                            "modelName": modelname,
+                        }
+                    )
         print(can_add_list)
         if len(can_add_list) == 0:
-            can_add_list.append({ "modelID": 0, "modelName": "No more weather models to add", })
+            can_add_list.append(
+                {
+                    "modelID": 0,
+                    "modelName": "No more weather models to add",
+                }
+            )
         return render_template("add/addmodel.html", add_models_list=can_add_list)
 
     elif request.method == "POST":
@@ -488,11 +501,11 @@ def add_model():
         if request.form["modelID"] == 0:
             return redirect("/models")
         for model_dict in keys.valid_models_tuple:
-            print(request.form['modelID'])
+            print(request.form["modelID"])
             print(model_dict)
-            if str(model_dict['modelID']) == str(request.form['modelID']):
+            if str(model_dict["modelID"]) == str(request.form["modelID"]):
                 print("Yes!")
-                modelname = model_dict['modelName']
+                modelname = model_dict["modelName"]
                 if modelname.upper() not in keys.valid_models_list:
                     flash("Not a recognized Weather Model!")
                     return render_template("add/addmodel.html")
@@ -502,9 +515,7 @@ def add_model():
         model_update = f"INSERT INTO `Models` (modelID, modelName)\n VALUES ('{request.form['modelID']}', '{modelname.upper()}');"
         if DEBUG:
             logger.info("add model post query: " + model_update)
-        model_obj = db.execute_query(
-            db_connection=db_connection, query=model_update
-        )
+        model_obj = db.execute_query(db_connection=db_connection, query=model_update)
         return redirect("/models")
 
 
@@ -527,9 +538,7 @@ def add_date():
         date_query = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{request.form['dateDateTime']}');"
         if DEBUG:
             logger.info("add date post first query: " + date_query)
-        date_obj = db.execute_query(
-            db_connection=db_connection, query=date_query
-        )
+        date_obj = db.execute_query(db_connection=db_connection, query=date_query)
         return redirect("/dates")
 
 
@@ -569,13 +578,13 @@ def add_reading():
         new_date = now + timedelta(hours=1)
         new_date_str = new_date.strftime(date_format)
         old_date_str = old_date.strftime(date_format)
-        date_insert = (
-            f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{datetime_str}');"
-        )
+        date_insert = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{datetime_str}');"
         date_results = db.execute_query(
             db_connection=db_connection, query=date_insert
         ).fetchall()
-        date_get_id = f"SELECT `dateID` FROM Dates\n WHERE `dateDateTime`='{datetime_str}';"
+        date_get_id = (
+            f"SELECT `dateID` FROM Dates\n WHERE `dateDateTime`='{datetime_str}';"
+        )
         date_id_results = db.execute_query(
             db_connection=db_connection, query=date_get_id
         ).fetchall()
@@ -909,9 +918,7 @@ def update_forecast(forecastID):
             "forecastWeatherCode": request.form.get("forecastWeatherCode"),
             "forecastPressureMSL": request.form.get("forecastPressureMSL"),
             "forecastWindSpeed10m": request.form.get("forecastWindSpeed"),
-            "forecastWindDirection10m": request.form.get(
-                "forecastWindDirection"
-            ),
+            "forecastWindDirection10m": request.form.get("forecastWindDirection"),
             "forecastCape": request.form.get("forecastCape"),
             "forecastLocationID": request.form.get("locationID"),
             "forecastModelID": model_id,
@@ -1027,9 +1034,7 @@ def readingedit(readingID):
         """
         if DEBUG:
             logger.info("edit reading post: " + reading_query)
-        query_obj = db.execute_query(
-            db_connection=db_connection, query=reading_query
-        )
+        query_obj = db.execute_query(db_connection=db_connection, query=reading_query)
 
         return redirect("/readings")
 
@@ -1083,9 +1088,7 @@ def update_sensor(sensorID):
         sensor_query = f"UPDATE Sensors\n SET `sensorName`='{request.form['sensorName']}', `sensorAPIKey`='{request.form['sensorAPIKey']}', `sensorNumber`='{request.form['sensorNumber']}', `sensorLocationID`='{request.form['locationID']}' \n WHERE sensorID='{sensorID}';"
         if DEBUG:
             logger.info("edit sensor post first query: " + sensor_query)
-        query_obj = db.execute_query(
-            db_connection=db_connection, query=sensor_query
-        )
+        query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
 
         return redirect("/sensors")
 
@@ -1096,17 +1099,13 @@ def modeledit(modelID):
 
     modelID = escape(modelID)
     if request.method == "GET":
-        models_query = (
-            f"SELECT * FROM Models\nWHERE Models.modelID = {modelID};"
-        )
+        models_query = f"SELECT * FROM Models\nWHERE Models.modelID = {modelID};"
         query_results = db.execute_query(
             db_connection=db_connection, query=models_query
         ).fetchall()
         if DEBUG:
             logger.info("edit model get: " + str(query_results))
-        return render_template(
-            "edit/editmodel.html", specific_model=query_results
-        )
+        return render_template("edit/editmodel.html", specific_model=query_results)
 
     elif request.method == "POST":
         if request.form["modelName"].upper() not in keys.valid_models_list:
@@ -1119,9 +1118,7 @@ def modeledit(modelID):
         model_query = f"UPDATE Models\nSET `modelName`='{request.form['modelName']}'\nWHERE Models.modelID = {modelID};"
         if DEBUG:
             logger.info("edit model post: " + model_query)
-        query_obj = db.execute_query(
-            db_connection=db_connection, query=model_query
-        )
+        query_obj = db.execute_query(db_connection=db_connection, query=model_query)
 
         return redirect("/library")
 
@@ -1138,9 +1135,7 @@ def dateedit(dateID):
         ).fetchall()
         if DEBUG:
             logger.info("edit date get: " + str(query_results))
-        return render_template(
-            "edit/editdate.html", specific_date=query_results
-        )
+        return render_template("edit/editdate.html", specific_date=query_results)
 
     elif request.method == "POST":
         if DEBUG:
@@ -1152,9 +1147,7 @@ def dateedit(dateID):
         """
         if DEBUG:
             logger.info("edit date post: " + date_query)
-        query_obj = db.execute_query(
-            db_connection=db_connection, query=date_query
-        )
+        query_obj = db.execute_query(db_connection=db_connection, query=date_query)
 
         return redirect("/dates")
 
@@ -1165,7 +1158,9 @@ def locationedit(locationID):
 
     locationID = escape(locationID)
     if request.method == "GET":
-        locations_query = f"SELECT * FROM Locations\nWHERE Locations.locationID = {locationID};"
+        locations_query = (
+            f"SELECT * FROM Locations\nWHERE Locations.locationID = {locationID};"
+        )
         query_results = db.execute_query(
             db_connection=db_connection, query=locations_query
         ).fetchall()
@@ -1185,9 +1180,7 @@ def locationedit(locationID):
         """
         if DEBUG:
             logger.info("edit location post: " + location_query)
-        query_obj = db.execute_query(
-            db_connection=db_connection, query=location_query
-        )
+        query_obj = db.execute_query(db_connection=db_connection, query=location_query)
 
         return redirect("/locations")
 

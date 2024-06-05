@@ -14,10 +14,12 @@ db = os.environ.get("340DB")
 
 # Source: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
 
+
 class DBConnector:
-    '''DB Connector Class'''
+    """DB Connector Class"""
+
     conn = None
-    
+
     def connect_to_db(self, host=host, user=user, passwd=passwd, db=db):
         """Connects to a database and returns a database objects"""
         self.conn = MySQLdb.connect(host, user, passwd, db)
@@ -43,7 +45,8 @@ class DBConnector:
             cursor.execute(query, query_params)
             self.conn.commit()
         return cursor
-    
+
+
 def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """
     connects to a database and returns a database objects
@@ -74,7 +77,7 @@ def execute_query(db_connection=None, query=None, query_params=()):
         print("query is empty! Please pass a SQL query in query")
         return None
 
-    #print("Executing %s with %s" % (query, query_params))
+    # print("Executing %s with %s" % (query, query_params))
 
     # Referenced: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
     # Modified the class based version to fit within the existing functions
@@ -89,22 +92,22 @@ def execute_query(db_connection=None, query=None, query_params=()):
         db_connection.commit()
 
     # Create a cursor to execute query. Why? Because apparently they optimize execution by retaining a reference according to PEP0249
-    #cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
+    # cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
 
-    
-    #params = tuple()
-    #create a tuple of paramters to send with the query
-    #for q in query_params:
+    # params = tuple()
+    # create a tuple of paramters to send with the query
+    # for q in query_params:
     #    params = params + (q)
 
     # TODO: Sanitize the query before executing it!!!
-    #cursor.execute(query, query_params)
+    # cursor.execute(query, query_params)
     # this will actually commit any changes to the database. without this no
     # changes will be committed!
-    #db_connection.commit()
+    # db_connection.commit()
     return cursor
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print("Executing a sample query on the database")
     db = connect_to_database()
     db2 = DBConnector()

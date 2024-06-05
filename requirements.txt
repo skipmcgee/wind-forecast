@@ -25,3 +25,4 @@ MarkupSafe
 mysqlclient
 flask-mysqldb
 Werkzeug
+black

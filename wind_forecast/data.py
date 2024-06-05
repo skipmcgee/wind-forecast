@@ -78,12 +78,30 @@ class KeyTranslation:
             "ICON",
         ]
         self.valid_models_tuple = (
-            { 'modelID': 1, 'modelName': 'ECMWF', },
-            { 'modelID': 2, 'modelName': 'HRRR', },
-            { 'modelID': 3, 'modelName': 'GFS', },
-            { 'modelID': 4, 'modelName': 'ICON', },
-            { 'modelID': 5, 'modelName': 'MBLUE', },
-            { 'modelID': 6, 'modelName': 'NAM', },
+            {
+                "modelID": 1,
+                "modelName": "ECMWF",
+            },
+            {
+                "modelID": 2,
+                "modelName": "HRRR",
+            },
+            {
+                "modelID": 3,
+                "modelName": "GFS",
+            },
+            {
+                "modelID": 4,
+                "modelName": "ICON",
+            },
+            {
+                "modelID": 5,
+                "modelName": "MBLUE",
+            },
+            {
+                "modelID": 6,
+                "modelName": "NAM",
+            },
         )
 
     def check_valid_model(self, passed_model_name: str) -> bool:

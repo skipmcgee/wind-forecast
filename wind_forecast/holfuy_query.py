@@ -1,6 +1,6 @@
+## used the Holfuy API Docs at https://api.holfuy.com/live/ to create this code
 import asyncio
 import aiohttp
-import json
 from pprintjson import pprintjson as ppjson
 
 # local imports
