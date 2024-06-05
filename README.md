@@ -1,5 +1,5 @@
 # wind-forecast
-wind forecast data 
+application for wind forecast and wind reading data analysis
 
 ### if first run, install the requirements:
 1) follow the os-specific install instructions at: https://pypi.org/project/mysqlclient/
@@ -37,7 +37,7 @@ wind forecast data
 ### Syntax to run via Gunicorn:
 `gunicorn --config gunicorn.py wsgi:app`
 
-## Code referenced for this project:
+## Code referenced for this project (accessed repeatedly April-June 2024):
 - https://open-meteo.com/en/docs/ecmwf-api
 - https://open-meteo.com/en/docs/gfs-api
 - https://api.holfuy.com/live/ 
