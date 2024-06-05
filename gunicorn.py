@@ -1,3 +1,5 @@
+# Date Accessed: 20240430
+# Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
 import os
 
 workers = 2

@@ -1,3 +1,5 @@
+# Date Accessed: 20240430
+# Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
 import MySQLdb
 import os
 from dotenv import load_dotenv, find_dotenv

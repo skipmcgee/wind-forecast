@@ -1,3 +1,4 @@
+# date: 20240530
 # used the code generator at: https://open-meteo.com/en/docs/gfs-api
 # as well as their docs to create this
 import openmeteo_requests

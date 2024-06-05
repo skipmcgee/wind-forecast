@@ -1,4 +1,6 @@
 #!/bin/env python3
+# Date Accessed: 20240430
+# Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
 import logging
 from markupsafe import Markup, escape
 from flask import (

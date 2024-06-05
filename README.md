@@ -36,3 +36,10 @@ wind forecast data
 
 ### Syntax to run via Gunicorn:
 `gunicorn --config gunicorn.py wsgi:app`
+
+## Code referenced for this project:
+- https://open-meteo.com/en/docs/ecmwf-api
+- https://open-meteo.com/en/docs/gfs-api
+- https://api.holfuy.com/live/ 
+- https://github.com/osu-cs340-ecampus/flask-starter-app/
+- https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
