@@ -11,7 +11,7 @@
     <div></div>
     <div>
         <article>
-            <form name="editmodel" id="editmodel" action="/edit/model/{{specific_model[0].modelID}}" method="post">
+            <form name="editmodel" id="editmodel" class="overflow-auto" action="/edit/model/{{specific_model[0].modelID}}" method="post">
                 <!-- <legend><strong>Edit Weather Model:</strong></legend> -->
                 <fieldset>
                     <input type="hidden" value="{{specific_model[0].modelID}}" class="form-control" id="modelID"
@@ -26,5 +26,4 @@
     </div>
     <div></div>
 </div>
-
 {% endblock %}

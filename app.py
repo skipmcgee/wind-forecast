@@ -1111,7 +1111,7 @@ def modeledit(modelID):
     elif request.method == "POST":
         if request.form["modelName"].upper() not in keys.valid_models_list:
             flash("Not a recognized Weather Model!")
-            return redirect(f"/edit/editmodel/{request.form['modelID']}")
+            return redirect(f"/edit/model/{request.form['modelID']}")
         if DEBUG:
             logger.info(
                 f"updating name for {request.form['modelID']} to: {request.form['modelName']}"

@@ -11,7 +11,7 @@
     <div></div>
     <div>
         <article>
-            <form name="editsensor" id="editsensor" action="/edit/sensor/{{specific_sensor[0].sensorID}}" method="post">
+            <form name="editsensor" id="editsensor" class="overflow-auto" action="/edit/sensor/{{specific_sensor[0].sensorID}}" method="post">
                 <fieldset>
                     <input type="hidden" value="{{specific_sensor[0].sensorID}}" class="form-control" id="sensorID"
                         name="sensorID" required>

@@ -11,7 +11,7 @@
     <div></div>
     <div>
         <article>
-            <form name="editForecast" id="editForecast" action="/edit/forecast/{{specific_forecast.forecastID}}"
+            <form name="editForecast" id="editForecast" class="overflow-auto" action="/edit/forecast/{{specific_forecast.forecastID}}"
                 method="post">
                 <fieldset>
                     <input type="hidden" value="{{specific_forecast.forecastID}}" class="form-control" id="forecastID" name="forecastID">
