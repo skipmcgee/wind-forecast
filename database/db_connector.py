@@ -1,3 +1,9 @@
+# Citation for the following function: execute_query()
+# Date: 05/25/2024
+# Based on a StackOverflow solution provided by user "powdahound"
+# I modified the class based StackOverflow solution to work with the existing execute_query() function provided by the Flask App Starter Code
+# Source URL: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
+
 # Date Accessed: 20240430
 # Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
 import MySQLdb
@@ -13,41 +19,6 @@ host = os.environ.get("340DBHOST")
 user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
-
-# Source: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
-
-
-class DBConnector:
-    """DB Connector Class"""
-
-    conn = None
-
-    def connect_to_db(self, host=host, user=user, passwd=passwd, db=db):
-        """Connects to a database and returns a database objects"""
-        self.conn = MySQLdb.connect(host, user, passwd, db)
-
-    def _execute_query(self, query=None, query_params=()):
-        """
-        executes a given SQL query on the given db connection and returns a Cursor object
-
-        db_connection: a MySQLdb connection object created by connect_to_database()
-        query: string containing SQL query
-
-        returns: A Cursor object as specified at https://www.python.org/dev/peps/pep-0249/#cursor-objects.
-        You need to run .fetchall() or .fetchone() on that object to actually acccess the results.
-        """
-        try:
-            cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(query, query_params)
-            self.conn.commit()
-
-        except (AttributeError, MySQLdb.OperationalError):
-            self.connect_to_db()
-            cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(query, query_params)
-            self.conn.commit()
-        return cursor
-
 
 def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """
@@ -79,14 +50,15 @@ def execute_query(db_connection=None, query=None, query_params=()):
         print("query is empty! Please pass a SQL query in query")
         return None
 
-    # print("Executing %s with %s" % (query, query_params))
-
-    # Referenced: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
     # Modified the class based version to fit within the existing functions
+
+    # Try to execute query
     try:
         cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query, query_params)
         db_connection.commit()
+
+    # if connection has timed out then reconnect before executing the query
     except (AttributeError, MySQLdb.OperationalError):
         db_connection = connect_to_database(host=host, user=user, passwd=passwd, db=db)
         cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)

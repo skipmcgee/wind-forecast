@@ -1,6 +1,11 @@
 <!--
-    Date Accessed: 20240430
-    Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
+
+Citation for the following template:
+Date: 04/30/2024
+Adapted from the Flask Starter Application
+(Explain degree of originality)
+Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
+
 -->
 {% extends 'base.j2' %}
 {% block content %}
@@ -9,23 +14,24 @@
     {{info_dict['todate']}}:</h6>
 <div></div>
 <article>
-    <div></div>
-    {% if wind_speed|length > 0 %}
-    <img src="data:image/png;base64,{{wind_speed.decode('utf8')}}" class="overflow-auto" />
-    <div></div>
-    {% endif %}
-    {% if wind_direction|length > 0 %}
-    <img src="data:image/png;base64,{{wind_direction.decode('utf8')}}" class="overflow-auto"/>
-    <div></div>
-    {% endif %}
-    {% if wind_speed_diff|length > 0 %}
-    <img src="data:image/png;base64,{{wind_speed_diff.decode('utf8')}}" class="overflow-auto"/>
-    <div></div>
-    {% endif %}
-    {% if wind_direction_diff|length > 0 %}
-    <img src="data:image/png;base64,{{wind_direction_diff.decode('utf8')}}" class="overflow-auto"/>
-    <div></div>
-    {% endif %}
+    <div class="grid">
+        <div>
+            {% if wind_speed|length > 0 %}
+            <img src="data:image/png;base64,{{wind_speed.decode('utf8')}}" class="overflow-auto" />
+            {% endif %}
+            {% if wind_direction|length > 0 %}
+            <img src="data:image/png;base64,{{wind_direction.decode('utf8')}}" class="overflow-auto" />
+        </div>
+        <div>
+            {% endif %}
+            {% if wind_speed_diff|length > 0 %}
+            <img src="data:image/png;base64,{{wind_speed_diff.decode('utf8')}}" class="overflow-auto" />
+            {% endif %}
+            {% if wind_direction_diff|length > 0 %}
+            <img src="data:image/png;base64,{{wind_direction_diff.decode('utf8')}}" class="overflow-auto" />
+            {% endif %}
+        </div>
+    </div>
     <div id="forecastTable" class="overflow-auto">
         {% if forecasts %}
         <table class="striped">
@@ -49,7 +55,7 @@
                     {% endif %}
                     {% endfor %}
                     <td><a href="/edit/forecast/{{item.forecastID}}" class="btn btn-default" method="get"><span
-                            class="material-icons">mode_edit</span></a></td>
+                                class="material-icons">mode_edit</span></a></td>
                     <td><a href="/delete/forecast/{{item.forecastID}}" class="btn btn-default" method="post"
                             onclick="return confirm('Are you sure you want to delete this forecast?')"><span
                                 class="material-icons">delete</span></a></td>
@@ -85,7 +91,7 @@
                     {% endif %}
                     {% endfor %}
                     <td><a href="/edit/reading/{{item.readingID}}" class="btn btn-default" method="get"><span
-                        class="material-icons">mode_edit</span></a></td>
+                                class="material-icons">mode_edit</span></a></td>
                     <td><a href="/delete/reading/{{item.readingID}}" class="btn btn-default" method="post"
                             onclick="return confirm('Are you sure you want to delete this reading?')"><span
                                 class="material-icons">delete</span></a></td>

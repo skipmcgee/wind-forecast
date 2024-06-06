@@ -6,6 +6,8 @@ import numpy as np
 from io import BytesIO
 import base64
 
+plt.switch_backend('agg')
+
 class DisplayPlots:
     """class to plot wind values and display them in graphical depictions"""
 
