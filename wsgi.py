@@ -3,7 +3,7 @@
 # Copied from the Flask Starter App
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/?tab=readme-ov-file#gunicorn
 
-app import app
+from app import app
 
 if __name__ == "__main__":
     app.run()
