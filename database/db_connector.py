@@ -23,6 +23,7 @@ user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
 
+
 def connect_to_database(host=host, user=user, passwd=passwd, db=db):
     """
     connects to a database and returns a database objects
