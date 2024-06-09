@@ -1098,7 +1098,7 @@ def update_sensor(sensorID):
             logger.info("edit sensor post first query: " + sensor_query)
         query_obj = db.execute_query(db_connection=db_connection, query=sensor_query)
 
-        return redirect("/sensors")
+        return redirect("/library")
 
 
 @app.route("/edit/model/<int:modelID>", methods=["POST", "GET"])
@@ -1190,7 +1190,7 @@ def locationedit(locationID):
             logger.info("edit location post: " + location_query)
         query_obj = db.execute_query(db_connection=db_connection, query=location_query)
 
-        return redirect("/locations")
+        return redirect("/library")
 
 
 ############
