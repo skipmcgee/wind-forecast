@@ -1,7 +1,8 @@
-# Date Accessed: 20240430
-# Based on
-# used the starter app code as a template and base from which to build on
-# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
+# Citation
+# Date: 05/20/2024
+# Adapted from the Gunicorn Official Documentation
+# Source URL: https://docs.gunicorn.org/en/latest/configure.html
+
 import os
 
 workers = 2
