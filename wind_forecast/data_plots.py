@@ -1,5 +1,8 @@
-# referenced https://www.geeksforgeeks.org/graph-plotting-in-python-set-1/ for plotting examples
-# as well as https://stackoverflow.com/questions/38061267/matplotlib-graphic-image-to-base64 for base64 conversion
+# Date: 05/30/2024
+# Based on
+# referenced the following code for plotting and base64 conversion examples
+# Source URL: https://www.geeksforgeeks.org/graph-plotting-in-python-set-1/
+# Source URL: https://stackoverflow.com/questions/38061267/matplotlib-graphic-image-to-base64
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np

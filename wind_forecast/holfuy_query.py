@@ -1,5 +1,7 @@
-# date: 20240530
-# used the Holfuy API Docs at https://api.holfuy.com/live/ to create this code
+# Date: 05/30/2024
+# Based on
+# used the Holfuy API Documentation to create this code
+# Source URL: https://api.holfuy.com/live/
 import asyncio
 import aiohttp
 from pprintjson import pprintjson as ppjson

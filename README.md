@@ -43,3 +43,8 @@ application for wind forecast and wind reading data analysis
 - https://api.holfuy.com/live/ 
 - https://github.com/osu-cs340-ecampus/flask-starter-app/
 - https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
+- https://www.geeksforgeeks.org/graph-plotting-in-python-set-1/
+- https://stackoverflow.com/questions/38061267/matplotlib-graphic-image-to-base64
+- https://picocss.com
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now
+- https://stackoverflow.com/questions/38816337/convert-javascript-date-format-to-yyyy-mm-ddthhmmss

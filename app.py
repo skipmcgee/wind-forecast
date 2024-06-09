@@ -1,6 +1,8 @@
 #!/bin/env python3
-# Date Accessed: 20240430
-# Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
+# Date: 04/30/2024
+# Based on
+# used the starter app code as a template and base from which to build on
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
 import logging
 from markupsafe import Markup, escape
 from flask import (

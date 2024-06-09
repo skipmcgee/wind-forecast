@@ -1,5 +1,7 @@
 # Date Accessed: 20240430
-# Referenced and used: https://github.com/osu-cs340-ecampus/flask-starter-app/
+# Based on
+# used the starter app code as a template and base from which to build on
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
 import os
 
 workers = 2

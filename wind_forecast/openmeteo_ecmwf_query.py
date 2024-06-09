@@ -1,6 +1,7 @@
-# date: 20240530
-# used the code generator at: https://open-meteo.com/en/docs/ecmwf-api
-# as well as their docs to create this
+# Date: 05/30/2024
+# Adapted From
+# used the code generator and their API documentation to create this code
+# Source URL: https://open-meteo.com/en/docs/ecmwf-api
 import openmeteo_requests
 import requests_cache
 import pandas as pd
