@@ -1,15 +1,17 @@
+-- Data Manipulation Language
+-- 4/28/2024
 -- MySQL Script created by David McGee and Theodore Norred
 -- CS-340 Group 10 Project
 
 
--- --------------------
--- Create
--- --------------------
+-- ------------
+-- Forecasts --
+-- ------------
 
--- Forecasts
+-- Create
 
 INSERT INTO 
-	`Forecasts` (
+	Forecasts (
 		forecastForDateTime, 
 		forecastDateID, 
 		forecastTemperature2m, 
@@ -36,18 +38,8 @@ VALUES
 		%(forecastLocationID)s,
         %(forecastModelID)s
 );
-                    
--- Locations
--- Sensors
--- Models
--- Dates
--- Readings
 
--- --------------------
 -- Read
--- --------------------
-
--- Forecasts
 
 SELECT 
 	Forecasts.forecastID,
@@ -71,7 +63,45 @@ JOIN
 JOIN 
 	Dates ON Forecasts.forecastDateID = Dates.dateID;
     
--- Locations
+-- Update
+
+UPDATE 
+	Forecasts
+SET 
+	forecastForDateTime = %(forecastForDateTime)s,
+	forecastDateID = %(forecastDateID)s,
+	forecastTemperature2m = %(forecastTemperature2m)s,
+	forecastPrecipitation = %(forecastPrecipitation)s,
+	forecastWeatherCode = %(forecastWeatherCode)s,
+	forecastPressureMSL = %(forecastPressureMSL)s,
+	forecastWindSpeed10m = %(forecastWindSpeed10m)s,
+	forecastWindDirection10m = %(forecastWindDirection10m)s,
+	forecastCape = %(forecastCape)s,
+	forecastLocationID = %(forecastLocationID)s,
+	forecastModelID = %(forecastModelID)s
+WHERE 
+	forecastID = %(forecastID)s;
+    
+-- Delete
+
+DELETE FROM 
+	Forecasts
+WHERE
+	forecastID = %(forecastID)s;
+	
+
+-- ------------
+-- Locations --
+-- ------------
+
+-- Create
+
+INSERT INTO
+	Locations (locationName, locationLatitude, locationLongitude, locationAltitude)
+VALUES
+	(%(locationName)s, %(locationLatitude)s, %(locationLongitude)s, %(locationAltitude)s);
+            
+-- Read
 
 SELECT 
     locationID,
@@ -81,8 +111,39 @@ SELECT
     locationAltitude
 FROM
     Locations;
-        
--- Sensors
+    
+-- Update
+
+UPDATE 
+	Locations
+SET 
+	locationName= %(locationName)s, 
+    locationLatitude= %(locationLatitude)s, 
+    locationLongitude= %(locationLongitude)s, 
+    locationAltitude= %(locationAltitude)s
+WHERE 
+	Locations.locationID = %(locationID)s;
+    
+-- Delete
+
+DELETE FROM 
+	Locations
+WHERE 
+	locationID = %(locationID)s;
+	
+	
+-- ----------
+-- Sensors --
+-- ----------
+
+-- Create
+
+INSERT INTO 
+	Sensors (sensorName, sensorAPIKey, sensorNumber, sensorLocationID)
+VALUES 
+	(%(sensorName)s, %(sensorAPIKey)s, %(sensorNumber)s, %(location)s);
+
+-- Read
 
 SELECT 
     Sensors.sensorID,
@@ -96,24 +157,123 @@ FROM
     Sensors
 JOIN
     Locations ON Sensors.sensorLocationID = Locations.locationID;
+    
+-- Update
 
--- Models
+UPDATE 
+	Sensors 
+SET 
+	sensorName= %(sensorName)s, sensorAPIKey= %(sensorAPIKey)s, sensorNumber= %(sensorNumber)s, sensorLocationID= %(locationID)s
+WHERE 
+	sensorID= %(sensorID)s;
+
+-- Delete
+
+DELETE FROM
+	Sensors
+WHERE
+	sensorID = %(sensorID)s;
+	
+
+-- ---------
+-- Models --
+-- ---------
+
+-- Create
+
+INSERT INTO 
+	Models (
+		modelID, 
+        modelName
+        )
+VALUES 
+	(%(modelID)s, %(modelName)s);
+
+-- Read
 
 SELECT 
     modelID, 
     modelName
 FROM
     Models;
-        
--- Dates
+    
+-- Update
+
+UPDATE 
+	Models
+SET 
+	modelName = %(modelName)s
+WHERE 
+	Models.modelID = %(modelID)s;
+    
+-- Delete
+
+DELETE FROM 
+	Models
+WHERE 
+	modelID = %(modelID)s;
+	
+    
+-- --------
+-- Dates --
+-- --------
+
+-- Create
+
+INSERT INTO 
+	Dates (dateDateTime)
+VALUES 
+	(%(dateDateTime)s);
+    
+-- Read
 
 SELECT 
     dateID, 
     dateDateTime
 FROM
     Dates;
+    
+-- Update
 
--- Readings
+UPDATE 
+	Dates
+SET 
+	dateDateTime = %(dateDateTime)s
+WHERE 
+	Dates.dateID = %(dateID)s;
+        
+-- Delete
+
+DELETE FROM 
+	Dates
+WHERE 
+	dateID = %(dateID)s;
+        
+-- -----------
+-- Readings --
+-- -----------
+
+-- Create
+
+INSERT INTO 
+	Readings (
+    readingSensorID, 
+    readingWindSpeed, 
+    readingWindGust, 
+    readingWindMin, 
+    readingWindDirection, 
+    readingTemperature, 
+    readingDateID)
+VALUES (
+	%(readingSensorID)s, 
+	%(readingWindSpeed)s, 
+	%(readingWindGust)s, 
+	%(readingWindMin)s, 
+	%(readingWindDirection)s, 
+	%(readingTemperature)s, 
+	%(readingDateID)s);
+        
+-- Read
 
 SELECT 
     Readings.readingID,
@@ -131,260 +291,25 @@ JOIN
 	Sensors ON Readings.readingSensorID = Sensors.sensorID
 JOIN 
 	Dates ON Readings.readingDateID = Dates.dateID;
-
--- --------------------
+    
 -- Update
--- --------------------
 
--- Forecasts
-
-SELECT 
-	forecastID,
-	forecastDateID,
-	forecastTemperature2m,
-	forecastPrecipitation,
-	forecastWeatherCode,
-	forecastPressureMSL,
-	forecastWindSpeed10m,
-	forecastWindDirection10m,
-	forecastCape,
-	forecastModelID,
-	forecastLocationID,
-	forecastForDateTime
-FROM 
-	Forecasts
-WHERE
-	forecastID = %(forecastID)s;
-            
--- Locations
--- Sensors
-
-SELECT 
-	* 
-FROM 
-	Sensors
-JOIN 
-	Locations ON Sensors.sensorLocationID = Locations.locationID;
--- WHERE Sensors.sensorID = %(sensorID)s;
-            
--- Models
--- Dates
--- Readings
-
--- --------------------
+UPDATE 
+	Readings
+SET 
+	readingSensorID= %(readingSensorID)s,
+    readingWindSpeed= %(readingWindSpeed)s,
+    readingWindGust= %(readingWindGust)s,
+    readingWindMin= %(readingWindMin)s,
+    readingWindDirection= %(readingWindDirection)s,
+    readingTemperature= %(readingTemperature)s,
+    readingDateID= %(readingDateID)s
+WHERE 
+	Readings.readingID = %(readingID)s
+    
 -- Delete
--- --------------------
 
--- Forecasts
-
-DELETE FROM 
-	Forecasts
+DELETE FROM
+	Readings
 WHERE
-	forecastID = %(forecastID)s;
-        
--- Locations
--- Sensors
--- Models
--- Dates
--- Readings
-
--- -----------------------------------------------------
--- Get Sensor + Location Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-SELECT sensorID, sensorName, sensorAPIKEY, sensorNumber, locationLatitude, locationLongitude, locationAltitude FROM Sensors
-JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
-ORDER BY sensorName DESC;
-
-- -----------------------------------------------------
--- Delete a Forecast
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-DELETE FROM Forecasts WHERE forecastID=_forecastID;
-
--- -----------------------------------------------------
--- Get Forecast Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-
-
--- OR get Forecasts from a date range
-
-SELECT * 
-FROM Forecasts
-JOIN Models ON Forecasts.forecastModelID = Models.modelID
-JOIN Locations ON Forecasts.forecastLocationID = Locations.locationID
-WHERE 
-    forecastForDateTime BETWEEN _toDate AND _fromDate
-    AND
-    Locations.locationID = _locationID;
--- -----------------------------------------------------
--- Insert Forecast Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`,)
-VALUES (_forecastDateID, _forecastTemperature2m, _forecastPrecipitation, _forecastWeatherCode, _forecastPressureMSL, _forecastWindSpeed10m, _forecastWindDirection10m, _forecastCape, _forecastModelID, _forecastLocationID, _forecastForDateTime,);
-
--- -----------------------------------------------------
--- Update Forecast Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-UPDATE Forecasts
-SET column1 = value1, column2 = value2,
-WHERE forecastID=_forecastID; 
-
-- -----------------------------------------------------
--- Delete a Reading
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-DELETE FROM Readings WHERE readingID=_readingID;
-
--- -----------------------------------------------------
--- Get Readings Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-SELECT * FROM Readings;
-
--- OR get Readings from a date range
-
-SELECT * FROM Readings
-JOIN Sensors ON Readings.readingSensorID = Sensors.sensorID
-JOIN Dates ON Readings.readingDateID = Dates.dateID
-WHERE 
-    dateDateTime BETWEEN _toDate AND _fromDate
-    AND
-    sensorLocationID =_locationID;
--- -----------------------------------------------------
--- Insert Readings Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-INSERT INTO Readings (`readingSensorID`, `readingWindSpeed`, `readingWindGust`, `readingWindMin`, `readingWindDirection`, `readingTemperature`, `readingDateID`,)
-VALUES (_readingSensorID, _readingWindSpeed, _readingWindGust, _readingWindMin, _readingWindDirection, _readingTemperature, _readingDateID,);
-
--- -----------------------------------------------------
--- Update Reading Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-UPDATE Readings
-SET column1 = value1, column2 = value2,
-WHERE readingID=_readingID; 
-
-- -----------------------------------------------------
--- Delete a Model
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-DELETE FROM Models WHERE modelID=_modelID;
-
--- -----------------------------------------------------
--- Get Models Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-SELECT * FROM Models;
-
--- -----------------------------------------------------
--- Insert Models Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-INSERT INTO Models (`modelName`)
-VALUES (_modelName);
-
--- -----------------------------------------------------
--- Update Model Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-UPDATE Models
-SET column1 = value1, column2 = value2,
-WHERE modelID=_modelID; 
-
-- -----------------------------------------------------
--- Delete a Date
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-DELETE FROM Dates WHERE dateID=_dateID;
-
--- -----------------------------------------------------
--- Get Dates Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-SELECT * FROM Dates;
-
--- OR get Dates from a date range
-
-SELECT * 
-FROM Dates
-WHERE dateDateTime BETWEEN _toDate AND _fromDate;
-
--- -----------------------------------------------------
--- Insert Dates Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-INSERT INTO Dates (`dateDateTime`)
-VALUES (_dateDateTime);
-
--- -----------------------------------------------------
--- Update Dates Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-UPDATE Dates
-SET column1 = value1, column2 = value2,
-WHERE dateID=_dateID; 
-
-- -----------------------------------------------------
--- Delete a Sensor
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-DELETE FROM Sensors WHERE sensorID=_sensorID;
-
--- -----------------------------------------------------
--- Get Sensors Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-SELECT * FROM Sensors;
-
--- OR
-
-SELECT * FROM Sensors
-JOIN Locations ON Sensors.sensorLocationID = Locations.locationID
-WHERE Sensors.sensorID = _sensorID;
-
--- -----------------------------------------------------
--- Insert Sensors Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-INSERT INTO Sensors (`sensorName`, `sensorAPIKey`, `sensorNumber`, `sensorLocationID`,)
-VALUES (_sensorName, _sensorAPIKey, _sensorNumber, _sensorLocationID,);
-
--- -----------------------------------------------------
--- Update Sensor Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-UPDATE Sensors
-SET `sensorName` = _sensorName, `sensorAPIKey` = _sensorAPIKey, `sensorNumber` = _sensorNumber, `sensorLocationID` = _sensorLocationID,
-WHERE `sensorID` = _sensorID; 
-
-- -----------------------------------------------------
--- Delete a Location
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-DELETE FROM Locations WHERE locationID=_locationID;
-
--- -----------------------------------------------------
--- Get Locations Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-SELECT * FROM Locations;
-
--- -----------------------------------------------------
--- Insert Locations Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-INSERT INTO Locations (`locationName`, `locationLatitude`, `locationLongitude`, `locationAltitude`,)
-VALUES (_locationName, _locationLatitude, _locationLongitude, _locationAltitude,);
-
--- -----------------------------------------------------
--- Update Location Information
--- '_' is used to denote backend language variables
--- -----------------------------------------------------
-UPDATE Locations
-SET `locationName`={editsensor['locationName']}, `locationLatitude`={editsensor['locationLatitude']}, `locationLongitude`={editsensor['locationLongitude']}, `locationAltitude`={editsensor['locationAltitude']},
-WHERE `locationID`=_locationID;
+	readingID = %(readingID)s;
