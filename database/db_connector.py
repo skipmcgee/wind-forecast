@@ -1,10 +1,15 @@
+# Citation
+# Date: 04/30/2024
+# Copied from the Flask Starter App code
+# Copied the starter app code to template this file
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
+
 # Citation for the following function: execute_query()
 # Date: 05/25/2024
 # Based on a StackOverflow solution provided by user "powdahound"
 # I modified the class based StackOverflow solution to work with the existing execute_query() function provided by the Flask App Starter Code
 # Source URL: https://stackoverflow.com/questions/207981/how-to-enable-mysql-client-auto-re-connect-with-mysqldb/982873#982873
-# Copied the starter app code to template this file
-# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
+
 import MySQLdb
 import os
 from dotenv import load_dotenv, find_dotenv

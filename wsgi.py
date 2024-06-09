@@ -1,7 +1,8 @@
-# Date Accessed: 20240430
-# Based on
-# used the starter app code as a template and base from which to build on
-# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
+# Citation
+# Date: 04/30/2024
+# Copied from the Flask Starter App
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/?tab=readme-ov-file#gunicorn
+
 app import app
 
 if __name__ == "__main__":

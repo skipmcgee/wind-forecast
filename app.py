@@ -1,8 +1,11 @@
 #!/bin/env python3
+
+# Citation
 # Date: 04/30/2024
-# Based on
-# used the starter app code as a template and base from which to build on
+# Based on the Flask Starter App
+# Used the starter app code as a template and base from which to build on
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/
+
 import logging
 from markupsafe import Markup, escape
 from flask import (
@@ -34,15 +37,16 @@ from wind_forecast.data_plots import DisplayPlots
 app = Flask(__name__)
 app.secret_key = "mc)kNIk4cbIZQ,@jUve-Q}2^T3em$p"
 db_connection = db.connect_to_database()
+keys = KeyTranslation()
+plots = DisplayPlots()
+info_dict = dict()
 
 # Logger
 logging.basicConfig(
     level=logging.DEBUG, format="%(levelname)s : %(message)s"
 )  # filename='app.log',
 logger = logging.getLogger("werkzeug")
-keys = KeyTranslation()
-plots = DisplayPlots()
-info_dict = dict()
+
 DEBUG = True
 
 
