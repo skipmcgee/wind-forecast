@@ -6,3 +6,4 @@ venv
 .cache.sqlite
 __pycache__
 *.log
+.vscode/
