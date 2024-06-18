@@ -1116,6 +1116,7 @@ def modeledit(modelID):
         return render_template("edit/editmodel.html", specific_model=query_results)
 
     elif request.method == "POST":
+        request.form = escape(request.form)
         if request.form["modelName"].upper() not in keys.valid_models_list:
             flash("Not a recognized Weather Model!")
             return redirect(f"/edit/model/{request.form['modelID']}")
