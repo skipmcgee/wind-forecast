@@ -36,7 +36,7 @@
             <thead>
                 <tr>
                     {% for key in forecasts[0].keys() %}
-                    {% if key != 'forecastDateID' %}
+                    {% if key != 'forecastDateID' and key != 'forecastID' and key != 'modelID' and key != 'locationID' and key != 'locationID' and key != 'forecastLocationID' and key != 'forecastModelID' %}
                     <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key_dict[key] }}</th>
                     {% endif %}
                     {% endfor %}
@@ -47,7 +47,7 @@
                 {% for item in forecasts %}
                 <tr>
                     {% for key in item.keys() %}
-                    {% if key != 'forecastDateID' %}
+                    {% if key != 'forecastDateID' and key != 'forecastID' and key != 'modelID' and key != 'locationID' and key != 'forecastLocationID' and key != 'forecastModelID' %}
                     <td>{{item[key]}}</td>
                     {% endif %}
                     {% endfor %}
@@ -72,7 +72,7 @@
             <thead>
                 <tr>
                     {% for key in readings[0].keys() %}
-                    {% if key != 'readingID' and key != 'readingDateID' and key != 'readingSensorID' %}
+                    {% if key != 'readingID' and key != 'readingDateID' and key != 'sensorID' and key != 'locationID' and key != 'readingSensorID' and key != 'dateID' and key != 'sensorLocationID' and key != 'sensorAPIKey' %}
                     <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key_dict[key] }}</th>
                     {% endif %}
                     {% endfor %}
@@ -83,7 +83,7 @@
                 {% for item in readings %}
                 <tr>
                     {% for key in item.keys() %}
-                    {% if key != 'readingID' and key != 'readingDateID' and key != 'readingSensorID' %}
+                    {% if key != 'readingID' and key != 'readingDateID' and key != 'sensorID' and key != 'locationID' and key != 'readingSensorID' and key != 'dateID' and key != 'sensorLocationID' and key != 'sensorAPIKey' %}
                     <td>{{item[key]}}</td>
                     {% endif %}
                     {% endfor %}

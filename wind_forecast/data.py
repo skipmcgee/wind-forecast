@@ -5,7 +5,7 @@ class KeyTranslation:
         self.key_dict = dict()
         self.key_dict["sensorID"] = "Sensor ID"
         self.key_dict["sensorName"] = "Sensor Name"
-        self.key_dict["sensorAPIKEY"] = "API Key"
+        self.key_dict["sensorAPIKey"] = "API Key"
         self.key_dict["sensorNumber"] = "Sensor Number"
         self.key_dict["locationLatitude"] = "Latitude"
         self.key_dict["locationLongitude"] = "Longitude"
@@ -23,14 +23,14 @@ class KeyTranslation:
         self.key_dict["forecastCape"] = "Cape"
         self.key_dict["forecastModelID"] = "Model"
         self.key_dict["forecastLocationID"] = "Location"
-        self.key_dict["forecastForDateTime"] = "Forecast Date/Time"
+        self.key_dict["forecastForDateTime"] = "Forecast For Date/Time"
         self.key_dict["locationID"] = "Location ID"
         self.key_dict["locationName"] = "Location Name"
         self.key_dict["locationLatitude"] = "Latitude"
         self.key_dict["locationLongitude"] = "Longitude"
         self.key_dict["locationAltitude"] = "Altitude"
         self.key_dict["dateID"] = "Date ID"
-        self.key_dict["dateDateTime"] = "Date/Time"
+        self.key_dict["dateDateTime"] = "Created Date/Time"
         self.key_dict["readingID"] = "Reading ID"
         self.key_dict["readingSensorID"] = "Sensor"
         self.key_dict["readingWindSpeed"] = "Average Wind Speed"
@@ -47,7 +47,6 @@ class KeyTranslation:
             "readings",
         ]
         self.valid_models_list = [
-            "HRRR",
             "ECMWF",
             "MBLUE",
             "GFS",
@@ -69,14 +68,6 @@ class KeyTranslation:
             "forecasts",
             "readings",
         ]
-        self.valid_models_list = [
-            "HRRR",
-            "ECMWF",
-            "MBLUE",
-            "GFS",
-            "NAM",
-            "ICON",
-        ]
         self.valid_models_tuple = (
             {
                 "modelID": 1,
@@ -84,22 +75,18 @@ class KeyTranslation:
             },
             {
                 "modelID": 2,
-                "modelName": "HRRR",
-            },
-            {
-                "modelID": 3,
                 "modelName": "GFS",
             },
             {
-                "modelID": 4,
+                "modelID": 3,
                 "modelName": "ICON",
             },
             {
-                "modelID": 5,
+                "modelID": 4,
                 "modelName": "MBLUE",
             },
             {
-                "modelID": 6,
+                "modelID": 5,
                 "modelName": "NAM",
             },
         )

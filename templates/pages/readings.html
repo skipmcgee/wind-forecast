@@ -13,6 +13,12 @@
     <h3>{{ mesg }}</h3>
     {% endfor %}
     <div></div>
+    <div class="grid">
+        <div></div>
+        <div><a href='/add/reading'><input class="btn" type="button" value="Add a Reading" method="get"></a></div>
+        <div></div>
+    </div>
+    <div></div>
     <div id="readingTable" class="overflow-auto">
         <table class="striped">
             <caption>Current Readings: </caption>
@@ -47,13 +53,6 @@
             </tbody>
             {% endif %}
         </table>
-
-        <div class="grid">
-            <div></div>
-            <div><a href='/add/reading'><input class="btn" type="button" value="Add a Reading" method="get"></a></div>
-            <div></div>
-        </div>
-
     </div>
 </article>
 {% endblock %}

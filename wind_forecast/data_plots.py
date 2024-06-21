@@ -8,7 +8,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 import base64
+import logging
 
+# supress matplotlib debug messages
+plt.set_loglevel (level = 'warning')
+# get the the logger with the name 'PIL'
+pil_logger = logging.getLogger('PIL')  
+# override the logger logging level to INFO
+pil_logger.setLevel(logging.INFO)
 
 class DisplayPlots:
     """class to plot wind values and display them in graphical depictions"""
@@ -30,6 +37,8 @@ class DisplayPlots:
         plt.xlabel("Time")
         plt.ylabel("Wind Speed (MPH)")
         plt.legend()
+        plt.tight_layout()
+        plt.grid()
         plt.savefig(image, format="png")
         return base64.encodebytes(image.getvalue())
 
@@ -48,6 +57,7 @@ class DisplayPlots:
         plt.xlabel("Time")
         plt.ylabel("Wind Direction (degrees)")
         plt.legend()
+        plt.tight_layout()
         plt.savefig(image, format="png")
         return base64.encodebytes(image.getvalue())
 
@@ -60,6 +70,8 @@ class DisplayPlots:
         plt.title("Wind Direction (degree difference from predicted)")
         plt.xlabel("Time")
         plt.ylabel("Wind Direction Difference")
+        plt.tight_layout()
+        plt.grid()
         plt.plot()
         plt.savefig(image, format="png")
         return base64.encodebytes(image.getvalue())
@@ -73,6 +85,8 @@ class DisplayPlots:
         plt.title("Wind Speed Difference from Predicted")
         plt.xlabel("Time")
         plt.ylabel("Wind Speed Difference")
+        plt.tight_layout()
+        plt.grid()
         plt.plot()
         plt.savefig(image, format="png")
         return base64.encodebytes(image.getvalue())

@@ -13,6 +13,13 @@
     <h3>{{ mesg }}</h3>
     {% endfor %}
     <div></div>
+    <div class="grid">
+        <div></div>
+        <div><a href='/add/forecast'><input class="btn" type="button" value="Add a Forecast" method="post"></a>
+        </div>
+        <div></div>
+    </div>
+    <div></div>
     <div id="forecastTable" class="overflow-auto">
         <table class="striped">
             <caption>Current Forecasts: </caption>
@@ -47,14 +54,6 @@
             </tbody>
             {% endif %}
         </table>
-
-        <div class="grid">
-            <div></div>
-            <div><a href='/add/forecast'><input class="btn" type="button" value="Add a Forecast" method="post"></a>
-            </div>
-            <div></div>
-        </div>
-
     </div>
 </article>
 {% endblock %}

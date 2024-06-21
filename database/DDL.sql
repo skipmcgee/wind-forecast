@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
   CONSTRAINT `fk_Forecasts_Models`
     FOREIGN KEY (`forecastModelID`)
     REFERENCES `Models` (`modelID`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Forecasts_Locations1`
     FOREIGN KEY (`forecastLocationID`)
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
   CONSTRAINT `fk_Forecasts_Dates1`
     FOREIGN KEY (`forecastDateID`)
     REFERENCES `Dates` (`dateID`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'Forecast information that uses attributes that are common across all weather models.\n';
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `Sensors` (
   CONSTRAINT `fk_Sensors_Locations1`
     FOREIGN KEY (`sensorLocationID`)
     REFERENCES `Locations` (`locationID`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'The sensors that can measure the weather data at a specific location.';
@@ -183,8 +183,7 @@ INSERT
 	`Models` (modelID, modelName)
 VALUES 
 	(1, 'ECMWF'),
-	(2, 'HRRR'),
-	(3, 'GFS');
+	(2, 'GFS');
 
 -- -----------------------------------------------------
 -- Insert `Locations`
