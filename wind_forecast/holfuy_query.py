@@ -21,7 +21,9 @@ async def fetch(session, url):
         return await response.json(), response.status
 
 
-async def gather_data(holfuy_token: str, holfuy_station: str = '1151', DEBUG=False) -> tuple:
+async def gather_data(
+    holfuy_token: str, holfuy_station: str = "1151", DEBUG=False
+) -> tuple:
     base_url = "https://api.holfuy.com/live/?"
     info_type = "JSON"
     wind_speed_units = "mph"

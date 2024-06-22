@@ -174,10 +174,12 @@ def results():
         merged_df = merged_df.drop_duplicates(subset=["forecastForDateTime"])
         if DEBUG:
             logger.info(
-                [str(merged_df["forecastForDateTime"]),\
-                str(merged_df["dateDateTime"]),\
-                str(merged_df["forecastWindSpeed10m"]),\
-                str(merged_df["readingWindSpeed"]),]
+                [
+                    str(merged_df["forecastForDateTime"]),
+                    str(merged_df["dateDateTime"]),
+                    str(merged_df["forecastWindSpeed10m"]),
+                    str(merged_df["readingWindSpeed"]),
+                ]
             )
 
         # generate the comparison area plots based on the baseline merged dataframe
@@ -334,12 +336,16 @@ def add_forecast():
             )
             forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
             row_count = len(ecmwf.index)
-            date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{now}';"
+            date_check_query = (
+                f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{now}';"
+            )
             index_date_results = db.execute_query(
                 db_connection=db_connection, query=date_check_query
             ).fetchone()
             if not index_date_results:
-                date_create_id = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{now}');"
+                date_create_id = (
+                    f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{now}');"
+                )
                 date_id = db.execute_query(
                     db_connection=db_connection, query=date_create_id
                 )
@@ -347,7 +353,9 @@ def add_forecast():
                     db_connection=db_connection, query=date_check_query
                 ).fetchone()
             for index, row in ecmwf.iterrows():
-                logger.info(f"index: {index}, row: {row}, now: {now}, values: {row['date']}")
+                logger.info(
+                    f"index: {index}, row: {row}, now: {now}, values: {row['date']}"
+                )
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -374,15 +382,19 @@ def add_forecast():
                 sensor_results["locationLatitude"],
                 sensor_results["locationLongitude"],
             )
-            
+
             forecast_query = f"INSERT INTO Forecasts (`forecastDateID`, `forecastTemperature2m`, `forecastPrecipitation`, `forecastWeatherCode`, `forecastPressureMSL`, `forecastWindSpeed10m`, `forecastWindDirection10m`, `forecastCape`, `forecastModelID`, `forecastLocationID`, `forecastForDateTime`)\n VALUES "
             row_count = len(gfs.index)
-            date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{now}';"
+            date_check_query = (
+                f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{now}';"
+            )
             index_date_results = db.execute_query(
                 db_connection=db_connection, query=date_check_query
             ).fetchone()
             if not index_date_results:
-                date_create_id = f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{now}');"
+                date_create_id = (
+                    f"INSERT INTO Dates (`dateDateTime`)\n VALUES ('{now}');"
+                )
                 date_id = db.execute_query(
                     db_connection=db_connection, query=date_create_id
                 )
@@ -390,7 +402,9 @@ def add_forecast():
                     db_connection=db_connection, query=date_check_query
                 ).fetchone()
             for index, row in gfs.iterrows():
-                logger.info(f"index: {index}, row: {row}, date: {now}, values: {row['date']}")
+                logger.info(
+                    f"index: {index}, row: {row}, date: {now}, values: {row['date']}"
+                )
                 date_check_query = f"SELECT `dateID`\nFROM Dates\nWHERE `dateDateTime`='{row['date']}';"
                 date_results = db.execute_query(
                     db_connection=db_connection, query=date_check_query
@@ -601,18 +615,34 @@ def add_reading():
         if not keys.check_valid_sensor(use_sensorID):
             flash("This sensor is not currently supported for MVP!")
             return redirect("/add/reading")
-        sensor_query = f"SELECT * FROM Sensors\n WHERE Sensors.sensorID = '{use_sensorID}';"
+        sensor_query = (
+            f"SELECT * FROM Sensors\n WHERE Sensors.sensorID = '{use_sensorID}';"
+        )
         sensor_results = db.execute_query(
             db_connection=db_connection, query=sensor_query
         ).fetchone()
         if str(use_sensorID) == str(1):
             if DEBUG:
-                print(f"Using the Holfuy query, station number: {str(sensor_results['sensorNumber'])}")
-            valid_obj_list, error_obj_list = asyncio.run(gather_data(sensor_results['sensorAPIKey'], str(sensor_results['sensorNumber'])))
+                print(
+                    f"Using the Holfuy query, station number: {str(sensor_results['sensorNumber'])}"
+                )
+            valid_obj_list, error_obj_list = asyncio.run(
+                gather_data(
+                    sensor_results["sensorAPIKey"], str(sensor_results["sensorNumber"])
+                )
+            )
         elif str(use_sensorID) == str(2):
             if DEBUG:
-                print(f"Using the Tempest query, station number: {str(sensor_results['sensorNumber'])}")
-            valid_obj_list, error_obj_list = asyncio.run(query_tempest(sensor_results['sensorName'], sensor_results['sensorAPIKey'], str(sensor_results['sensorNumber'])))
+                print(
+                    f"Using the Tempest query, station number: {str(sensor_results['sensorNumber'])}"
+                )
+            valid_obj_list, error_obj_list = asyncio.run(
+                query_tempest(
+                    sensor_results["sensorName"],
+                    sensor_results["sensorAPIKey"],
+                    str(sensor_results["sensorNumber"]),
+                )
+            )
         if DEBUG:
             app.logger.debug("Valid object list:")
             for sensor_obj in valid_obj_list:
@@ -622,7 +652,7 @@ def add_reading():
                 pp.pprint(error_obj)
         # check for errors
         for sensor_obj in valid_obj_list:
-            if "error" in sensor_obj.keys() or '40' in str(error_obj_list):
+            if "error" in sensor_obj.keys() or "40" in str(error_obj_list):
                 flash("Error accessing Sensor API, check sensor information")
                 return redirect("/library")
         now = datetime.now()

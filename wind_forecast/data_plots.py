@@ -11,11 +11,12 @@ import base64
 import logging
 
 # supress matplotlib debug messages
-plt.set_loglevel (level = 'warning')
+plt.set_loglevel(level="warning")
 # get the the logger with the name 'PIL'
-pil_logger = logging.getLogger('PIL')  
+pil_logger = logging.getLogger("PIL")
 # override the logger logging level to INFO
 pil_logger.setLevel(logging.INFO)
+
 
 class DisplayPlots:
     """class to plot wind values and display them in graphical depictions"""
