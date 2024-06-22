@@ -205,10 +205,7 @@ INSERT INTO
 	`Sensors` (sensorName, sensorLocationID, sensorAPIKey, sensorNumber)
 VALUES 
 	('La Bajada Holfuy', 1, 'mytestapikey1234', 1151),
-	('Sandia Peak Holfuy', 2, 'mytestapikey23456', 1152),
-	('Sandia Peak Tempest', 2, 'mytestapikey345670', 2),
-	('Sandia Crest Holfuy', 3, 'mytestapikey456789', 1153),
-	('Blue Springs Holfuy', 4, 'mytestapikey56789', 1154);
+	('Sandia Soaring Peak Tempest', 2, 'mytestapikey23456', 134520);
 
 -- -----------------------------------------------------
 -- Insert `Dates`

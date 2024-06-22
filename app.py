@@ -29,7 +29,8 @@ from flask.views import View, MethodView
 # local imports
 from wind_forecast.openmeteo_ecmwf_query import query_ecmwf
 from wind_forecast.openmeteo_gfs_query import query_gfs
-from wind_forecast.holfuy_query import fetch, gather_data
+from wind_forecast.holfuy_query import gather_data
+from wind_forecast.tempest_query import query_tempest
 from wind_forecast.data import KeyTranslation
 from wind_forecast.data_plots import DisplayPlots
 
@@ -597,20 +598,33 @@ def add_reading():
         use_sensorID = request.form["sensorID"]
         if DEBUG:
             logger.info("add reading post for sensor: " + use_sensorID)
-        if use_sensorID not in keys.current_supported_sensor_list:
+        if not keys.check_valid_sensor(use_sensorID):
             flash("This sensor is not currently supported for MVP!")
             return redirect("/add/reading")
-        valid_obj_list, error_obj_list = asyncio.run(gather_data())
+        sensor_query = f"SELECT * FROM Sensors\n WHERE Sensors.sensorID = '{use_sensorID}';"
+        sensor_results = db.execute_query(
+            db_connection=db_connection, query=sensor_query
+        ).fetchone()
+        if str(use_sensorID) == str(1):
+            if DEBUG:
+                print(f"Using the Holfuy query, station number: {str(sensor_results['sensorNumber'])}")
+            valid_obj_list, error_obj_list = asyncio.run(gather_data(sensor_results['sensorAPIKey'], str(sensor_results['sensorNumber'])))
+        elif str(use_sensorID) == str(2):
+            if DEBUG:
+                print(f"Using the Tempest query, station number: {str(sensor_results['sensorNumber'])}")
+            valid_obj_list, error_obj_list = asyncio.run(query_tempest(sensor_results['sensorName'], sensor_results['sensorAPIKey'], str(sensor_results['sensorNumber'])))
         if DEBUG:
+            app.logger.debug("Valid object list:")
             for sensor_obj in valid_obj_list:
                 pp.pprint(sensor_obj)
+            app.logger.debug("Error object list:")
             for error_obj in error_obj_list:
                 pp.pprint(error_obj)
         # check for errors
         for sensor_obj in valid_obj_list:
-            if "error" in sensor_obj.keys():
-                flash("Error accessing Holfuy API")
-                return redirect("/")
+            if "error" in sensor_obj.keys() or '40' in str(error_obj_list):
+                flash("Error accessing Sensor API, check sensor information")
+                return redirect("/library")
         now = datetime.now()
         date_format = "%Y-%m-%d %H:%M:%S"
         datetime_str = now.strftime(date_format)

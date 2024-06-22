@@ -54,9 +54,12 @@ class KeyTranslation:
             "ICON",
         ]
         self.current_supported_model_list = ["ECMWF", "GFS"]
-        self.current_supported_sensor_list = [
-            "1",
-        ]
+        self.current_sensor_dict = {
+            "Holfuy": 1,
+            "1": "Holfuy",
+            "Tempest": 2,
+            "2": "Tempest",
+        }
         self.current_supported_sensor_models_list = [
             "Holfuy",
             "Tempest",
@@ -93,12 +96,13 @@ class KeyTranslation:
 
     def check_valid_model(self, passed_model_name: str) -> bool:
         """check if model is supported and model name is valid"""
-        if passed_model_name in self.valid_models_list:
+        if str(passed_model_name) in self.valid_models_list:
             return True
         return False
 
     def check_valid_sensor(self, passed_sensor_id: str) -> bool:
         """check if sensor is supported and sensor name is valid"""
-        if passed_sensor_id in self.current_supported_sensor_list:
+        print(passed_sensor_id, self.current_sensor_dict)
+        if str(passed_sensor_id) in self.current_sensor_dict:
             return True
         return False
