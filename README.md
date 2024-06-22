@@ -1,14 +1,14 @@
 # wind-forecast
 application for wind forecast and wind reading data analysis
 
-### if first run, install the requirements:
+### install the requirements:
 1) follow the os-specific install instructions at: https://pypi.org/project/mysqlclient/
 2) `python3 -m venv venv`
 3) `source venv/bin/activate` or `venv\Scripts\activate` on Windows.
 4) `pip install --upgrade pip setuptools wheel`
 5) `pip install -r requirements.txt`
 
-### then create your database connection file:
+### (required) create your database connection file:
 - open database/.env
 - add the following customized variables:
     ```
@@ -24,6 +24,9 @@ application for wind forecast and wind reading data analysis
     ```
     HOLFUY_STATION='1151'
     HOLFUY_TOKEN='mytoken'
+    TEMPEST_STATION='134520'
+    TEMPEST_TOKEN='mytoken'
+    TEMPEST_STATION_NAME='Sandia Soaring Peak Tempest'
     ```
 
 ### make sure your network or local db is set up:
@@ -48,3 +51,4 @@ application for wind forecast and wind reading data analysis
 - https://picocss.com
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now
 - https://stackoverflow.com/questions/38816337/convert-javascript-date-format-to-yyyy-mm-ddthhmmss
+- https://apidocs.tempestwx.com/reference/get_observations-stn-station-id
