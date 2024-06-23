@@ -76,7 +76,7 @@ async def query_tempest(
 
 if __name__ == "__main__":
     seconds = time.time()
-    #print("Epoch Seconds: ", seconds)
+    # print("Epoch Seconds: ", seconds)
     loop = asyncio.get_event_loop()
     response, status = loop.run_until_complete(
         query_tempest(

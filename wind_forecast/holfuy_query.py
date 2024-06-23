@@ -50,4 +50,4 @@ if __name__ == "__main__":
     valid_obj_list, error_obj_list = loop.run_until_complete(
         gather_data(holfuy_token=holfuy_token)
     )
-    #pprint.pp(valid_obj_list, indent=4)
+    # pprint.pp(valid_obj_list, indent=4)

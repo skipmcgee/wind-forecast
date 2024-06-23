@@ -91,7 +91,7 @@ def query_gfs(query_lat: float, query_long: float, DEBUG: bool = False) -> tuple
 
     # Process first location. To-do: add a for-loop for multiple locations or weather models
     response = responses[0]
-    if DEBUG: 
+    if DEBUG:
         print(f"Coordinates {response.Latitude()}°N {response.Longitude()}°E")
         print(f"Elevation {response.Elevation()} m asl")
         print(f"Timezone {response.Timezone()} {response.TimezoneAbbreviation()}")
@@ -233,7 +233,7 @@ def query_gfs(query_lat: float, query_long: float, DEBUG: bool = False) -> tuple
     # print(daily_dataframe)
     if DEBUG:
         pprint.pp(hourly_dataframe)
-    
+
     print("OpenMeteo GFS query completed successfully")
     return hourly_dataframe
 
