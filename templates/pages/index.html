@@ -10,15 +10,17 @@
     <h4>{% block title %}Analyze Weather Model Accuracy{% endblock %}</h4>
     <article> 
         <p></p>
-        <p>There are a variety of wind forecast models (ECMWF, GFS, MBLUE, etc.) which often have different wind forecasts
+        <p>There are a variety of wind forecast models such as <strong>ECMWF</strong> or <strong>GFS</strong>. which often have different wind forecasts
             for a given location. How do you determine which model is the most historically accurate at a given location? 
             How do you predict which model will be the most accurate forecast / which you should rely on for your next free flight?</p>
         <p></p>
         <p>This application uses the free <a href="https://open-meteo.com" target="_blank" rel="noreferrer noopener">OpenMeteo API</a> 
-            to obtain wind forecast data, and a <a href="https://api.holfuy.com/" target="_blank" rel="noreferrer noopener">Holfuy device API</a>
-             to obtain the measured wind forecast data. The minimal viable product uses 2 weather forecast models
-            (GFS and ECMWF) and 1 Holfuy device, located at La Bajada Ridge, New Mexico.
-            The codebase can be found at <a href="https://github.com/skipmcgee/wind-forecast" target="_blank" rel="noreferrer noopener">GitHub repository</a>.</p>
+            to obtain wind forecast data from 2 weather forecast models (ECMWF and GFS), and two types of sensors to obtain measured wind data: a 
+            <a href="https://apidocs.tempestwx.com/reference/quick-start" target="_blank" rel="noreferrer noopener">Tempest Sensor</a>, 
+            and a <a href="https://api.holfuy.com/" target="_blank" rel="noreferrer noopener">Holfuy Sensor</a>. Note that the <strong>OpenMeteo</strong> 
+            <strong>GFS</strong> model is enriched with <strong>HRRR</strong> model data for forecasts < 3 days from the requested date.
+            The application codebase can be found on <a href="https://skipmcgee.github.io/" target="_blank" rel="noreferrer noopener">Skip McGee's</a>
+            <a href="https://github.com/skipmcgee/wind-forecast" target="_blank" rel="noreferrer noopener">Wind-Forecast</a> repository.</p>
     </article>
 </section>
 <div></div>

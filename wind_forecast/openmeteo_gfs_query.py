@@ -6,11 +6,12 @@ import openmeteo_requests
 import requests_cache
 import pandas as pd
 from retry_requests import retry
+import pprint
 
 
-def query_gfs(query_lat: float, query_long: float) -> tuple:
-
-    print(f"query_gfs started for lat: {str(query_lat)}, long: {str(query_long)}")
+def query_gfs(query_lat: float, query_long: float, DEBUG: bool = False) -> tuple:
+    if DEBUG:
+        print(f"query_gfs started for lat: {str(query_lat)}, long: {str(query_long)}")
 
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession(".cache", expire_after=3600)
@@ -88,12 +89,13 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
     }
     responses = openmeteo.weather_api(url, params=params)
 
-    # Process first location. Add a for-loop for multiple locations or weather models
+    # Process first location. To-do: add a for-loop for multiple locations or weather models
     response = responses[0]
-    print(f"Coordinates {response.Latitude()}°N {response.Longitude()}°E")
-    print(f"Elevation {response.Elevation()} m asl")
-    print(f"Timezone {response.Timezone()} {response.TimezoneAbbreviation()}")
-    print(f"Timezone difference to GMT+0 {response.UtcOffsetSeconds()} s")
+    if DEBUG: 
+        print(f"Coordinates {response.Latitude()}°N {response.Longitude()}°E")
+        print(f"Elevation {response.Elevation()} m asl")
+        print(f"Timezone {response.Timezone()} {response.TimezoneAbbreviation()}")
+        print(f"Timezone difference to GMT+0 {response.UtcOffsetSeconds()} s")
 
     # Process minutely_15 data. The order of variables needs to be the same as requested.
     minutely_15 = response.Minutely15()
@@ -229,8 +231,10 @@ def query_gfs(query_lat: float, query_long: float) -> tuple:
 
     daily_dataframe = pd.DataFrame(data=daily_data)
     # print(daily_dataframe)
-
-    # pprint.pprint(hourly_dataframe)
+    if DEBUG:
+        pprint.pp(hourly_dataframe)
+    
+    print("OpenMeteo GFS query completed successfully")
     return hourly_dataframe
 
 

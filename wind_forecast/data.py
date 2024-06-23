@@ -6,6 +6,7 @@ class KeyTranslation:
         self.key_dict["sensorID"] = "Sensor ID"
         self.key_dict["sensorName"] = "Sensor Name"
         self.key_dict["sensorAPIKey"] = "API Key"
+        self.key_dict["sensorAPIKEY"] = "API Key"
         self.key_dict["sensorNumber"] = "Sensor Number"
         self.key_dict["locationLatitude"] = "Latitude"
         self.key_dict["locationLongitude"] = "Longitude"

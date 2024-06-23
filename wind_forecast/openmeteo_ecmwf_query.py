@@ -6,11 +6,13 @@ import openmeteo_requests
 import requests_cache
 import pandas as pd
 from retry_requests import retry
+import pprint
 
 
-def query_ecmwf(query_lat: float, query_long: float) -> tuple:
+def query_ecmwf(query_lat: float, query_long: float, DEBUG: bool = False):
 
-    print(f"query_ecmwf started for lat: {str(query_lat)}, long: {str(query_long)}")
+    if DEBUG:
+        print(f"query_ecmwf started for lat: {str(query_lat)}, long: {str(query_long)}")
 
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession(".cache", expire_after=3600)
@@ -47,12 +49,13 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
     }
     responses = openmeteo.weather_api(url, params=params)
 
-    # Process first location. Add a for-loop for multiple locations or weather models
+    # Process first location. To-do: add a for-loop for multiple locations or weather models
     response = responses[0]
-    print(f"Coordinates: {response.Latitude()}°N {response.Longitude()}°E")
-    print(f"Elevation: {response.Elevation()} m asl")
-    print(f"Timezone: {response.Timezone()} {response.TimezoneAbbreviation()}")
-    print(f"Timezone difference to GMT+0: {response.UtcOffsetSeconds()} s")
+    if DEBUG:
+        print(f"Coordinates: {response.Latitude()}°N {response.Longitude()}°E")
+        print(f"Elevation: {response.Elevation()} m asl")
+        print(f"Timezone: {response.Timezone()} {response.TimezoneAbbreviation()}")
+        print(f"Timezone difference to GMT+0: {response.UtcOffsetSeconds()} s")
 
     # Process hourly data. The order of variables needs to be the same as requested.
     hourly = response.Hourly()
@@ -95,10 +98,12 @@ def query_ecmwf(query_lat: float, query_long: float) -> tuple:
     hourly_dataframe = pd.DataFrame(data=hourly_data)
     # print(hourly_dataframe)
 
-    # pprint.pprint(hourly_dataframe.to_dict())
+    if DEBUG:
+        pprint.pp(hourly_dataframe.to_dict())
 
+    print("OpenMeteo ECMWF query completed successfully")
     return hourly_dataframe
 
 
 if __name__ == "__main__":
-    query_ecmwf("35.562", "-106.226")
+    query_ecmwf(query_lat=35.562, query_long=-106.226)

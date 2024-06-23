@@ -1,7 +1,6 @@
 # Documentation from:
 # https://apidocs.tempestwx.com/reference/get_observations-stn-station-id
 # accessed: 6/21/2024
-import requests
 import time
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -43,7 +42,7 @@ async def query_tempest(
 
     async with aiohttp.ClientSession() as session:
         json_object, status_code = await tempest_fetch(session, url)
-    print("Returned status code: " + str(status_code))
+    print("Tempest Query returned status code: " + str(status_code))
     # now let's convert this into the holfuy formatting for ease of useage
     if status_code == 200:
         if DEBUG:
@@ -77,13 +76,13 @@ async def query_tempest(
 
 if __name__ == "__main__":
     seconds = time.time()
-    print("Epoch Seconds: ", seconds)
+    #print("Epoch Seconds: ", seconds)
     loop = asyncio.get_event_loop()
     response, status = loop.run_until_complete(
         query_tempest(
             tempest_station_name="Sandia Soaring Peak Tempest",
             tempest_token=tempest_token,
             tempest_station=tempest_station,
-            DEBUG=True,
+            DEBUG=False,
         )
     )

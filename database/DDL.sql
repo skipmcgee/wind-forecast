@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `Models` (
   `modelName` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`modelID`),
   UNIQUE INDEX `modelID_UNIQUE` (`modelID` ASC) VISIBLE)
-ENGINE = InnoDB
 COMMENT = 'These are the individual weather models that the Model-Managers product supports.';
 
 
@@ -45,7 +44,6 @@ CREATE TABLE IF NOT EXISTS `Locations` (
   `locationAltitude` INT NOT NULL,
   PRIMARY KEY (`locationID`),
   UNIQUE INDEX `locationName_UNIQUE` (`locationName` ASC) VISIBLE)
-ENGINE = InnoDB
 COMMENT = 'The locations where customers desire to compare forecasts to measured values.';
 
 
@@ -62,7 +60,6 @@ CREATE TABLE IF NOT EXISTS `Dates` (
   `dateDateTime` DATETIME NOT NULL,
   PRIMARY KEY (`dateID`),
   INDEX `dateDateTime_UNIQUE` (`dateDateTime` ASC) VISIBLE)
-ENGINE = InnoDB
 COMMENT = 'Date information in DateTime.';
 
 -- -----------------------------------------------------
@@ -105,7 +102,6 @@ CREATE TABLE IF NOT EXISTS `Forecasts` (
     REFERENCES `Dates` (`dateID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
 COMMENT = 'Forecast information that uses attributes that are common across all weather models.\n';
 
 
@@ -131,7 +127,6 @@ CREATE TABLE IF NOT EXISTS `Sensors` (
     REFERENCES `Locations` (`locationID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
 COMMENT = 'The sensors that can measure the weather data at a specific location.';
 
 
@@ -165,7 +160,6 @@ CREATE TABLE IF NOT EXISTS `Readings` (
     REFERENCES `Dates` (`dateID`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-ENGINE = InnoDB
 COMMENT = 'The actual measured sensor reading values.';
 
 

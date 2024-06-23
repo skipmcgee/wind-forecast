@@ -34,23 +34,20 @@ async def gather_data(
         if DEBUG:
             print("Holfuy URL: " + url)
         urls.append(url)
-    valid_obj_list = []
-    error_obj_list = []
+    json_obj_list = []
+    error_code_list = []
     async with aiohttp.ClientSession() as session:
         for url in urls:
             json_object, status_code = await fetch(session, url)
-            if status_code == 200:
-                if DEBUG:
-                    pprint.pp(json_object, indent=4)
-                valid_obj_list.append(json_object)
-            else:
-                print(f"Error with {str(url)}")
-                print("Status Code: " + str(status_code))
-                error_obj_list.append(json_object)
-    return valid_obj_list, error_obj_list
+            json_obj_list.append(json_object)
+            error_code_list.append(status_code)
+    print("Holfuy Query returned status code: " + str(error_code_list[0]))
+    return json_obj_list, error_code_list
 
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    valid_obj_list, error_obj_list = loop.run_until_complete(gather_data(holfuy_token))
-    pprint.pp(valid_obj_list, indent=4)
+    valid_obj_list, error_obj_list = loop.run_until_complete(
+        gather_data(holfuy_token=holfuy_token)
+    )
+    #pprint.pp(valid_obj_list, indent=4)

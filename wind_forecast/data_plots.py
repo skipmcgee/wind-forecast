@@ -21,7 +21,7 @@ pil_logger.setLevel(logging.INFO)
 class DisplayPlots:
     """class to plot wind values and display them in graphical depictions"""
 
-    def wind_speed(self, merged_df: object):
+    def wind_speed(self, merged_df: dict):
         """plot to display wind speeds over time"""
         image = BytesIO()
         plt.plot([], [], color="y", label="Actual Wind Speed", linewidth=5)
@@ -43,7 +43,7 @@ class DisplayPlots:
         plt.savefig(image, format="png")
         return base64.encodebytes(image.getvalue())
 
-    def wind_direction(self, merged_df: object):
+    def wind_direction(self, merged_df: dict):
         """plot to display wind directions over time"""
         image = BytesIO()
         plt.plot([], [], color="g", label="Predicted Wind Direction", linewidth=5)

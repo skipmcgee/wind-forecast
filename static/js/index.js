@@ -7,7 +7,7 @@
 
 
 // Set the current sensor in the form to the 1st in the list
-const currentSensor = 1;
+const currentSensors = [1, 2,];
 
 function convertDateTime() {
   // Fetch the current date & time
@@ -61,7 +61,7 @@ function checkDates() {
 
 function checkSensor() {
   // Function to validate the sensor selection in the form.
-  const checkSensorValue = sensor.value;
+  let checkSensorValue = sensor.value;
   if (currentSensor == checkSensorValue) {
     submitButton.disabled = false;
   } else {
@@ -72,4 +72,4 @@ function checkSensor() {
 
 fromDate.addEventListener('change', checkDates);
 toDate.addEventListener('change', checkDates);
-sensor.addEventListener('change', checkSensor);
+//sensor.addEventListener('change', checkSensor);

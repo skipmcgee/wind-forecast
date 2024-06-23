@@ -2,7 +2,6 @@
 # Date: 04/30/2024
 # Generated running 'pip freeze > requirements.txt' as instructed in the Flask Starter App
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/?tab=readme-ov-file#requirementstxt
-
 netCDF4
 matplotlib
 pvlib
@@ -23,6 +22,8 @@ click
 Flask
 Flask-WTF
 Flask-Security-Too
+Flask-Login
+Flask-Migrate
 gunicorn
 itsdangerous
 Jinja2
@@ -31,3 +32,4 @@ mysqlclient
 flask-mysqldb
 Werkzeug
 black
+python-decouple
